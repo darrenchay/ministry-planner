@@ -21,7 +21,6 @@ const worshipOnDutySchema = new Schema({
         type: String,
         required : true
     }
-    
 });
 
 export default model('worshipOnDuty', worshipOnDutySchema);

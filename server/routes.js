@@ -1,5 +1,8 @@
 import { connection } from './db/db';
 import userHandler from './handlers/user-handler';
+import eventHandler from './handlers/event-handler';
+import resourceHandler from './handlers/resource-handler';
+import worshipOnDutyHandler from './handlers/worship-on-duty-handler';
 
 export function init(server) {
 	connection(); // creates database connection
@@ -11,6 +14,7 @@ export function init(server) {
 
     // add endpoints here
 	server.use('/api/users', userHandler);
-    // server.use('/api/foo', fooHandler);
-    // server.use('/api/bar', barHandler);
+    server.use('/api/events', eventHandler);
+    server.use('/api/resources', resourceHandler);
+    server.use('/api/worshipOnDuty', worshipOnDutyHandler);
 }

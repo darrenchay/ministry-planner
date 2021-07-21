@@ -17,18 +17,17 @@ class UserDB {
 				res.status(400).send(err.message);
 			else
 				res.status(200).send(users);
-		})
+		});
 	}
 
 	getOne(req, res) {
 		userSchema.find({
-			username : req.params.username,
-			password : req.params.password
+			id : req.params.id
 		}, function(err, user) {
 			if (err)
 				res.status(400).send(err.errmsg);
 			else if (user == '')
-				res.status(404).send("User '" + req.params.username + "' not found");
+				res.status(404).send("User '" + req.params.id + "' not found");
 			else
 				res.status(200).send(user);
 		});
@@ -36,34 +35,35 @@ class UserDB {
 
 	getOneByEmail(req, res) {
 		userSchema.find({
-			username : req.params.email
+			email : req.params.email,
+			password : req.params.password
 		}, function(err, user) {
 			if (err)
 				res.status(400).send(err.errmsg);
 			else if (user == '')
-				res.status(404).send("User '" + req.params.username + "' not found");
+				res.status(404).send("User '" + req.params.email + "' not found");
 			else
 				res.status(200).send(user);
 		});
 	}
 
 	updateOne(req, res) { // for all other fields that's not an array
-		userSchema.updateOne({username : req.params.username}, req.body, function(err, user) {
+		userSchema.updateOne({id : req.params.id}, req.body, function(err, user) {
 			if (err)
 				res.status(400).send(err.errmsg);
 			else if (user.n == 0)
-				res.status(404).send("User '" + req.params.username + "' not found");
+				res.status(404).send("User '" + req.params.id + "' not found");
 			else
 				res.status(200).send(user);
 		});
 	}
 
 	deleteOne(req, res) {
-		userSchema.deleteOne({username: req.params.username, password: req.body.password}, function(err, user) {
+		userSchema.deleteOne({id: req.params.id}, function(err, user) {
 			if (err)
 				res.status(400).send(err.errmsg)
 			else if (user.n == 0)
-				res.status(404).send("User '" + req.params.username + "' not found");
+				res.status(404).send("User '" + req.params.id + "' not found");
 			else
 				res.status(200).send('deleted');
 		});

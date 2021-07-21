@@ -5,7 +5,7 @@ export function connection() {
     mongoose.connect(uri, {
                         useNewUrlParser : true,
                         useUnifiedTopology : true,
-                        useCreateIndex : true,
+                        useCreateIndex : false
                     });
     mongoose.connection.once('open', () => {
         console.log('MongoDB database connection established successfully!');
