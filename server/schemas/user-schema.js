@@ -4,31 +4,30 @@ const userSchema = new Schema({
 	id : {
 		type : String,
 		required : true,
-		unique : true
+		unique: true
 	},
 	firstname : {
 		type : String,
-		required : true,
-		unique : true
+		required : true
 	},
 	lastname : {
 		type : String,
-		required : true,
-		unique : true
+		required : true
 	},
     email : {
         type : String,
-        required : true
+        required : true,
+		unique: true
     },
-	phoneNumber : {
-		type : Number,
-		required : false
-	},
 	password : {
 		type : String,
 		required : true,
 		min : 8,
 		max : 40
+	},
+	phoneNumber : {
+		type : Number,
+		required : false
 	},
     role : {
         type : String,

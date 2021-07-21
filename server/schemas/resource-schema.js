@@ -8,9 +8,9 @@ const resourceSchema = new Schema({
 	},
 	songList : [
         {
-            songId: Strings
+            songId: String
         }
     ]
 });
 
-export default model('user', userSchema);
+export default model('resource', resourceSchema);
