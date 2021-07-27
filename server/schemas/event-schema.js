@@ -17,7 +17,15 @@ const eventSchema = new Schema({
     timestamp : {
         type : String,
         required : true
-    }
+    },
+	type : {
+		type : String,
+		required : true
+	},
+	eventDetailsId : {
+		type : String,
+		required : true
+	}
 });
 
 export default model('event', eventSchema);

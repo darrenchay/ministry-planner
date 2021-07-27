@@ -1,6 +1,6 @@
 import userSchema from '../schemas/user-schema';
 
-class UserDB {
+class UserActions {
     addOne(req, res) {
 		var user = new userSchema(req.body);
 		user.save(function(err, user) {
@@ -79,4 +79,4 @@ class UserDB {
 	}
 }
 
-export default new UserDB();
+export default new UserActions();

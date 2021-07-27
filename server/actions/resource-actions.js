@@ -1,6 +1,6 @@
 import resourceSchema from '../schemas/resource-schema';
 
-class ResourceDB {
+class ResourceActions {
     addOne(req, res) {
 		var resource = new resourceSchema(req.body);
 		resource.save(function(err, resource) {
@@ -65,4 +65,4 @@ class ResourceDB {
 	}
 }
 
-export default new ResourceDB();
+export default new ResourceActions();

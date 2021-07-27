@@ -6,6 +6,10 @@ const resourceSchema = new Schema({
 		required : true,
 		unique : true
 	},
+	eventId : {
+		type : String,
+		required : true
+	},
 	songList : [
         {
             songId: String
