@@ -7,115 +7,138 @@ import worshipOnDutySchema from '../schemas/worship-on-duty-schema';
 
 class PlannerPageActions {
     //Get all events by type, then retrieve all specific event details, then add that as one property in the events object
-    getAll(req, res) {
-        // (async function () {
-        //     try {
-        //         await eventSchema.find({
-        //             type: req.params.type
-        //         }).then(events => {
-        //             console.log(events);
-        //             events.forEach(event => {
-        //                 console.log(event);
-        //                 await worshipOnDutySchema.find({
-        //                     eventId: event.id
-        //                 }, function (err, worshipDetails) {
-        //                     console.log("worship details: ");
-        //                     console.log(worshipDetails);
-        //                     event.worshipDetails = worshipDetails;
-        //                 });
-        //             })
-        //             res.status(200).send(events);
-        //         });
-        //     } catch (err) {
-        //         console.log(err.details);
-        //         res.status(400).send(err);
-        //     }
-        // })();
-        var events;
+     getAll(req, res) {
+        let eventList = [];
         (async function () {
             try {
-                events = await new Promise((resolve, reject) => {
-                    eventSchema.find({
-                        type: req.params.type
-                    }, function (err, events) {
-                        if (err) {
-                            res.status(400).send(err.errmsg);
-                        } else {
-                            events.forEach(event => {
-                                var worshipDetails1 = new Promise((resolve, reject) => {
-                                    worshipOnDutySchema.find({
-                                        eventId: event.id
-                                    }, function (err, worshipDetails) {
-                                        console.log("worship details: ");
-                                        console.log(worshipDetails);
-                                        resolve(worshipDetails)
-                                    });
-                                })
-                                event.worshipDetails = worshipDetails1;
-                            });
-                            resolve(events);
-                        }
-                    });
+                await eventSchema.find({
+                    type: req.params.type
+                }).then(events => {
+                    console.log(events);
+                    let fullEvent = {
+                        event: {},
+                        eventDetails: {},
+                        resources: {}
+                    }
+                    /* (async function () {
+                        await Promise.all(events.map(async (event) => {
+                            fullEvent.event = event;
+                            const worshipDetails = await new Promise((resolve, reject) => {
+                                worshipOnDutySchema.find({
+                                    eventId: event.id
+                                }, function (err, worshipDetails) {
+                                    console.log("worship details: ");
+                                    console.log(worshipDetails);
+                                    resolve(worshipDetails)
+                                });
+                            })
+                            fullEvent.eventDetails = worshipDetails[0];
+                            eventList.push(fullEvent);
+                            console.log("HERE:");
+                            console.log(eventList);
+                            event.eventDetails = worshipDetails[0];
+                        }));
+                    })(); */
+                    
+                    for (const event of events) {
+                        console.log("iterating over event: ")
+                        console.log(event);
+                        (async function () {
+                            fullEvent.event = event;
+                            console.log("eventID: " + event.id);
+                            let worshipDetails = await new Promise((resolve, reject) => {
+                                worshipOnDutySchema.find({
+                                    eventId: event.id
+                                }, function (err, worshipDetails) {
+                                    console.log("worship details: ");
+                                    console.log(worshipDetails);
+                                    resolve(worshipDetails)
+                                });
+                            })
+                            fullEvent.eventDetails = worshipDetails[0];
+                            eventList.push(fullEvent);
+                            console.log("HERE:");
+                            console.log(eventList);
+                        })();
+                    }
+                    console.log("End");
+                    console.log(events);
+                    res.status(200).send(events);
                 });
-
-                // console.log(events);
-                // var worshipDetails;
-                // events.forEach(event => {
-                //     worshipDetails = new Promise((resolve, reject) => {
-                //         worshipOnDutySchema.find({
-                //             eventId: event.id
-                //         }, function (err, worshipDetails) {
-                //             console.log("worship details: ");
-                //             console.log(worshipDetails);
-                //             resolve(worshipDetails)
-                //         });
-                //     })
-                //     event.worshipDetails = worshipDetails;
-                // });
-
-                console.log(events);
-
-                res.status(200).send(events);
-
             } catch (err) {
                 console.log(err.details);
                 res.status(400).send(err);
             }
         })();
 
-        // eventSchema.find({
-        //     type: req.params.type
-        // }, function (err, events) {
-        //     var events1 = events;
-        //     console.log(events1);
-        //     for (var i = 0; i < events1.length; i++) {
-        //         worshipOnDutySchema.find({
-        //             eventId: events1[i].id
-        //         }, function (err, worshipDetails) {
-        //             console.log("worship details: ");
-        //             console.log(worshipDetails);
-        //             events1[i].worshipDetails = worshipDetails;
-        //         });
+        /* (async function () {
+            try {
+                var events = await new Promise((resolve, reject) => {
+                    eventSchema.find({
+                        type: req.params.type
+                    }, function (err, events) {
+                        if (err) {
+                            res.status(400).send(err.errmsg);
+                        } else {
+                            resolve(events);
+                        }
+                    });
+                });
 
-        //         resourceSchema.find({
-        //             eventId: events1[i].id
-        //         }, function (err, resourceDetails) {
-        //             console.log("resource details: ");
-        //             console.log(resourceDetails);
-        //             events1[i].resourceDetails = resourceDetails;
-        //         });
-        //     }
-        //     // events1.forEach(testEvent => {
-        //     //     var event = testEvent;
-        //     //     var eventDetailsId = event.eventDetailsId;
+                console.log(events);
+                var worshipDetails;
 
-        //     //     worshipOnDutySchema.find({
-        //     //         eventId: eventDetailsId
-        //     //     }, function (err, worshipDetails) {
-        //     //         console.log("worship details: ");
-        //     //         console.log(worshipDetails);
-        //     //         event.worshipDetails = worshipDetails;
-        //     //     });
+                await events.reduce(async (memo, event) => {
+                    await memo;
+                    console.log("here");
+                    console.log(event);
+                    console.log("event ID: " + event.id);
+                    fullEvent.event = event;
+                    const worshipDetails = await new Promise((resolve, reject) => {
+                        worshipOnDutySchema.find({
+                            eventId: event.id
+                        }, function (err, worshipDetails) {
+                            console.log("worship details: ");
+                            console.log(worshipDetails);
+                            resolve(worshipDetails)
+                        });
+                    })
+                    fullEvent.eventDetails = worshipDetails[0];
+                    eventList.push(fullEvent);
+                    console.log("HERE:");
+                    console.log(eventList);
+                    event.eventDetails = worshipDetails[0];
+                })
+                // await Promise.all(events.map(async (event) => {
+                    
+                // }));
+                *//* events.forEach(event => {
+                    (async function () {
+                        worshipDetails = new Promise((resolve, reject) => {
+                            worshipOnDutySchema.find({
+                                eventId: event.id
+                            }, function (err, worshipDetails) {
+                                console.log("worship details: ");
+                                console.log(worshipDetails);
+                                resolve(worshipDetails)
+                            });
+                        })
+                        event.worshipDetails = worshipDetails;
+                    })();
+                }); *//*
+
+                console.log("At the end");
+                console.log(events);
+                console.log("EventList Data: ");
+                console.log(eventList);
+                res.status(200).send(events);
+
+            } catch (err) {
+                console.log(err.details);
+                res.status(400).send(err);
+            }
+        })(); */
+
 
         //     //     resourceSchema.find({
         //     //         eventId: eventDetailsId
