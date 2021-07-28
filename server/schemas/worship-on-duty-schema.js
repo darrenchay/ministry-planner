@@ -6,6 +6,10 @@ const worshipOnDutySchema = new Schema({
 		required : true,
 		unique : true
 	},
+    eventId : {
+        type : String,
+        required : true
+    },
 	teamList : [
         {
             roleId : String, 

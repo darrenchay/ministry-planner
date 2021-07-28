@@ -1,6 +1,6 @@
 import worshipOnDutySchema from '../schemas/worship-on-duty-schema';
 
-class WorshipOnDutyDB {
+class WorshipOnDutyActions {
     addOne(req, res) {
 		var worshipOnDuty = new worshipOnDutySchema(req.body);
 		worshipOnDuty.save(function(err, worshipOnDuty) {
@@ -65,4 +65,4 @@ class WorshipOnDutyDB {
 	}
 }
 
-export default new WorshipOnDutyDB();
+export default new WorshipOnDutyActions();
