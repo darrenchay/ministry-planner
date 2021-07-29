@@ -32,6 +32,10 @@ const userSchema = new Schema({
     role : {
         type : String,
         required : true
+    }, 
+    ministry : {
+        type : String,
+        required : true
     }
 });
 
