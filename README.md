@@ -1,6 +1,6 @@
 # ministry-planner
 # Notes for developers
-- npm insall after cloning and each time changing branches
+- npm install after cloning and each time changing branches
 - Create a branch when starting a new part of development
 - DO NOT PUSH TO MAIN DIRECTLY 
 - When assigned a pull request, review the code to see if everything is ok then approve or add comments 
