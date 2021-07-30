@@ -16,9 +16,10 @@ const worshipOnDutySchema = new Schema({
             personId : String 
         }
     ],
-    rehersals : [
+    rehearsals : [
         {
-            timestamp: String
+            timestamp: String,
+            location: String
         }
     ],
     resourceId : {
