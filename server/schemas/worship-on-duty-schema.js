@@ -1,30 +1,35 @@
 import { Schema, model } from 'mongoose';
 
 const worshipOnDutySchema = new Schema({
-	id : {
-		type : String,
-		required : true,
-		unique : true
-	},
-    eventId : {
-        type : String,
-        required : true
+    id: {
+        type: String,
+        required: true,
+        unique: true
     },
-	teamList : [
+    eventId: {
+        type: String,
+        required: true
+    },
+    teamList: [
         {
-            roleId : String, 
-            personId : String 
+            roleId: String,
+            person: [
+                {
+                    Id: String,
+                    tag: String, //worship Leader, lead vocal etc
+                }
+            ]
         }
     ],
-    rehearsals : [
+    rehearsals: [
         {
             timestamp: String,
             location: String
         }
     ],
-    resourceId : {
+    resourceId: {
         type: String,
-        required : true
+        required: true
     }
 });
 
