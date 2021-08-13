@@ -28,4 +28,4 @@ const eventSchema = new Schema({
 	}
 });
 
-export default model('event', eventSchema);
+export default model('Event', eventSchema);

@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
+import user from './user-schema';
 
-const worshipOnDutySchema = new Schema({
+const worshipEventDetails = new Schema({
     id: {
         type: String,
         required: true,
@@ -13,10 +14,17 @@ const worshipOnDutySchema = new Schema({
     teamList: [
         {
             roleId: String,
-            person: [
+            roleName: String,
+            teamMember: [
                 {
-                    Id: String,
-                    tag: String, //worship Leader, lead vocal etc
+                    type: Schema.Types.ObjectId,
+                    ref: 'User',
+                }
+            ],
+            teamMapping: [
+                {
+                    memberId: String,
+                    tag: String
                 }
             ]
         }
@@ -33,4 +41,4 @@ const worshipOnDutySchema = new Schema({
     }
 });
 
-export default model('worshipOnDuty', worshipOnDutySchema);
+export default model('WorshipEventDetails', worshipEventDetails);

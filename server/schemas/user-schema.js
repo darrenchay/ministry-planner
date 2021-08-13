@@ -38,7 +38,13 @@ const userSchema = new Schema({
     ministry: {
         type: String,
         required: true
-    }
+    },
+    assignedEvents: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'WorshipEventDetails'
+        }
+    ]
 });
 
-export default model('user', userSchema);
+export default model('User', userSchema);

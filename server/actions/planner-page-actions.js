@@ -2,8 +2,7 @@ import express from 'express';
 
 import eventSchema from '../schemas/event-schema';
 import resourceSchema from '../schemas/resource-schema';
-// import userSchema from '../schemas/user-schema';
-import worshipOnDutySchema from '../schemas/worship-on-duty-schema';
+import worshipEventDetailsSchema from '../schemas/worship-event-details-schema';
 
 class PlannerPageActions {
     //Get all events by type, then retrieve all specific event details, then add that as one property in the events object
@@ -31,12 +30,18 @@ class PlannerPageActions {
                     const event = events[i];
                     // Creating promise to find event details for each event
                     promises.push(new Promise((resolve, reject) => {
-                        worshipOnDutySchema.find({
+                        worshipEventDetailsSchema.find({
                             eventId: event.id
-                        }, function (err, worshipDetails) {
+                        }).populate({
+                            path: 'teamList',
+                            populate: {
+                                path: 'teamMember',
+                                model: 'User'
+                            }
+                        })
+                        .exec(function (err, worshipDetails) {
                             if (worshipDetails != '') {
                                 var fullEvent = {}; //Creating a new variable to store the data
-
                                 fullEvent.event = event;
                                 fullEvent.eventDetails = worshipDetails[0];
                                 eventList.push(fullEvent);
@@ -45,6 +50,19 @@ class PlannerPageActions {
                             }
                             resolve();
                         });
+                        // worshipEventDetailsSchema.find({
+                        //     eventId: event.id
+                        // }, function (err, worshipDetails) {
+                        //     if (worshipDetails != '') {
+                        //         var fullEvent = {}; //Creating a new variable to store the data
+                        //         fullEvent.event = event;
+                        //         fullEvent.eventDetails = worshipDetails[0];
+                        //         eventList.push(fullEvent);
+                        //     } else {
+                        //         console.log("worship details not found");
+                        //     }
+                        //     resolve();
+                        // });
                     }));
                 }
                 Promise.all(promises).then(function () {
