@@ -2,11 +2,6 @@ import { Schema, model } from 'mongoose';
 import user from './user-schema';
 
 const worshipEventDetails = new Schema({
-    id: {
-        type: String,
-        required: true,
-        unique: true
-    },
     eventId: {
         type: String,
         required: true

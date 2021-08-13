@@ -22,7 +22,7 @@ class roleActions {
 
 	getOne(req, res) {
 		roleSchema.find({
-			id : req.params.id
+			_id: req.params.id
 		}, function(err, role) {
 			if (err)
 				res.status(400).send(err.errmsg);
@@ -34,7 +34,7 @@ class roleActions {
 	}
 
 	updateOne(req, res) { // for all other fields that's not an array
-		roleSchema.updateOne({id : req.params.id}, req.body, function(err, role) {
+		roleSchema.updateOne({_id: req.params.id}, req.body, function(err, role) {
 			if (err)
 				res.status(400).send(err.errmsg);
 			else if (role.n == 0)
@@ -45,7 +45,7 @@ class roleActions {
 	}
 
 	deleteOne(req, res) {
-		roleSchema.deleteOne({id: req.params.id}, function(err, role) {
+		roleSchema.deleteOne({_id: req.params.id}, function(err, role) {
 			if (err)
 				res.status(400).send(err.errmsg)
 			else if (role.n == 0)

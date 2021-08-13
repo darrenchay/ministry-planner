@@ -22,7 +22,7 @@ class ResourceActions {
 
 	getOne(req, res) {
 		resourceSchema.find({
-			id : req.params.id
+			_id : req.params.id
 		}, function(err, resource) {
 			if (err)
 				res.status(400).send(err.errmsg);
@@ -34,7 +34,7 @@ class ResourceActions {
 	}
 
 	updateOne(req, res) { // for all other fields that's not an array
-		resourceSchema.updateOne({id : req.params.id}, req.body, function(err, resource) {
+		resourceSchema.updateOne({_id : req.params.id}, req.body, function(err, resource) {
 			if (err)
 				res.status(400).send(err.errmsg);
 			else if (resource.n == 0)
@@ -45,7 +45,7 @@ class ResourceActions {
 	}
 
 	deleteOne(req, res) {
-		resourceSchema.deleteOne({id: req.params.id}, function(err, resource) {
+		resourceSchema.deleteOne({_id: req.params.id}, function(err, resource) {
 			if (err)
 				res.status(400).send(err.errmsg)
 			else if (resource.n == 0)

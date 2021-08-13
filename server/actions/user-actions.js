@@ -25,7 +25,7 @@ class UserActions {
     }
 
     getOne(req, res) {
-        userSchema.findOne({ id: req.params.id })
+        userSchema.findOne({ _id: req.params.id })
             .populate('assignedEvents', 'eventId')
             .exec((err, user) => {
                 if (err)
@@ -52,7 +52,7 @@ class UserActions {
     }
 
     updateOne(req, res) { // for all other fields that's not an array
-        userSchema.updateOne({ id: req.params.id }, req.body, function (err, user) {
+        userSchema.updateOne({ _id: req.params.id }, req.body, function (err, user) {
             if (err)
                 res.status(400).send(err.errmsg);
             else if (user.n == 0)
@@ -63,7 +63,7 @@ class UserActions {
     }
 
     deleteOne(req, res) {
-        userSchema.deleteOne({ id: req.params.id }, function (err, user) {
+        userSchema.deleteOne({ _id: req.params.id }, function (err, user) {
             if (err)
                 res.status(400).send(err.errmsg)
             else if (user.n == 0)

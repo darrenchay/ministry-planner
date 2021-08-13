@@ -1,7 +1,6 @@
 import express from 'express';
 
 import eventSchema from '../schemas/event-schema';
-import resourceSchema from '../schemas/resource-schema';
 import worshipEventDetailsSchema from '../schemas/worship-event-details-schema';
 
 class PlannerPageActions {
@@ -31,7 +30,7 @@ class PlannerPageActions {
                     // Creating promise to find event details for each event
                     promises.push(new Promise((resolve, reject) => {
                         worshipEventDetailsSchema.find({
-                            eventId: event.id
+                            eventId: event._id
                         }).populate({
                             path: 'teamList',
                             populate: {
@@ -50,19 +49,6 @@ class PlannerPageActions {
                             }
                             resolve();
                         });
-                        // worshipEventDetailsSchema.find({
-                        //     eventId: event.id
-                        // }, function (err, worshipDetails) {
-                        //     if (worshipDetails != '') {
-                        //         var fullEvent = {}; //Creating a new variable to store the data
-                        //         fullEvent.event = event;
-                        //         fullEvent.eventDetails = worshipDetails[0];
-                        //         eventList.push(fullEvent);
-                        //     } else {
-                        //         console.log("worship details not found");
-                        //     }
-                        //     resolve();
-                        // });
                     }));
                 }
                 Promise.all(promises).then(function () {
@@ -78,6 +64,9 @@ class PlannerPageActions {
 
     //Save a new full event (e.g a new worship event)
 
+    /* Save a new event (keep eventDetailsId as a blank string: " ")
+        save the worship details event and add the event ID to the worship details
+        update the event to include the worship Details ID */
     //Delete an event
 }
 

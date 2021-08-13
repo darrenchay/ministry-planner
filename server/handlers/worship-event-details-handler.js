@@ -4,8 +4,6 @@ import WorshipEventDetails from '../actions/worship-event-details-actions';
 const router = express.Router();
 
 router.get('/', function(req, res) { WorshipEventDetails.getAll(req, res) });
-router.get('/test', function(req, res) { WorshipEventDetails.findOne(req, res) });
-
 router.get('/:id', function(req, res) { WorshipEventDetails.getOne(req, res) });
 
 router.post('/add', function(req, res) { WorshipEventDetails.addOne(req, res) });

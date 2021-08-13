@@ -1,6 +1,4 @@
 import WorshipEventDetails from '../schemas/worship-event-details-schema';
-import User from '../schemas/user-schema';
-const mongoose = require('mongoose');
 
 class WorshipOnDutyActions {
     addOne(req, res) {
@@ -34,7 +32,7 @@ class WorshipOnDutyActions {
     }
 
     getOne(req, res) {
-        WorshipEventDetails.find({ id: req.params.id })
+        WorshipEventDetails.find({ _id: req.params.id })
             .populate({
                 path: 'teamList',
                 populate: {
@@ -51,7 +49,7 @@ class WorshipOnDutyActions {
     }
 
     updateOne(req, res) { // for all other fields that's not an array
-        WorshipEventDetails.updateOne({ id: req.params.id }, req.body, function (err, worshipEventDetails) {
+        WorshipEventDetails.updateOne({ _id: req.params.id }, req.body, function (err, worshipEventDetails) {
             if (err)
                 res.status(400).send(err.errmsg);
             else if (worshipEventDetails.n == 0)
@@ -62,7 +60,7 @@ class WorshipOnDutyActions {
     }
 
     deleteOne(req, res) {
-        WorshipEventDetails.deleteOne({ id: req.params.id }, function (err, worshipEventDetails) {
+        WorshipEventDetails.deleteOne({ _id: req.params.id }, function (err, worshipEventDetails) {
             if (err)
                 res.status(400).send(err.errmsg)
             else if (worshipEventDetails.n == 0)
