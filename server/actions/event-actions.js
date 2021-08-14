@@ -22,7 +22,7 @@ class EventActions {
 
     getOne(req, res) {
         eventSchema.find({
-            id: req.params.id
+            _id: req.params.id
         }, function (err, event) {
             if (err)
                 res.status(400).send(err.errmsg);
@@ -34,7 +34,7 @@ class EventActions {
     }
 
     updateOne(req, res) { // for all other fields that's not an array
-        eventSchema.updateOne({ id: req.params.id }, req.body, function (err, event) {
+        eventSchema.updateOne({ _id: req.params.id }, req.body, function (err, event) {
             if (err)
                 res.status(400).send(err.errmsg);
             else if (event.n == 0)
@@ -45,7 +45,7 @@ class EventActions {
     }
 
     deleteOne(req, res) {
-        eventSchema.deleteOne({ id: req.params.id }, function (err, event) {
+        eventSchema.deleteOne({ _id: req.params.id }, function (err, event) {
             if (err)
                 res.status(400).send(err.errmsg)
             else if (event.n == 0)

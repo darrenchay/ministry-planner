@@ -1,11 +1,6 @@
 import { Schema, model } from 'mongoose';
 
 const resourceSchema = new Schema({
-	id : {
-		type : String,
-		required : true,
-		unique : true
-	},
 	eventId : {
 		type : String,
 		required : true
@@ -17,4 +12,4 @@ const resourceSchema = new Schema({
     ]
 });
 
-export default model('resource', resourceSchema);
+export default model('Resource', resourceSchema);
