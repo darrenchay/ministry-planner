@@ -61,11 +61,9 @@ export default function HomePage() {
       </Box>
 
       <Grid
-      container spacing="2px" 
+      spacing={16} 
       justify='space-around'
       alignItems='center'
-      width={{ max: "500px" }}
-      
       >
         <Button variant="contained" className={classes.homeNavButtons}>
           Planner
@@ -78,7 +76,18 @@ export default function HomePage() {
         </Button>
       </Grid>
 
-      
+      {/* <Grid container spacing={16}>
+        <Grid item xs={12}>
+          <Grid container justify="center">
+            {[0, 1, 2].map(value => (
+              <Grid key={value} item>
+                asdasdsdsdsds
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
+       */}
     </div>
   );
 }
