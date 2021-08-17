@@ -1,5 +1,3 @@
-import express from 'express';
-
 import eventSchema from '../schemas/event-schema';
 import worshipEventDetailsSchema from '../schemas/worship-event-details-schema';
 
@@ -11,11 +9,13 @@ class PlannerPageActions {
                 // Retrieving all events
                 var events = await new Promise((resolve, reject) => {
                     eventSchema.find({
-                        type: req.params.type
+                        "eventDetails.eventType": req.params.type
                     }, function (err, events) {
                         if (err) {
                             res.status(400).send(err.errmsg);
                         } else {
+                            console.log("here");
+                            console.log(events);
                             resolve(events);
                         }
                     });
