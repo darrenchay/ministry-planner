@@ -2,11 +2,10 @@ import eventSchema from '../schemas/event-schema';
 import worshipEventDetailsSchema from '../schemas/worship-event-details-schema';
 
 class PlannerPageActions {
-    //Get all events by type, then retrieve all specific event details, then add that as one property in the events object
     getAll(req, res) {
         (async () => {
             try {
-                // Retrieving all events
+                // Retrieving all events for one type of ministry
                 var events = await new Promise((resolve, reject) => {
                     eventSchema.find({
                         "eventDetails.eventType": req.params.type
@@ -14,8 +13,6 @@ class PlannerPageActions {
                         if (err) {
                             res.status(400).send(err.errmsg);
                         } else {
-                            console.log("here");
-                            console.log(events);
                             resolve(events);
                         }
                     });
