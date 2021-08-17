@@ -1,0 +1,38 @@
+.wrapper {
+    margin: 12px;
+    display: flex;
+    text-align: left;
+}
+
+.card {
+    width: '25%';
+    margin-right: 14px;
+    position: relative;
+    min-width: 200px;
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+.title {
+    font-size: 14px;
+}
+
+.card2 {
+    width: '100%';
+    margin-bottom: 10px;
+}
+
+.roleName {
+    margin-bottom: 10px;
+}
+
+.resourcesButton {
+    bottom: 0;
+    position: 'absolute';
+    background-color: #d15038 !important;
+}
+
+.cardActions {
+    padding: 16px !important;
+}
