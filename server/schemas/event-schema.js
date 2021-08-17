@@ -13,14 +13,12 @@ const eventSchema = new Schema({
         type : String,
         required : true
     },
-	type : {
-		type : String,
-		required : true
-	},
-	eventDetailsId : {
-		type : String,
-		required : true
-	}
+    eventDetails: [
+        {
+            eventDetailsId: String,
+            eventType: String
+        }
+    ]
 });
 
 export default model('Event', eventSchema);
