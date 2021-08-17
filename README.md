@@ -3,7 +3,7 @@
 - DO NOT PUSH TO MAIN DIRECTLY 
 - When assigned a pull request, review the code to see if everything is ok then approve or add comments 
 - Generally, the one who did the development on that branch will be the one merging 
-### Running a local instance of code
+### Running a local instance of the code
 - npm install after cloning and each time changing branches
 - Create a branch when starting a new part of development
 - To start the app cd to the appropriate folder (client/server) 
