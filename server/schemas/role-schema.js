@@ -9,10 +9,6 @@ const roleSchema = new Schema({
         type : String,
         required : false
     },
-    timestamp : {
-        type : String,
-        required : false
-    }, 
     ministry : {
         type : String,
         required : true 
