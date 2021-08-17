@@ -4,8 +4,8 @@
 - When assigned a pull request, review the code to see if everything is ok then approve or add comments 
 - Generally, the one who did the development on that branch will be the one merging 
 ### Running a local instance of the code
-- npm install after cloning and each time changing branches
-- Create a branch when starting a new part of development
+- Create a branch from main when starting a new part of development
+- npm install after branching to new branch (or when cloning for the first time)
 - To start the app cd to the appropriate folder (client/server) 
   - Type 'npm run dev' in the command line to start running the server side
   - Type 'npm start' in the command line to start running the client side
