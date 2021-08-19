@@ -33,6 +33,9 @@ const worshipEventDetails = new Schema({
     resourceId: {
         type: String,
         required: true
+    },
+    additionalInfo: {
+        type: String
     }
 });
 
