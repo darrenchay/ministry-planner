@@ -31,13 +31,12 @@ const useStyles = makeStyles((theme) => ({
         margin: "0 10px 0 10px",
         justifyContent: "center",
     },
-    shoppingCartButton: {
+    button: {
         borderRadius: "50%",
         color: "#D83B1E",
         padding: "10px",
-        borderRadius: "10px",
     },
-    shoppingCartIcon: {
+    icon: {
         color: "#D83B1Ek",
         size: "small",
     },
@@ -81,18 +80,18 @@ export default function Navbar() {
                     </Box>
 
                     <Button
-                        startIcon={<SearchIcon className={classes.shoppingCartIcon} />}
-                        className={classes.shoppingCartButton}
+                        startIcon={<SearchIcon className={classes.icon} />}
+                        className={classes.button}
                     >
                     </Button>
                     <Button
-                        startIcon={<AccountCircleIcon className={classes.shoppingCartIcon} />}
-                        className={classes.shoppingCartButton}
+                        startIcon={<AccountCircleIcon className={classes.icon} />}
+                        className={classes.button}
                     >
                     </Button>
                     <Button
-                        startIcon={<HelpOutlineIcon className={classes.shoppingCartIcon} />}
-                        className={classes.shoppingCartButton}
+                        startIcon={<HelpOutlineIcon className={classes.icon} />}
+                        className={classes.button}
                     >
                     </Button>
                     

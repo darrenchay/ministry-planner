@@ -37,17 +37,16 @@ const ButtonGroup = ({ isEditable, toggleEdit }) => {
     );
 }
 
-// The cards for each of the roles
+// The cards for each of the roles (includes handling for additional info as well)
 const RoleSection = ({ role, index, isEditable }) => {
     const [isRoleEditable, toggleRoleEdit] = useState(false);
 
     return (
         <>
             {index >= 0 &&
-                <Card key={index} className='card2'>
+                <Card key={index} className='roleCard'>
                     <CardHeader
                         title={role.roleName}
-                        classes='roleName'
                         action={
                             <>
                                 {isEditable && <ButtonGroup
@@ -58,9 +57,9 @@ const RoleSection = ({ role, index, isEditable }) => {
                         }
                     />
                     <CardContent>
-                        <Typography color="textSecondary" gutterBottom>
-                            {role.teamMember.length > 0 && role.teamMember.map((teamMember, index2) => (
-                                <div key={index2}>{teamMember.firstname}</div>
+                        <Typography component={'span'} color="textSecondary" gutterBottom>
+                            {role.teamMember.length > 0 && role.teamMember.map(teamMember => (
+                                <div key={teamMember._id}>{teamMember.firstname}</div>
                             ))}
                             {role.teamMember.length === 0 && <div>
                                 No members assigned</div>}
@@ -68,10 +67,9 @@ const RoleSection = ({ role, index, isEditable }) => {
                     </CardContent>
                 </Card>}
             {index < 0 &&
-                <Card className='card2'>
+                <Card className='roleCard'>
                     <CardHeader
                         title='Additional Info'
-                        classes='roleName'
                         action={
                             <>
                                 {isEditable && <ButtonGroup
@@ -103,7 +101,6 @@ export default function EventCard({ event, index }) {
             <CardHeader
                 title={event.event.name}
                 subheader={convertDate(parseInt(event.event.timestamp))}
-                classes='roleName'
                 action={
                     <ButtonGroup
                         isEditable={isEditable}
