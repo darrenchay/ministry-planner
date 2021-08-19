@@ -10,12 +10,11 @@ export default function PlannerPage() {
 
     // Updates events list when something on the page updates
     useEffect(() => {
-        console.log(baseURL + "/getAll/" + ministry);
         axios
             .get(baseURL + "/getAll/" + ministry)
             .then((resp) => {
                 let data = resp.data;
-                console.log(data);
+                console.log("Successfully retrieved " + data.length + " events");
                 loadEvents(data);
             })
             .catch((err) => {
@@ -32,9 +31,7 @@ export default function PlannerPage() {
                         <EventCard key={index} event={event} index={index} />
                     ))
                     .sort((firstEl, secondEl) => {
-                        let firstEvent = firstEl.props.event.event.timestamp;
-                        let secondEvent = secondEl.props.event.event.timestamp;
-                        return firstEvent - secondEvent;
+                        return firstEl.props.event.event.timestamp - secondEl.props.event.event.timestamp;
                     })
             }
 

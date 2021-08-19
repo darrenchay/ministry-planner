@@ -1,5 +1,5 @@
 import "./PlannerPage.scss";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
     Card,
     CardHeader,
@@ -18,7 +18,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 const ButtonGroup = ({ isEditable, toggleEdit }) => {
     const handleEdit = () => {
         toggleEdit(!isEditable);
-        console.log("editing is " + isEditable);
+        // console.log("editing is " + isEditable);
     }
     return (
         <>
@@ -92,12 +92,8 @@ const RoleSection = ({ role, index, isEditable }) => {
 export default function EventCard({ event, index }) {
     const [isEditable, toggleEdit] = useState(false);
 
-    useEffect(() => {
-        console.log("Event Card click");
-    }, [isEditable]);
-
     return (
-        <Card className='card'>
+        <Card key={index} className='card'>
             <CardHeader
                 title={event.event.name}
                 subheader={convertDate(parseInt(event.event.timestamp))}
