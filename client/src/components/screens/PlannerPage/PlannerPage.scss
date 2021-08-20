@@ -27,6 +27,14 @@
     margin-bottom: 10px;
 }
 
+//To clean up
+.roleCardContent {
+    display: 'flex';
+    align-items: 'center';
+    flex-wrap: 'wrap';
+    // position: 'relative'
+}
+
 .resourcesButton {
     bottom: 0;
     position: 'absolute';
@@ -39,4 +47,15 @@
 
 .save {
     background-color: green;
+}
+
+// To update so that it sticks to the right
+.clearIcon {
+    position: relative;
+    // right: -100px;
+}
+
+.formControl {
+    margin: 5px;
+    width: 50%;
 }

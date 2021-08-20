@@ -1,4 +1,3 @@
-import "./PlannerPage.scss";
 import React, { useState } from "react";
 import {
     Card,
@@ -7,12 +6,21 @@ import {
     CardContent,
     Button,
     IconButton,
-    Typography
+    Typography,
+    Select,
+    FormControl,
+    MenuItem,
+    InputLabel,
+    TextField
 } from '@material-ui/core';
-import convertDate from "../../utils/ConvertDate";
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import CancelIcon from '@material-ui/icons/Cancel';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+
+import convertDate from "../../utils/ConvertDate";
+import "./PlannerPage.scss";
 
 // Handles the toggling of the edit/save/cancel buttons
 const ButtonGroup = ({ isEditable, toggleEdit }) => {
@@ -40,6 +48,11 @@ const ButtonGroup = ({ isEditable, toggleEdit }) => {
 // The cards for each of the roles (includes handling for additional info as well)
 const RoleSection = ({ role, index, isEditable }) => {
     const [isRoleEditable, toggleRoleEdit] = useState(false);
+    const [selectedMember, changeSelectedMember] = useState('')
+
+    const handleChangeSelected = (event) => {
+        changeSelectedMember(event.target.value)
+    }
 
     return (
         <>
@@ -57,13 +70,51 @@ const RoleSection = ({ role, index, isEditable }) => {
                         }
                     />
                     <CardContent>
-                        <Typography component={'span'} color="textSecondary" gutterBottom>
-                            {role.teamMember.length > 0 && role.teamMember.map(teamMember => (
-                                <div key={teamMember._id}>{teamMember.firstname}</div>
-                            ))}
-                            {role.teamMember.length === 0 && <div>
-                                No members assigned</div>}
-                        </Typography>
+                        {role.teamMember.length > 0 && role.teamMember.map(teamMember => (
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                position: 'relative'
+                            }} key={teamMember._id}>
+                                <Typography color="textSecondary">
+                                    {teamMember.firstname}
+                                </Typography>
+                                {(isEditable && isRoleEditable) &&
+                                    <IconButton className='clearIcon'>
+                                        <CancelIcon color='default' />
+                                    </IconButton>
+                                }
+                            </div>
+                        ))}
+
+                        {/* To CHange to a textfield which onclick role becomes editable */}
+                        {role.teamMember.length === 0 && <div>
+                            <Typography component={'span'} color="textSecondary" gutterBottom>
+                                No members assigned
+                            </Typography>
+                        </div>}
+                        {(isEditable && isRoleEditable) &&
+                            <FormControl className='formControl'>
+                                <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
+                                <Select
+                                    labelId="teamMemberSelect"
+                                    id="teamMemberSelect"
+                                    value={selectedMember}
+                                    onChange={handleChangeSelected}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={'id1'}>Yoann</MenuItem>
+                                    <MenuItem value={'id1'}>Darren</MenuItem>
+                                    <MenuItem value={'id1'}>Emile</MenuItem>
+                                </Select>
+                                <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+                                <IconButton onClick={handleChangeSelected} aria-label="settings">
+                                    <AddCircleIcon />
+                                </IconButton>
+                            </FormControl>}
                     </CardContent>
                 </Card>}
             {index < 0 &&
