@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+    makeStyles,
     Card,
     CardHeader,
     CardActions,
@@ -21,6 +22,13 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import convertDate from "../../utils/ConvertDate";
 import "./PlannerPage.scss";
+
+// TODO: To find a way to use scss instead of makestyles here
+const useStyles = makeStyles(() => ({
+    noBorder: {
+        border: "none",
+    },
+}));
 
 // Handles the toggling of the edit/save/cancel buttons
 const ButtonGroup = ({ isEditable, toggleEdit }) => {
@@ -47,19 +55,26 @@ const ButtonGroup = ({ isEditable, toggleEdit }) => {
 
 // The cards for each of the roles (includes handling for additional info as well)
 const RoleSection = ({ role, index, isEditable }) => {
+    const classes = useStyles();
     const [isRoleEditable, toggleRoleEdit] = useState(false);
-    const [selectedMember, changeSelectedMember] = useState('')
+    const [selectedMember, changeSelectedMember] = useState('');
+    const [additionalInfo, setAdditionalInfo] = useState(role.additionalInfo);
 
     const handleChangeSelected = (event) => {
         changeSelectedMember(event.target.value)
     }
 
+    const handleTextFieldAddInfo = (event) => {
+        setAdditionalInfo(event.target.value);
+    }
+
     return (
         <>
             {index >= 0 &&
-                <Card key={index} className='roleCard'>
+                <Card key={index} className='card-role-section'>
                     <CardHeader
                         title={role.roleName}
+                        className='rolename'
                         action={
                             <>
                                 {isEditable && <ButtonGroup
@@ -88,14 +103,17 @@ const RoleSection = ({ role, index, isEditable }) => {
                             </div>
                         ))}
 
-                        {/* To CHange to a textfield which onclick role becomes editable */}
-                        {role.teamMember.length === 0 && <div>
-                            <Typography component={'span'} color="textSecondary" gutterBottom>
-                                No members assigned
-                            </Typography>
-                        </div>}
+                        {/* To Change to a textfield which onclick role becomes editable */}
+                        {role.teamMember.length === 0 &&
+                            <div>
+                                <Typography component={'span'} color="textSecondary" gutterBottom>
+                                    No members assigned
+                                </Typography>
+                            </div>}
+
+
                         {(isEditable && isRoleEditable) &&
-                            <FormControl className='formControl'>
+                            <FormControl className='formControl' display="inline">
                                 <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
                                 <Select
                                     labelId="teamMemberSelect"
@@ -131,9 +149,18 @@ const RoleSection = ({ role, index, isEditable }) => {
                         }
                     />
                     <CardContent>
-                        <Typography color="textSecondary" gutterBottom>
-                            {role.additionalInfo}
-                        </Typography>
+                        <TextField InputProps={{
+                            classes: {
+                                notchedOutline: classes.noBorder
+                            },
+                        }}
+                            multiline={true}
+                            disabled={!isRoleEditable}
+                            id="outlined-basic"
+                            variant="outlined"
+                            placeholder="no additional info"
+                            value={additionalInfo}
+                            onChange={handleTextFieldAddInfo} />
                     </CardContent>
                 </Card>}
         </>
@@ -146,6 +173,7 @@ export default function EventCard({ event, index }) {
     return (
         <Card key={index} className='card'>
             <CardHeader
+                className='card-header'
                 title={event.event.name}
                 subheader={convertDate(parseInt(event.event.timestamp))}
                 action={
@@ -170,8 +198,8 @@ export default function EventCard({ event, index }) {
                         isEditable={isEditable}
                     />}
             </CardContent>
-            <CardActions className='cardActions'>
-                <Button className='resourcesButton' variant="contained"
+            <CardActions className='card-actions'>
+                <Button className='resources-button' variant="contained"
                     color='primary' size="small">
                     Resources
                 </Button>
