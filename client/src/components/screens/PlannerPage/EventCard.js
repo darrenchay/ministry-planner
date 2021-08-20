@@ -170,14 +170,30 @@ const RoleSection = ({ role, index, isEditable }) => {
 }
 
 export default function EventCard({ event, index }) {
+    const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
-    const [selectedDate, changeSelectedDate] = useState(new Date(event.event.time * 1000))
+    const [selectedDate, changeSelectedDate] = useState(new Date(event.event.time * 1000));
+    const [eventName, changeEventName] = useState(event.event.name);
 
+    const handleChangeEventName = (e) => {
+        changeEventName(e.target.value);
+    }
     return (
         <Card key={index} className='card'>
             <CardHeader
                 className='card-header'
-                title={event.event.name}
+                title={<TextField InputProps={{
+                    classes: {
+                        notchedOutline: classes.noBorder
+                    },
+                }}
+                    multiline={true}
+                    disabled={!isEditable}
+                    id="outlined-basic"
+                    variant="outlined"
+                    placeholder="no additional info"
+                    value={eventName}
+                    onChange={handleChangeEventName} />}
                 subheader={
                     <>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -186,6 +202,7 @@ export default function EventCard({ event, index }) {
                                 format="MM/dd/yyyy"
                                 margin="normal"
                                 id="pickupDate"
+                                disabled={!isEditable}
                                 value={selectedDate}
                                 onChange={changeSelectedDate}
                                 KeyboardButtonProps={{
