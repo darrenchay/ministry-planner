@@ -1,0 +1,28 @@
+.home-page-wrapper {
+   background: linear-gradient(#D83B1E 0%, #FE9969 100%);
+   
+   .main-verse {
+      flex-grow: 1;
+      font-weight: bold;
+      color: white;
+      padding-top: 50px;
+      border-radius: 10px;
+   }
+   
+   .main-verse-ref {
+      padding-bottom: 80px;
+      color: white;
+   }
+   
+   .home-nav-buttons {
+      box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
+      background-color: white;
+      width: 200px;
+      height: 250px;
+      font-weight: bold;
+      color: #D83B1E;
+      font-size: 20px;
+      padding: 12px;
+      border-radius: 15px;
+   }
+}
