@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import {
     makeStyles,
     Card,
@@ -174,6 +175,11 @@ export default function EventCard({ event, index }) {
     const [isEditable, toggleEdit] = useState(false);
     const [selectedDate, changeSelectedDate] = useState(new Date(event.event.time * 1000));
     const [eventName, changeEventName] = useState(event.event.name);
+    const history = useHistory();
+
+    let redirectToResources = (event) => {
+        history.push("resources");
+    };
 
     const handleChangeEventName = (e) => {
         changeEventName(e.target.value);
@@ -236,7 +242,7 @@ export default function EventCard({ event, index }) {
             </CardContent>
             <CardActions className='card-actions'>
                 <Button className='resources-button' variant="contained"
-                    color='primary' size="small">
+                    color='primary' size="small" onClick={redirectToResources}>
                     Resources
                 </Button>
             </CardActions>
