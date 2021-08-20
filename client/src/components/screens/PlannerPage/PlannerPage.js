@@ -24,7 +24,7 @@ export default function PlannerPage() {
     }, []);
 
     return (
-        <div className='wrapper'>
+        <div className='planner-page-wrapper'>
             {events?.length > 0 &&
                 events
                     .map((event, index) => (

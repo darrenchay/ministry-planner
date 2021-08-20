@@ -1,48 +1,46 @@
-.wrapper {
+.planner-page-wrapper {
     margin: 12px;
     display: flex;
     text-align: left;
-}
+    
+    .card {
+        width: 25%;
+        margin-right: 14px;
+        position: relative;
+        min-width: 200px;
 
-.card {
-    width: '25%';
-    margin-right: 14px;
-    position: relative;
-    min-width: 200px;
-    &:last-child {
-        margin-right: 0;
-    }
-}
+        &-header {
+            margin-bottom: 20px;
+        }
 
-.title {
-    font-size: 14px;
-}
+        &:last-child {
+            margin-right: 0;
+        }
 
-.roleCard {
-    width: '100%';
-    margin-bottom: 10px;
-}
+        &-role-section {
+            width: 100%;
+            margin-bottom: 12px;
 
-.roleName {
-    margin-bottom: 10px;
-}
+            &:last-child {
+                margin-bottom: 16px;
+            }
 
-//To clean up
-.roleCardContent {
-    display: 'flex';
-    align-items: 'center';
-    flex-wrap: 'wrap';
-    // position: 'relative'
-}
+            .rolename {
+                margin-bottom: 10px;
+            }
+        }
 
-.resourcesButton {
-    bottom: 0;
-    position: 'absolute';
-    background-color: #d15038 !important;
-}
+        &-actions {
+            padding: 16px;
 
-.cardActions {
-    padding: 16px !important;
+            .resources-button {
+                bottom: 0;
+                position: absolute;
+                background-color: #d15038;
+                margin-bottom: 16px;
+            }
+        }
+    }    
 }
 
 .save {

@@ -1,0 +1,31 @@
+.logo {
+   height: 35px;
+   width: 35px;
+}
+
+.nav-buttons {
+   font-weight: bold;
+   color: #D83B1E;
+   padding: 10px;
+   border-radius: 10px;
+   margin: 0 0 0 20px;
+}
+
+.nav-menu-items {
+   font-weight: bold;
+   border-radius: 10px;
+   margin: 0 10px 0 10px;
+   justify-content: center;
+}
+
+.right-area-button {
+   border-radius: 50%;
+   color: #D83B1E;
+   padding: 10px;
+   border-radius: 10px;
+   
+   .right-area-icon {
+      color: #D83B1E;
+      size: small;
+   }
+}
