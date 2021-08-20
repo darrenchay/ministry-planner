@@ -17,7 +17,7 @@
             margin-right: 0;
         }
 
-        &-2 {
+        &-role-section {
             width: 100%;
             margin-bottom: 12px;
 
@@ -27,6 +27,10 @@
 
             .rolename {
                 margin-bottom: 10px;
+            }
+
+            .additional-info {
+                border-width: 0px;
             }
         }
 
@@ -43,3 +47,17 @@
     }    
 }
 
+.save {
+    background-color: green;
+}
+
+// To update so that it sticks to the right
+.clearIcon {
+    position: relative;
+    // right: -100px;
+}
+
+.formControl {
+    margin: 5px;
+    width: 50%;
+}
