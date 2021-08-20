@@ -19,6 +19,8 @@ import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import CancelIcon from '@material-ui/icons/Cancel';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from '@date-io/date-fns'
 
 import convertDate from "../../utils/ConvertDate";
 import "./PlannerPage.scss";
@@ -169,13 +171,30 @@ const RoleSection = ({ role, index, isEditable }) => {
 
 export default function EventCard({ event, index }) {
     const [isEditable, toggleEdit] = useState(false);
+    const [selectedDate, changeSelectedDate] = useState(new Date(event.event.time * 1000))
 
     return (
         <Card key={index} className='card'>
             <CardHeader
                 className='card-header'
                 title={event.event.name}
-                subheader={convertDate(parseInt(event.event.timestamp))}
+                subheader={
+                    <>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                variant="inline"
+                                format="MM/dd/yyyy"
+                                margin="normal"
+                                id="pickupDate"
+                                value={selectedDate}
+                                onChange={changeSelectedDate}
+                                KeyboardButtonProps={{
+                                    "aria-label": "change date",
+                                }}
+                            />
+                        </MuiPickersUtilsProvider>
+                    </>
+                }
                 action={
                     <ButtonGroup
                         isEditable={isEditable}
