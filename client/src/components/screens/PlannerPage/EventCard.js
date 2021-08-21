@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
     makeStyles,
     Card,
@@ -7,23 +7,15 @@ import {
     CardActions,
     CardContent,
     Button,
-    IconButton,
-    Typography,
-    Select,
-    FormControl,
-    MenuItem,
-    InputLabel,
     TextField
 } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
-import ClearIcon from '@material-ui/icons/Clear';
-import CancelIcon from '@material-ui/icons/Cancel';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from '@date-io/date-fns'
+import DateFnsUtils from '@date-io/date-fns';
 
+import ButtonGroup from './../../utils/EditButtonGroup';
+import RoleSection from './RoleSection';
 import convertDate from "../../utils/ConvertDate";
+import * as EventsAPI from './../../utils/Services/EventsAPI'
 import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here
@@ -33,148 +25,16 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// Handles the toggling of the edit/save/cancel buttons
-const ButtonGroup = ({ isEditable, toggleEdit }) => {
-    const handleEdit = () => {
-        toggleEdit(!isEditable);
-        // console.log("editing is " + isEditable);
-    }
-    return (
-        <>
-            {!isEditable && <IconButton onClick={handleEdit} aria-label="settings" >
-                <EditIcon />
-            </IconButton>}
-            {isEditable && <>
-                <IconButton onClick={handleEdit} aria-label="settings">
-                    <DoneIcon />
-                </IconButton>
-                <IconButton onClick={handleEdit} aria-label="settings">
-                    <ClearIcon />
-                </IconButton>
-            </>}
-        </>
-    );
-}
-
-// The cards for each of the roles (includes handling for additional info as well)
-const RoleSection = ({ role, index, isEditable }) => {
-    const classes = useStyles();
-    const [isRoleEditable, toggleRoleEdit] = useState(false);
-    const [selectedMember, changeSelectedMember] = useState('');
-    const [additionalInfo, setAdditionalInfo] = useState(role.additionalInfo);
-
-    const handleChangeSelected = (event) => {
-        changeSelectedMember(event.target.value)
-    }
-
-    const handleTextFieldAddInfo = (event) => {
-        setAdditionalInfo(event.target.value);
-    }
-
-    return (
-        <>
-            {index >= 0 &&
-                <Card key={index} className='card-role-section'>
-                    <CardHeader
-                        title={role.roleName}
-                        className='rolename'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                />}
-                            </>
-                        }
-                    />
-                    <CardContent>
-                        {role.teamMember.length > 0 && role.teamMember.map(teamMember => (
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                position: 'relative'
-                            }} key={teamMember._id}>
-                                <Typography color="textSecondary">
-                                    {teamMember.firstname}
-                                </Typography>
-                                {(isEditable && isRoleEditable) &&
-                                    <IconButton className='clearIcon'>
-                                        <CancelIcon color='default' />
-                                    </IconButton>
-                                }
-                            </div>
-                        ))}
-
-                        {/* To Change to a textfield which onclick role becomes editable */}
-                        {role.teamMember.length === 0 &&
-                            <div>
-                                <Typography component={'span'} color="textSecondary" gutterBottom>
-                                    No members assigned
-                                </Typography>
-                            </div>}
-
-
-                        {(isEditable && isRoleEditable) &&
-                            <FormControl className='formControl' display="inline">
-                                <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
-                                <Select
-                                    labelId="teamMemberSelect"
-                                    id="teamMemberSelect"
-                                    value={selectedMember}
-                                    onChange={handleChangeSelected}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={'id1'}>Yoann</MenuItem>
-                                    <MenuItem value={'id1'}>Darren</MenuItem>
-                                    <MenuItem value={'id1'}>Emile</MenuItem>
-                                </Select>
-                                <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-                                <IconButton onClick={handleChangeSelected} aria-label="settings">
-                                    <AddCircleIcon />
-                                </IconButton>
-                            </FormControl>}
-                    </CardContent>
-                </Card>}
-            {index < 0 &&
-                <Card className='roleCard'>
-                    <CardHeader
-                        title='Additional Info'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                />}
-                            </>
-                        }
-                    />
-                    <CardContent>
-                        <TextField InputProps={{
-                            classes: {
-                                notchedOutline: classes.noBorder
-                            },
-                        }}
-                            multiline={true}
-                            disabled={!isRoleEditable}
-                            id="outlined-basic"
-                            variant="outlined"
-                            placeholder="no additional info"
-                            value={additionalInfo}
-                            onChange={handleTextFieldAddInfo} />
-                    </CardContent>
-                </Card>}
-        </>
-    );
-}
+// On click edit, save a local version of the event
+// Then when click update, take the copy of the event and send that as body, update original event to be the copy
+// Then when click cancel, revert to original version of event
 
 export default function EventCard({ event, index }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
     const [selectedDate, changeSelectedDate] = useState(new Date(event.event.time * 1000));
     const [eventName, changeEventName] = useState(event.event.name);
+    const eventId = event._id;
     const history = useHistory();
 
     let redirectToResources = (event) => {
@@ -183,6 +43,17 @@ export default function EventCard({ event, index }) {
 
     const handleChangeEventName = (e) => {
         changeEventName(e.target.value);
+    }
+
+    const updateEvent = () => {
+
+        EventsAPI.updateEvent(data, eventId)
+        .then(resp=> {
+            console.log("successfully updated " + resp.nModified + " event");
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
     return (
         <Card key={index} className='card'>
