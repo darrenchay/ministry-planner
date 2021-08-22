@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
     makeStyles,
     Card,
@@ -7,23 +7,14 @@ import {
     CardActions,
     CardContent,
     Button,
-    IconButton,
-    Typography,
-    Select,
-    FormControl,
-    MenuItem,
-    InputLabel,
     TextField
 } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import DoneIcon from '@material-ui/icons/Done';
-import ClearIcon from '@material-ui/icons/Clear';
-import CancelIcon from '@material-ui/icons/Cancel';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from '@date-io/date-fns'
+import DateFnsUtils from '@date-io/date-fns';
 
-import convertDate from "../../utils/ConvertDate";
+import ButtonGroup from './EditButtonGroup';
+import RoleSection from './RoleSection';
+// import convertDate from "../../utils/ConvertDate";
 import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here
@@ -33,157 +24,32 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// Handles the toggling of the edit/save/cancel buttons
-const ButtonGroup = ({ isEditable, toggleEdit }) => {
-    const handleEdit = () => {
-        toggleEdit(!isEditable);
-        // console.log("editing is " + isEditable);
-    }
-    return (
-        <>
-            {!isEditable && <IconButton onClick={handleEdit} aria-label="settings" >
-                <EditIcon />
-            </IconButton>}
-            {isEditable && <>
-                <IconButton onClick={handleEdit} aria-label="settings">
-                    <DoneIcon />
-                </IconButton>
-                <IconButton onClick={handleEdit} aria-label="settings">
-                    <ClearIcon />
-                </IconButton>
-            </>}
-        </>
-    );
-}
-
-// The cards for each of the roles (includes handling for additional info as well)
-const RoleSection = ({ role, index, isEditable }) => {
-    const classes = useStyles();
-    const [isRoleEditable, toggleRoleEdit] = useState(false);
-    const [selectedMember, changeSelectedMember] = useState('');
-    const [additionalInfo, setAdditionalInfo] = useState(role.additionalInfo);
-
-    const handleChangeSelected = (event) => {
-        changeSelectedMember(event.target.value)
-    }
-
-    const handleTextFieldAddInfo = (event) => {
-        setAdditionalInfo(event.target.value);
-    }
-
-    return (
-        <>
-            {index >= 0 &&
-                <Card key={index} className='card-role-section'>
-                    <CardHeader
-                        title={role.roleName}
-                        className='rolename'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                />}
-                            </>
-                        }
-                    />
-                    <CardContent>
-                        {role.teamMember.length > 0 && role.teamMember.map(teamMember => (
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                position: 'relative'
-                            }} key={teamMember._id}>
-                                <Typography color="textSecondary">
-                                    {teamMember.firstname}
-                                </Typography>
-                                {(isEditable && isRoleEditable) &&
-                                    <IconButton className='clearIcon'>
-                                        <CancelIcon color='default' />
-                                    </IconButton>
-                                }
-                            </div>
-                        ))}
-
-                        {/* To Change to a textfield which onclick role becomes editable */}
-                        {role.teamMember.length === 0 &&
-                            <div>
-                                <Typography component={'span'} color="textSecondary" gutterBottom>
-                                    No members assigned
-                                </Typography>
-                            </div>}
-
-
-                        {(isEditable && isRoleEditable) &&
-                            <FormControl className='formControl' display="inline">
-                                <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
-                                <Select
-                                    labelId="teamMemberSelect"
-                                    id="teamMemberSelect"
-                                    value={selectedMember}
-                                    onChange={handleChangeSelected}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={'id1'}>Yoann</MenuItem>
-                                    <MenuItem value={'id1'}>Darren</MenuItem>
-                                    <MenuItem value={'id1'}>Emile</MenuItem>
-                                </Select>
-                                <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-                                <IconButton onClick={handleChangeSelected} aria-label="settings">
-                                    <AddCircleIcon />
-                                </IconButton>
-                            </FormControl>}
-                    </CardContent>
-                </Card>}
-            {index < 0 &&
-                <Card className='roleCard'>
-                    <CardHeader
-                        title='Additional Info'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                />}
-                            </>
-                        }
-                    />
-                    <CardContent>
-                        <TextField InputProps={{
-                            classes: {
-                                notchedOutline: classes.noBorder
-                            },
-                        }}
-                            multiline={true}
-                            disabled={!isRoleEditable}
-                            id="outlined-basic"
-                            variant="outlined"
-                            placeholder="no additional info"
-                            value={additionalInfo}
-                            onChange={handleTextFieldAddInfo} />
-                    </CardContent>
-                </Card>}
-        </>
-    );
-}
-
+// On click edit, save a local version of the event
+// Then when click update, take the copy of the event and send that as body, update original event to be the copy
+// Then when click cancel, revert to original version of event
 export default function EventCard({ event, index }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
-    const [selectedDate, changeSelectedDate] = useState(new Date(event.event.time * 1000));
-    const [eventName, changeEventName] = useState(event.event.name);
+    const [originalEvent, changeOriginalEvent] = useState(event.event);
+    const [selectedEvent, changeSelectedEvent] = useState(event.event);
     const history = useHistory();
 
     let redirectToResources = (event) => {
         history.push("resources");
     };
 
-    const handleChangeEventName = (e) => {
-        changeEventName(e.target.value);
+    const handleChangeEvent = (e, type) => {
+        var tempEvent = Object.assign({}, selectedEvent);
+        if (type.toLowerCase() === 'name') {
+            tempEvent.name = e.target.value;
+        } else if (type.toLowerCase() === 'date') {
+            console.log(e);
+            tempEvent.timestamp = (e.getTime() / 1000);
+            console.log(tempEvent.timestamp);
+        }
+        changeSelectedEvent(tempEvent);
     }
+
     return (
         <Card key={index} className='card'>
             <CardHeader
@@ -198,8 +64,8 @@ export default function EventCard({ event, index }) {
                     id="outlined-basic"
                     variant="outlined"
                     placeholder="no additional info"
-                    value={eventName}
-                    onChange={handleChangeEventName} />}
+                    value={selectedEvent.name}
+                    onChange={(e) => handleChangeEvent(e, "name")} />}
                 subheader={
                     <>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -209,8 +75,8 @@ export default function EventCard({ event, index }) {
                                 margin="normal"
                                 id="pickupDate"
                                 disabled={!isEditable}
-                                value={selectedDate}
-                                onChange={changeSelectedDate}
+                                value={new Date(selectedEvent.timestamp * 1000)}
+                                onChange={(e) => handleChangeEvent(e, "date")}
                                 KeyboardButtonProps={{
                                     "aria-label": "change date",
                                 }}
@@ -222,6 +88,11 @@ export default function EventCard({ event, index }) {
                     <ButtonGroup
                         isEditable={isEditable}
                         toggleEdit={toggleEdit}
+                        type={"event"}
+                        data={selectedEvent}
+                        updateData={changeSelectedEvent}
+                        originalData={originalEvent}
+                        updateOriginalData={changeOriginalEvent}
                     />
                 }
             />
@@ -233,12 +104,11 @@ export default function EventCard({ event, index }) {
                         isEditable={isEditable}
                     />
                 ))}
-                {event.eventDetails.additionalInfo &&
-                    <RoleSection
-                        role={event.eventDetails}
-                        index={-1}
-                        isEditable={isEditable}
-                    />}
+                <RoleSection
+                    role={event.eventDetails}
+                    index={-1}
+                    isEditable={isEditable}
+                />
             </CardContent>
             <CardActions className='card-actions'>
                 <Button className='resources-button' variant="contained"
