@@ -14,7 +14,7 @@ import DateFnsUtils from '@date-io/date-fns';
 
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
-import convertDate from "../../utils/ConvertDate";
+// import convertDate from "../../utils/ConvertDate";
 import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here
@@ -32,21 +32,22 @@ export default function EventCard({ event, index }) {
     const [isEditable, toggleEdit] = useState(false);
     const [originalEvent, changeOriginalEvent] = useState(event.event);
     const [selectedEvent, changeSelectedEvent] = useState(event.event);
-    const [selectedDate, changeSelectedDate] = useState(new Date(selectedEvent * 1000));
     const history = useHistory();
 
     let redirectToResources = (event) => {
         history.push("resources");
     };
 
-    const handleChangeEventName = (e) => {
+    const handleChangeEvent = (e, type) => {
         var tempEvent = Object.assign({}, selectedEvent);
-        tempEvent.name = e.target.value;
+        if(type.toLowerCase() === 'name') {
+            tempEvent.name = e.target.value;
+        } else if (type.toLowerCase() === 'date') {
+            console.log(e);
+            tempEvent.timestamp = (e.getTime() / 1000);
+            console.log(tempEvent.timestamp);
+        }
         changeSelectedEvent(tempEvent);
-    }
-
-    const handleChangeDate = (e) => {
-        
     }
 
     return (
@@ -64,7 +65,7 @@ export default function EventCard({ event, index }) {
                     variant="outlined"
                     placeholder="no additional info"
                     value={selectedEvent.name}
-                    onChange={handleChangeEventName} />}
+                    onChange={(e) => handleChangeEvent(e, "name")} />}
                 subheader={
                     <>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -74,8 +75,8 @@ export default function EventCard({ event, index }) {
                                 margin="normal"
                                 id="pickupDate"
                                 disabled={!isEditable}
-                                value={selectedDate}
-                                onChange={changeSelectedDate}
+                                value={new Date(selectedEvent.timestamp * 1000)}
+                                onChange={(e) => handleChangeEvent(e, "date")}
                                 KeyboardButtonProps={{
                                     "aria-label": "change date",
                                 }}

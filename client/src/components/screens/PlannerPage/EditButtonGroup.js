@@ -12,19 +12,9 @@ import * as EventsAPI from './../../utils/Services/EventsAPI'
 export default function ButtonGroup({ isEditable, toggleEdit, type, data, updateData, originalData, updateOriginalData }) {
     const handleEdit = () => {
         toggleEdit(!isEditable);
-        if (type.toLowerCase() === "event") {
-            updateData(Object.assign([], data));
-            // console.log(data);
-            // console.log(originalData);
-        }
-        // console.log("editing is " + isEditable);
     }
 
     const handleSave = () => {
-        // console.log("temp data: ");
-        // console.log(data);
-        // console.log("original data: ");
-        // console.log(originalData);
         if (type.toLowerCase() === "event") {
             EventsAPI.updateEvent(data, data._id)
                 .then(resp => {
@@ -35,11 +25,15 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
                 });
         }
         toggleEdit(false);
+        // Updating original data and selected data
         updateOriginalData(data);
     }
 
-    // If you cancel, changes the 
+    // If you cancel, reverts the changes you made back to original data
     const handleCancel = () => {
+        console.log(originalData);
+        console.log('cached Data');
+        console.log(data);
         updateData(originalData);
         toggleEdit(false);
     }

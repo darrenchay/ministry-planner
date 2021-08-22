@@ -26,9 +26,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 // The cards for each of the roles (includes handling for additional info as well)
-export default function RoleSection ({ role, index, isEditable }) {
+export default function RoleSection({ role, index, isEditable }) {
     const classes = useStyles();
     const [isRoleEditable, toggleRoleEdit] = useState(false);
+    const [originalRole, changeOriginalRole] = useState(role);
+    const [selectedRole, changeSelectedRole] = useState(role);
     const [selectedMember, changeSelectedMember] = useState('');
     const [additionalInfo, setAdditionalInfo] = useState(role.additionalInfo);
 
@@ -36,8 +38,12 @@ export default function RoleSection ({ role, index, isEditable }) {
         changeSelectedMember(event.target.value)
     }
 
-    const handleTextFieldAddInfo = (event) => {
-        setAdditionalInfo(event.target.value);
+    const handleChangeRole = (e, type) => {
+        var tempRole = Object.assign({}, selectedRole);
+        if(type === 'addInfo') {
+            tempRole.additionalInfo = e.target.value;
+        } 
+        changeSelectedRole(tempRole);
     }
 
     return (
@@ -52,6 +58,11 @@ export default function RoleSection ({ role, index, isEditable }) {
                                 {isEditable && <ButtonGroup
                                     isEditable={isRoleEditable}
                                     toggleEdit={toggleRoleEdit}
+                                    type={"role"}
+                                    data={selectedRole}
+                                    updateData={changeSelectedRole}
+                                    originalData={originalRole}
+                                    updateOriginalData={changeOriginalRole}
                                 />}
                             </>
                         }
@@ -116,6 +127,11 @@ export default function RoleSection ({ role, index, isEditable }) {
                                 {isEditable && <ButtonGroup
                                     isEditable={isRoleEditable}
                                     toggleEdit={toggleRoleEdit}
+                                    type={"role"}
+                                    data={selectedRole}
+                                    updateData={changeSelectedRole}
+                                    originalData={originalRole}
+                                    updateOriginalData={changeOriginalRole}
                                 />}
                             </>
                         }
@@ -131,8 +147,8 @@ export default function RoleSection ({ role, index, isEditable }) {
                             id="outlined-basic"
                             variant="outlined"
                             placeholder="no additional info"
-                            value={additionalInfo}
-                            onChange={handleTextFieldAddInfo} />
+                            value={selectedRole.additionalInfo}
+                            onChange={(e) => handleChangeRole(e, 'addInfo')} />
                     </CardContent>
                 </Card>}
         </>
