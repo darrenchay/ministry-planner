@@ -25,6 +25,7 @@ export const updateEvent = (data, id) => {
     })
 }
 
+// Update that so that it updates each team member to only have their id and not the full user
 export const updateRole = (data, ministry) => {
     return axios ({
         method: "post",

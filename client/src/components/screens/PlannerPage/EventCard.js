@@ -24,9 +24,6 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// On click edit, save a local version of the event
-// Then when click update, take the copy of the event and send that as body, update original event to be the copy
-// Then when click cancel, revert to original version of event
 export default function EventCard({ event, index }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);

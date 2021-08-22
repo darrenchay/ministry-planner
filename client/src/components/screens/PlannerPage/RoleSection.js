@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import cloneDeep from "lodash/cloneDeep";
 import {
     makeStyles,
     Card,
@@ -17,6 +18,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import ButtonGroup from './EditButtonGroup'
 import "./PlannerPage.scss";
+import * as UsersAPI from './../../utils/Services/UsersAPI'
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles(() => ({
@@ -31,18 +33,47 @@ export default function RoleSection({ role, index, isEditable }) {
     const [isRoleEditable, toggleRoleEdit] = useState(false);
     const [originalRole, changeOriginalRole] = useState(role);
     const [selectedRole, changeSelectedRole] = useState(role);
-    const [selectedMember, changeSelectedMember] = useState('');
-
-    const handleChangeSelected = (event) => {
-        changeSelectedMember(event.target.value)
-    }
+    const [newRoleTag, changeNewRoleTag] = useState({ memberId: "", tag: "" });
 
     const handleChangeRole = (e, type) => {
-        var tempRole = Object.assign({}, selectedRole);
+        var tempRole = cloneDeep(selectedRole);
         if (type === 'addInfo') {
             tempRole.additionalInfo = e.target.value;
         }
         changeSelectedRole(tempRole);
+    }
+
+    const addRole = () => {
+        var tempRole = cloneDeep(selectedRole);
+        console.log(tempRole);
+        if (newRoleTag.memberId !== null && newRoleTag.memberId !== "" ) {
+            UsersAPI.getUser(newRoleTag.memberId)
+                .then(resp => {
+                    console.log("successfully retrieved user: " + resp.firstname + " " + resp.lastname);
+                    tempRole.teamMapping.push(newRoleTag);
+                    tempRole.teamMember.push(resp);
+                    console.log(tempRole);
+                    changeNewRoleTag({ memberId: "", tag: "" });
+                    console.log(newRoleTag);
+                    changeSelectedRole(tempRole);
+                })
+                .catch(err => {
+                    console.log(err);
+                    // Add error handler and do not make editable false, instead show an alert which says an error occured
+                });
+        } else {
+            // Validation handling
+        }
+    }
+
+    const handleAddRole = (e, type) => {
+        var tempData = Object.assign({}, newRoleTag);
+        if (type === 'id') {
+            tempData.memberId = e.target.value;
+        } else if (type === 'tag') {
+            tempData.tag = e.target.value;
+        }
+        changeNewRoleTag(tempData);
     }
 
     return (
@@ -67,7 +98,7 @@ export default function RoleSection({ role, index, isEditable }) {
                         }
                     />
                     <CardContent>
-                        {role.teamMember.length > 0 && role.teamMember.map(teamMember => (
+                        {selectedRole.teamMember.length > 0 && selectedRole.teamMember.map(teamMember => (
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -79,14 +110,14 @@ export default function RoleSection({ role, index, isEditable }) {
                                 </Typography>
                                 {(isEditable && isRoleEditable) &&
                                     <IconButton className='clearIcon'>
-                                        <CancelIcon color='default' />
+                                        <CancelIcon />
                                     </IconButton>
                                 }
                             </div>
                         ))}
 
                         {/* To Change to a textfield which onclick role becomes editable */}
-                        {role.teamMember.length === 0 &&
+                        {selectedRole.teamMember.length === 0 &&
                             <div>
                                 <Typography component={'span'} color="textSecondary" gutterBottom>
                                     No members assigned
@@ -101,21 +132,33 @@ export default function RoleSection({ role, index, isEditable }) {
                                     <Select
                                         labelId="teamMemberSelect"
                                         id="teamMemberSelect"
-                                        value={selectedMember}
-                                        onChange={handleChangeSelected}
+                                        value={newRoleTag.memberId}
+                                        onChange={(e) => handleAddRole(e, "id")}
                                     >
                                         <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
-                                        <MenuItem value={'id1'}>Yoann</MenuItem>
-                                        <MenuItem value={'id1'}>Darren</MenuItem>
-                                        <MenuItem value={'id1'}>Emile</MenuItem>
+                                        <MenuItem value={'6116f049194bf42a0254963d'}>Yoann</MenuItem>
+                                        <MenuItem value={'6116f026194bf42a02549639'}>Darren</MenuItem>
+                                        <MenuItem value={'6116f036194bf42a0254963b'}>Emile</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl>
-                                    <TextField id="outlined-basic" label="Tag" variant="outlined" />
+                                    <TextField InputProps={{
+                                        classes: {
+                                            notchedOutline: classes.noBorder
+                                        },
+                                    }}
+                                        multiline={true}
+                                        disabled={!isEditable}
+                                        id="add-role"
+                                        label="Tag"
+                                        variant="outlined"
+                                        placeholder="Add a tag"
+                                        value={newRoleTag.tag}
+                                        onChange={(e) => handleAddRole(e, "tag")} />
                                 </FormControl>
-                                <IconButton onClick={handleChangeSelected} aria-label="settings">
+                                <IconButton onClick={addRole} aria-label="settings">
                                     <AddCircleIcon />
                                 </IconButton>
                             </form>}
