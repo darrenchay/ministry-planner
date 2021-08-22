@@ -59,6 +59,24 @@ class WorshipOnDutyActions {
         });
     }
 
+    updateRole(req, res) { //Add updating of a team member (role) in the team list
+        WorshipEventDetails.updateOne(
+            {
+                "teamList.roleId": req.body.roleId
+            },
+            { "$set": { "teamList.$": req.body } },
+            function (err, worshipEventDetails) {
+                if (err) {
+                    res.status(400).send(err);
+                } else if (worshipEventDetails.n == 0) {
+                    console.log(worshipEventDetails);
+                    res.status(404).send("Role " + req.body.roleId + " not successfully updated");
+                } else {
+                    res.status(200).send(worshipEventDetails);
+                }
+            })
+    }
+
     deleteOne(req, res) {
         WorshipEventDetails.deleteOne({ _id: req.params.id }, function (err, worshipEventDetails) {
             if (err)
