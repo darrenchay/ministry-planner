@@ -13,13 +13,16 @@ export const getFullEventsList = (ministry) => {
 }
 
 export const updateEvent = (data, id) => {
+    // console.log('updateAPI');
+    // console.log(data);
     return axios ({
         method: "post",
-        url: baseURL + "events/update" + id,
+        url: baseURL + "events/update/" + id,
         data: data
     })
     .then(resp => resp.data)
     .catch(err => {
+        console.log("here");
         console.log(err);
         throw err;
     })

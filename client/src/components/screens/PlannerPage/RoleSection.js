@@ -15,7 +15,7 @@ import {
 import CancelIcon from '@material-ui/icons/Cancel';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import ButtonGroup from './../../utils/EditButtonGroup'
+import ButtonGroup from './EditButtonGroup'
 import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here

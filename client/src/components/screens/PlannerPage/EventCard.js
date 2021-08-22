@@ -12,10 +12,9 @@ import {
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
 
-import ButtonGroup from './../../utils/EditButtonGroup';
+import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
 import convertDate from "../../utils/ConvertDate";
-import * as EventsAPI from './../../utils/Services/EventsAPI'
 import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here
@@ -28,13 +27,12 @@ const useStyles = makeStyles(() => ({
 // On click edit, save a local version of the event
 // Then when click update, take the copy of the event and send that as body, update original event to be the copy
 // Then when click cancel, revert to original version of event
-
 export default function EventCard({ event, index }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
-    const [selectedDate, changeSelectedDate] = useState(new Date(event.event.time * 1000));
-    const [eventName, changeEventName] = useState(event.event.name);
-    const eventId = event._id;
+    const [originalEvent, changeOriginalEvent] = useState(event.event);
+    const [selectedEvent, changeSelectedEvent] = useState(event.event);
+    const [selectedDate, changeSelectedDate] = useState(new Date(selectedEvent * 1000));
     const history = useHistory();
 
     let redirectToResources = (event) => {
@@ -42,19 +40,15 @@ export default function EventCard({ event, index }) {
     };
 
     const handleChangeEventName = (e) => {
-        changeEventName(e.target.value);
+        var tempEvent = Object.assign({}, selectedEvent);
+        tempEvent.name = e.target.value;
+        changeSelectedEvent(tempEvent);
     }
 
-    const updateEvent = () => {
-
-        EventsAPI.updateEvent(data, eventId)
-        .then(resp=> {
-            console.log("successfully updated " + resp.nModified + " event");
-        })
-        .catch(err => {
-            console.log(err)
-        })
+    const handleChangeDate = (e) => {
+        
     }
+
     return (
         <Card key={index} className='card'>
             <CardHeader
@@ -69,7 +63,7 @@ export default function EventCard({ event, index }) {
                     id="outlined-basic"
                     variant="outlined"
                     placeholder="no additional info"
-                    value={eventName}
+                    value={selectedEvent.name}
                     onChange={handleChangeEventName} />}
                 subheader={
                     <>
@@ -93,6 +87,11 @@ export default function EventCard({ event, index }) {
                     <ButtonGroup
                         isEditable={isEditable}
                         toggleEdit={toggleEdit}
+                        type={"event"}
+                        data={selectedEvent}
+                        updateData={changeSelectedEvent}
+                        originalData={originalEvent}
+                        updateOriginalData={changeOriginalEvent}
                     />
                 }
             />
