@@ -32,7 +32,6 @@ export default function RoleSection({ role, index, isEditable }) {
     const [originalRole, changeOriginalRole] = useState(role);
     const [selectedRole, changeSelectedRole] = useState(role);
     const [selectedMember, changeSelectedMember] = useState('');
-    const [additionalInfo, setAdditionalInfo] = useState(role.additionalInfo);
 
     const handleChangeSelected = (event) => {
         changeSelectedMember(event.target.value)
@@ -40,9 +39,9 @@ export default function RoleSection({ role, index, isEditable }) {
 
     const handleChangeRole = (e, type) => {
         var tempRole = Object.assign({}, selectedRole);
-        if(type === 'addInfo') {
+        if (type === 'addInfo') {
             tempRole.additionalInfo = e.target.value;
-        } 
+        }
         changeSelectedRole(tempRole);
     }
 
@@ -96,29 +95,34 @@ export default function RoleSection({ role, index, isEditable }) {
 
 
                         {(isEditable && isRoleEditable) &&
-                            <FormControl className='formControl' display="inline">
-                                <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
-                                <Select
-                                    labelId="teamMemberSelect"
-                                    id="teamMemberSelect"
-                                    value={selectedMember}
-                                    onChange={handleChangeSelected}
-                                >
-                                    <MenuItem value="">
-                                        <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={'id1'}>Yoann</MenuItem>
-                                    <MenuItem value={'id1'}>Darren</MenuItem>
-                                    <MenuItem value={'id1'}>Emile</MenuItem>
-                                </Select>
-                                <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+                            <form className='add-team-member'>
+                                <FormControl>
+                                    <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
+                                    <Select
+                                        labelId="teamMemberSelect"
+                                        id="teamMemberSelect"
+                                        value={selectedMember}
+                                        onChange={handleChangeSelected}
+                                    >
+                                        <MenuItem value="">
+                                            <em>None</em>
+                                        </MenuItem>
+                                        <MenuItem value={'id1'}>Yoann</MenuItem>
+                                        <MenuItem value={'id1'}>Darren</MenuItem>
+                                        <MenuItem value={'id1'}>Emile</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <FormControl>
+                                    <TextField id="outlined-basic" label="Tag" variant="outlined" />
+                                </FormControl>
                                 <IconButton onClick={handleChangeSelected} aria-label="settings">
                                     <AddCircleIcon />
                                 </IconButton>
-                            </FormControl>}
+                            </form>}
                     </CardContent>
                 </Card>}
-            {index < 0 &&
+            {
+                index < 0 &&
                 <Card className='roleCard'>
                     <CardHeader
                         title='Additional Info'
@@ -150,7 +154,8 @@ export default function RoleSection({ role, index, isEditable }) {
                             value={selectedRole.additionalInfo}
                             onChange={(e) => handleChangeRole(e, 'addInfo')} />
                     </CardContent>
-                </Card>}
+                </Card>
+            }
         </>
     );
 }

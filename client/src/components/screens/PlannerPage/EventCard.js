@@ -40,7 +40,7 @@ export default function EventCard({ event, index }) {
 
     const handleChangeEvent = (e, type) => {
         var tempEvent = Object.assign({}, selectedEvent);
-        if(type.toLowerCase() === 'name') {
+        if (type.toLowerCase() === 'name') {
             tempEvent.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {
             console.log(e);
@@ -104,12 +104,11 @@ export default function EventCard({ event, index }) {
                         isEditable={isEditable}
                     />
                 ))}
-                {event.eventDetails.additionalInfo &&
-                    <RoleSection
-                        role={event.eventDetails}
-                        index={-1}
-                        isEditable={isEditable}
-                    />}
+                <RoleSection
+                    role={event.eventDetails}
+                    index={-1}
+                    isEditable={isEditable}
+                />
             </CardContent>
             <CardActions className='card-actions'>
                 <Button className='resources-button' variant="contained"

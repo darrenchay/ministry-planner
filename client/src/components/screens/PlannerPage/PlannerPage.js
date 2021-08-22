@@ -4,7 +4,7 @@ import EventCard from "./EventCard"
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 
 /* TODO: 
-    - Add a add event button
+    - Add an add event button
     - Add the scrolling/pagination of events
     - add the calendar thing to skip to a specific month
  */
@@ -36,6 +36,7 @@ export default function PlannerPage() {
                     .sort((firstEl, secondEl) => {
                         return firstEl.props.event.event.timestamp - secondEl.props.event.event.timestamp;
                     })
+                    //Add a filter for only 4 event cards
             }
 
             {events?.length === 0 &&

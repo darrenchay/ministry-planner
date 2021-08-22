@@ -2,7 +2,7 @@
     margin: 12px;
     display: flex;
     text-align: left;
-    
+
     .card {
         width: 25%;
         margin-right: 14px;
@@ -32,6 +32,14 @@
             .additional-info {
                 border-width: 0px;
             }
+
+            .add-team-member {
+                width: 800;
+                display: "flex";
+                flex-wrap: "wrap";
+                justify-content: "center";
+                align-items: "center";
+            }
         }
 
         &-actions {
@@ -44,5 +52,5 @@
                 margin-bottom: 16px;
             }
         }
-    }    
+    }
 }

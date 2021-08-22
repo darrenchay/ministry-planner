@@ -22,6 +22,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
                 })
                 .catch(err => {
                     console.log(err)
+                    // Add error handler and do not make editable false, instead show an alert which says an error occured
                 });
         }
         toggleEdit(false);
@@ -31,9 +32,6 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
 
     // If you cancel, reverts the changes you made back to original data
     const handleCancel = () => {
-        console.log(originalData);
-        console.log('cached Data');
-        console.log(data);
         updateData(originalData);
         toggleEdit(false);
     }
