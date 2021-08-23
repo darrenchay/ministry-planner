@@ -59,10 +59,10 @@ class WorshipOnDutyActions {
         });
     }
 
-    updateRole(req, res) { //Add updating of a team member (role) in the team list
+    updateRole(req, res) { //Updating a team member (role) in the team list
         WorshipEventDetails.updateOne(
             {
-                "teamList.roleId": req.body.roleId
+                "teamList._id": req.params.id
             },
             { "$set": { "teamList.$": req.body } },
             function (err, worshipEventDetails) {

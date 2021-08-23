@@ -13,28 +13,41 @@ export const getFullEventsList = (ministry) => {
 }
 
 export const updateEvent = (data, id) => {
-    return axios ({
+    return axios({
         method: "post",
         url: baseURL + "events/update/" + id,
         data: data
     })
-    .then(resp => resp.data)
-    .catch(err => {
-        console.log(err);
-        throw err;
-    })
+        .then(resp => resp.data)
+        .catch(err => {
+            console.log(err);
+            throw err;
+        })
 }
 
-// Update that so that it updates each team member to only have their id and not the full user
-export const updateRole = (data, ministry) => {
-    return axios ({
-        method: "post",
-        url: baseURL + ministry +"EventDetails/updateRole",
-        data: data
-    })
-    .then(resp => resp.data)
-    .catch(err => {
-        console.log(err);
-        throw err
-    })
+export const updateEventDetails = (data, ministry, type, id) => {
+    console.log(data);
+    if (type === 'role') {
+        return axios({
+            method: "post",
+            url: baseURL + ministry + "EventDetails/updateRole/" + data._id,
+            data: data
+        })
+            .then(resp => resp.data)
+            .catch(err => {
+                console.log(err);
+                throw err
+            })
+    } else {
+        return axios({
+            method: "post",
+            url: baseURL + ministry + "EventDetails/update/" + id,
+            data: data
+        })
+            .then(resp => resp.data)
+            .catch(err => {
+                console.log(err);
+                throw err
+            })
+    }
 }

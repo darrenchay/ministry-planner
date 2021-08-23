@@ -27,6 +27,56 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+const TeamMember = ({teamMember, teamMapping, role, roleHandler, isEditable, isRoleEditable}) => {
+    const [tag] = useState(() => {
+        if(Object.keys(teamMapping).length > 0) {
+            var mapping = teamMapping.find(mapping => mapping.memberId === teamMember._id);
+            if(mapping !== undefined) {
+                return mapping.tag;
+            }
+        } else {
+            return "";
+        }
+    })
+
+    const handleDeleteMember = () => {
+        var tempRole = cloneDeep(role);
+        console.log(role);
+        var tempTeamMembers = role.teamMember.filter((filteredTeamMember) => filteredTeamMember._id !== teamMember._id);
+        var tempTeamMappings = role.teamMapping.filter((filteredTeamMapping) => filteredTeamMapping.memberId !== teamMember._id);
+        console.log(tempTeamMembers);
+        console.log("mappings:");
+        console.log(tempTeamMappings);
+        tempRole.teamMember = tempTeamMembers;
+        tempRole.teamMapping = tempTeamMappings
+        console.log("updated role");
+        console.log(tempRole);
+        roleHandler(tempRole);
+    }
+
+    return (
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            position: 'relative',
+            margin: '10px'
+        }} key={teamMember._id}>
+            <Typography className="team-member">
+                {teamMember.firstname}
+            </Typography>
+            <Typography className="tag" color="textSecondary">
+                {tag}
+            </Typography>
+            {(isEditable && isRoleEditable) &&
+                <IconButton className='clearIcon' onClick={handleDeleteMember}>
+                    <CancelIcon />
+                </IconButton>
+            }
+        </div>
+    );
+}
+
 // The cards for each of the roles (includes handling for additional info as well)
 export default function RoleSection({ role, index, isEditable }) {
     const classes = useStyles();
@@ -46,15 +96,13 @@ export default function RoleSection({ role, index, isEditable }) {
     const addRole = () => {
         var tempRole = cloneDeep(selectedRole);
         console.log(tempRole);
-        if (newRoleTag.memberId !== null && newRoleTag.memberId !== "" ) {
+        if (newRoleTag.memberId !== null && newRoleTag.memberId !== "") {
             UsersAPI.getUser(newRoleTag.memberId)
                 .then(resp => {
                     console.log("successfully retrieved user: " + resp.firstname + " " + resp.lastname);
                     tempRole.teamMapping.push(newRoleTag);
                     tempRole.teamMember.push(resp);
-                    console.log(tempRole);
                     changeNewRoleTag({ memberId: "", tag: "" });
-                    console.log(newRoleTag);
                     changeSelectedRole(tempRole);
                 })
                 .catch(err => {
@@ -98,22 +146,15 @@ export default function RoleSection({ role, index, isEditable }) {
                         }
                     />
                     <CardContent>
-                        {selectedRole.teamMember.length > 0 && selectedRole.teamMember.map(teamMember => (
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                position: 'relative'
-                            }} key={teamMember._id}>
-                                <Typography color="textSecondary">
-                                    {teamMember.firstname}
-                                </Typography>
-                                {(isEditable && isRoleEditable) &&
-                                    <IconButton className='clearIcon'>
-                                        <CancelIcon />
-                                    </IconButton>
-                                }
-                            </div>
+                        {selectedRole.teamMember.length > 0 && selectedRole.teamMember.map(user => (
+                            <TeamMember
+                                teamMember={user}
+                                teamMapping={selectedRole.teamMapping}
+                                isEditable={isEditable}
+                                isRoleEditable={isRoleEditable}
+                                role = {selectedRole}
+                                roleHandler = {changeSelectedRole}
+                            />
                         ))}
 
                         {/* To Change to a textfield which onclick role becomes editable */}
@@ -141,6 +182,7 @@ export default function RoleSection({ role, index, isEditable }) {
                                         <MenuItem value={'6116f049194bf42a0254963d'}>Yoann</MenuItem>
                                         <MenuItem value={'6116f026194bf42a02549639'}>Darren</MenuItem>
                                         <MenuItem value={'6116f036194bf42a0254963b'}>Emile</MenuItem>
+                                        <MenuItem value={'6116f057194bf42a02549641'}>Evan</MenuItem>
                                     </Select>
                                 </FormControl>
                                 <FormControl>
@@ -174,7 +216,7 @@ export default function RoleSection({ role, index, isEditable }) {
                                 {isEditable && <ButtonGroup
                                     isEditable={isRoleEditable}
                                     toggleEdit={toggleRoleEdit}
-                                    type={"role"}
+                                    type={"eventDetails"}
                                     data={selectedRole}
                                     updateData={changeSelectedRole}
                                     originalData={originalRole}

@@ -1,4 +1,5 @@
 import React from "react";
+import cloneDeep from "lodash/cloneDeep";
 import {
     IconButton,
 } from '@material-ui/core';
@@ -27,7 +28,19 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
                     // Add error handler and do not make editable false, instead show an alert which says an error occured
                 });
         } else if (type.toLowerCase() === "role") {
-            EventsAPI.updateRole(data, 'worship')
+            EventsAPI.updateEventDetails(data, 'worship', 'role')
+                .then(resp => {
+                    console.log("successfully updated " + resp.nModified + " role(s)");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        } else if (type === "eventDetails") {
+            var tempData = cloneDeep(data);
+            delete tempData.teamList;
+            delete tempData.teamMapping;
+            console.log(tempData);
+            EventsAPI.updateEventDetails(tempData, 'worship', 'eventDetails', data._id)
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " role(s)");
                 })
@@ -41,6 +54,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
 
     // If you cancel, reverts the changes you made back to original data
     const handleCancel = () => {
+        // console.log(originalData);
+        // console.log(data);
         updateData(originalData);
         toggleEdit(false);
     }
