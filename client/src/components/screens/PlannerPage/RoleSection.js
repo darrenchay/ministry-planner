@@ -80,6 +80,13 @@ export default function RoleSection({ role, index, isEditable }) {
     const [selectedRole, changeSelectedRole] = useState(role);
     const [newRoleTag, changeNewRoleTag] = useState({ memberId: "", tag: "" });
 
+    useEffect(()=> {
+        if(!isEditable) {
+            toggleRoleEdit(false);
+            changeSelectedRole(originalRole);
+        }
+    }, [isEditable, originalRole]);
+
     const handleChangeRole = (e, type) => {
         var tempRole = cloneDeep(selectedRole);
         if (type === 'addInfo') {
@@ -97,7 +104,7 @@ export default function RoleSection({ role, index, isEditable }) {
                     console.log("successfully retrieved user: " + resp.firstname + " " + resp.lastname);
                     tempRole.teamMapping.push(newRoleTag);
                     tempRole.teamMember.push(resp);
-                    changeNewRoleTag({ memberId: "", tag: "" });
+                    changeNewRoleTag({ memberId: "", tag: "" }); //reset add member section
                     changeSelectedRole(tempRole);
                 })
                 .catch(err => {
@@ -152,14 +159,12 @@ export default function RoleSection({ role, index, isEditable }) {
                             />
                         ))}
 
-                        {/* To Change to a textfield which onclick role becomes editable */}
                         {selectedRole.teamMember.length === 0 &&
                             <div>
                                 <Typography component={'span'} color="textSecondary" gutterBottom>
                                     No members assigned
                                 </Typography>
                             </div>}
-
 
                         {(isEditable && isRoleEditable) &&
                             <form className='add-team-member'>
