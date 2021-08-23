@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
 import {
     makeStyles,
@@ -36,7 +37,7 @@ export default function EventCard({ event, index }) {
     };
 
     const handleChangeEvent = (e, type) => {
-        var tempEvent = Object.assign({}, selectedEvent);
+        var tempEvent = cloneDeep(selectedEvent);
         if (type.toLowerCase() === 'name') {
             tempEvent.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {

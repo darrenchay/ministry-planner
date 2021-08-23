@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import {
     makeStyles,
@@ -27,17 +27,8 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const TeamMember = ({teamMember, teamMapping, role, roleHandler, isEditable, isRoleEditable}) => {
-    const [tag] = useState(() => {
-        if(Object.keys(teamMapping).length > 0) {
-            var mapping = teamMapping.find(mapping => mapping.memberId === teamMember._id);
-            if(mapping !== undefined) {
-                return mapping.tag;
-            }
-        } else {
-            return "";
-        }
-    })
+const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, isRoleEditable }) => {
+    const [tag, setTag] = useState({})
 
     // Creates a copy of the role object and deletes the member (and mapping) from the copy and updates the selected role with the copy
     const handleDeleteMember = () => {
@@ -45,9 +36,18 @@ const TeamMember = ({teamMember, teamMapping, role, roleHandler, isEditable, isR
         var tempTeamMembers = role.teamMember.filter((filteredTeamMember) => filteredTeamMember._id !== teamMember._id);
         var tempTeamMappings = role.teamMapping.filter((filteredTeamMapping) => filteredTeamMapping.memberId !== teamMember._id);
         tempRole.teamMember = tempTeamMembers;
-        tempRole.teamMapping = tempTeamMappings
+        tempRole.teamMapping = tempTeamMappings;
         roleHandler(tempRole);
     }
+
+    useEffect(() => {
+        if (Object.keys(teamMapping).length > 0) {
+            var mapping = teamMapping.find(mapping => teamMember._id === mapping.memberId);
+            if (mapping !== undefined) {
+                setTag(mapping.tag);
+            }
+        }
+    }, [role, teamMember, teamMapping]);
 
     return (
         <div style={{
@@ -60,9 +60,9 @@ const TeamMember = ({teamMember, teamMapping, role, roleHandler, isEditable, isR
             <Typography className="team-member">
                 {teamMember.firstname}
             </Typography>
-            <Typography className="tag" color="textSecondary">
-                {tag}
-            </Typography>
+            {tag?.length > 0 && <Typography className="tag" color="textSecondary">
+                - {tag}
+            </Typography>}
             {(isEditable && isRoleEditable) &&
                 <IconButton className='clearIcon' onClick={handleDeleteMember}>
                     <CancelIcon />
@@ -147,8 +147,8 @@ export default function RoleSection({ role, index, isEditable }) {
                                 teamMapping={selectedRole.teamMapping}
                                 isEditable={isEditable}
                                 isRoleEditable={isRoleEditable}
-                                role = {selectedRole}
-                                roleHandler = {changeSelectedRole}
+                                role={selectedRole}
+                                roleHandler={changeSelectedRole}
                             />
                         ))}
 
