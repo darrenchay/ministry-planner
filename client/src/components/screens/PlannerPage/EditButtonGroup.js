@@ -58,9 +58,12 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
     }
     return (
         <>
-            {!isEditable && <IconButton onClick={handleEdit} aria-label="settings" >
+            {!isEditable && 
+            <IconButton onClick={handleEdit} aria-label="settings" >
                 <EditIcon />
-            </IconButton>}
+            </IconButton>
+            // To add a delete icon next to it as well (and delete only appears for event not role), for role its minimize instead of delete
+            }
             {isEditable && <>
                 <IconButton onClick={handleSave} aria-label="settings">
                     <DoneIcon />

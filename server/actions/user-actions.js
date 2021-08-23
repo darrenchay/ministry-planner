@@ -37,6 +37,21 @@ class UserActions {
             });
     }
 
+    getAllByRole(req, res) {
+        userSchema.find({
+            ministry: req.params.ministry,
+            role: req.params.role
+        }, function (err, users) {
+            if (err) {
+                res.status(400).send(err);
+            } else if (users == '') {
+                res.status(404).send("No users with role '" + req.body.role + "' not found");
+            } else {
+                res.status(200).send(users);
+            }
+        })
+    }
+
     getOneByEmail(req, res) {
         userSchema.find({
             email: req.params.email,
