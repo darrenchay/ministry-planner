@@ -26,7 +26,7 @@ export const updateEvent = (data, id) => {
 }
 
 export const updateEventDetails = (data, ministry, type, id) => {
-    console.log(data);
+    //Update the team members for a role
     if (type === 'role') {
         return axios({
             method: "post",
@@ -39,6 +39,7 @@ export const updateEventDetails = (data, ministry, type, id) => {
                 throw err
             })
     } else {
+        //Updates the general event details (additional Info, rehearsal time, etc) 
         return axios({
             method: "post",
             url: baseURL + ministry + "EventDetails/update/" + id,

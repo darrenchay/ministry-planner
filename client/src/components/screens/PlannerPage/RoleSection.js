@@ -39,18 +39,13 @@ const TeamMember = ({teamMember, teamMapping, role, roleHandler, isEditable, isR
         }
     })
 
+    // Creates a copy of the role object and deletes the member (and mapping) from the copy and updates the selected role with the copy
     const handleDeleteMember = () => {
         var tempRole = cloneDeep(role);
-        console.log(role);
         var tempTeamMembers = role.teamMember.filter((filteredTeamMember) => filteredTeamMember._id !== teamMember._id);
         var tempTeamMappings = role.teamMapping.filter((filteredTeamMapping) => filteredTeamMapping.memberId !== teamMember._id);
-        console.log(tempTeamMembers);
-        console.log("mappings:");
-        console.log(tempTeamMappings);
         tempRole.teamMember = tempTeamMembers;
         tempRole.teamMapping = tempTeamMappings
-        console.log("updated role");
-        console.log(tempRole);
         roleHandler(tempRole);
     }
 

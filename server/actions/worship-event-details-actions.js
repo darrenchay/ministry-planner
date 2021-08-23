@@ -64,12 +64,15 @@ class WorshipOnDutyActions {
             {
                 "teamList._id": req.params.id
             },
-            { "$set": { "teamList.$": req.body } },
+            {
+                "$set": {
+                    "teamList.$": req.body
+                }
+            },
             function (err, worshipEventDetails) {
                 if (err) {
                     res.status(400).send(err);
                 } else if (worshipEventDetails.n == 0) {
-                    console.log(worshipEventDetails);
                     res.status(404).send("Role " + req.body.roleId + " not successfully updated");
                 } else {
                     res.status(200).send(worshipEventDetails);

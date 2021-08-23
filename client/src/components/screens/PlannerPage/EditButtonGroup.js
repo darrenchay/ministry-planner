@@ -39,7 +39,6 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
             var tempData = cloneDeep(data);
             delete tempData.teamList;
             delete tempData.teamMapping;
-            console.log(tempData);
             EventsAPI.updateEventDetails(tempData, 'worship', 'eventDetails', data._id)
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " role(s)");
@@ -54,8 +53,6 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
 
     // If you cancel, reverts the changes you made back to original data
     const handleCancel = () => {
-        // console.log(originalData);
-        // console.log(data);
         updateData(originalData);
         toggleEdit(false);
     }

@@ -41,7 +41,6 @@ export default function EventCard({ event, index }) {
             tempEvent.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {
             tempEvent.timestamp = (e.getTime() / 1000);
-            console.log(tempEvent.timestamp);
         }
         changeSelectedEvent(tempEvent);
     }
