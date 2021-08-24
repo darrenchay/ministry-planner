@@ -11,3 +11,13 @@ export const getUser = (id) => {
             throw err;
         });
 }
+
+export const getUserByRole = (ministry, role) => {
+    return axios
+        .get(baseURL + "users/getRoles/" + ministry + "/" + role)
+        .then(resp => resp.data)
+        .catch((err) => {
+            console.log(err)
+            throw err;
+        });
+}

@@ -79,13 +79,23 @@ export default function RoleSection({ role, index, isEditable }) {
     const [originalRole, changeOriginalRole] = useState(role);
     const [selectedRole, changeSelectedRole] = useState(role);
     const [newRoleTag, changeNewRoleTag] = useState({ memberId: "", tag: "" });
+    const [availableMembers, changeAvailableMembers] = useState([]);
 
-    useEffect(()=> {
-        if(!isEditable) {
+    useEffect(() => {
+        if (!isEditable) {
             toggleRoleEdit(false);
             changeSelectedRole(originalRole);
         }
     }, [isEditable, originalRole]);
+
+    useEffect(() => {
+        if (selectedRole.roleName !== undefined) {
+            UsersAPI.getUserByRole('worship', selectedRole.roleName)
+                .then(resp => {
+                    changeAvailableMembers(resp)
+                })
+        }
+    }, [selectedRole]);
 
     const handleChangeRole = (e, type) => {
         var tempRole = cloneDeep(selectedRole);
@@ -95,6 +105,7 @@ export default function RoleSection({ role, index, isEditable }) {
         changeSelectedRole(tempRole);
     }
 
+    //Can be refactored to use available members instead of calling users again
     const addRole = () => {
         var tempRole = cloneDeep(selectedRole);
         console.log(tempRole);
@@ -173,16 +184,39 @@ export default function RoleSection({ role, index, isEditable }) {
                                     <Select
                                         labelId="teamMemberSelect"
                                         id="teamMemberSelect"
+                                        placeholder="Select a member"
                                         value={newRoleTag.memberId}
                                         onChange={(e) => handleAddRole(e, "id")}
                                     >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={'6116f049194bf42a0254963d'}>Yoann</MenuItem>
-                                        <MenuItem value={'6116f026194bf42a02549639'}>Darren</MenuItem>
-                                        <MenuItem value={'6116f036194bf42a0254963b'}>Emile</MenuItem>
-                                        <MenuItem value={'6116f057194bf42a02549641'}>Evan</MenuItem>
+                                        {availableMembers?.length > 0 &&
+                                            availableMembers
+                                                .filter(member => {
+                                                    //Check if member was already assigned, if yes, remove that member
+                                                    var found = true;
+                                                    selectedRole.teamMember.forEach(selectedMember => {
+                                                        if (selectedMember._id === member._id) {
+                                                            found = false;
+                                                        }
+                                                    })
+                                                    return found;
+                                                })
+                                                .map((member, index) => {
+                                                    return <MenuItem value={member._id}>{member.firstname}</MenuItem>
+                                                })
+                                        }
+
+                                        {/* To refactor */}
+                                        {availableMembers.filter(member => {
+                                            var found = true;
+                                            selectedRole.teamMember.forEach(selectedMember => {
+                                                if (selectedMember._id === member._id) {
+                                                    found = false;
+                                                }
+                                            })
+                                            return found;
+                                        }).length === 0 &&
+                                            <MenuItem value={0} disabled={true}>No Members</MenuItem>
+                                        }
                                     </Select>
                                 </FormControl>
                                 <FormControl>
