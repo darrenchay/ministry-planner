@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
 import {
     makeStyles,
@@ -24,14 +25,11 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-// On click edit, save a local version of the event
-// Then when click update, take the copy of the event and send that as body, update original event to be the copy
-// Then when click cancel, revert to original version of event
 export default function EventCard({ event, index }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
-    const [originalEvent, changeOriginalEvent] = useState(event.event);
-    const [selectedEvent, changeSelectedEvent] = useState(event.event);
+    const [originalEvent, changeOriginalEvent] = useState(event);
+    const [selectedEvent, changeSelectedEvent] = useState(event);
     const history = useHistory();
 
     let redirectToResources = (event) => {
@@ -39,13 +37,11 @@ export default function EventCard({ event, index }) {
     };
 
     const handleChangeEvent = (e, type) => {
-        var tempEvent = Object.assign({}, selectedEvent);
+        var tempEvent = cloneDeep(selectedEvent);
         if (type.toLowerCase() === 'name') {
-            tempEvent.name = e.target.value;
+            tempEvent.event.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {
-            console.log(e);
-            tempEvent.timestamp = (e.getTime() / 1000);
-            console.log(tempEvent.timestamp);
+            tempEvent.event.timestamp = (e.getTime() / 1000);
         }
         changeSelectedEvent(tempEvent);
     }
@@ -63,8 +59,8 @@ export default function EventCard({ event, index }) {
                     disabled={!isEditable}
                     id="outlined-basic"
                     variant="outlined"
-                    placeholder="no additional info"
-                    value={selectedEvent.name}
+                    placeholder="No event name"
+                    value={selectedEvent.event.name}
                     onChange={(e) => handleChangeEvent(e, "name")} />}
                 subheader={
                     <>
@@ -75,7 +71,7 @@ export default function EventCard({ event, index }) {
                                 margin="normal"
                                 id="pickupDate"
                                 disabled={!isEditable}
-                                value={new Date(selectedEvent.timestamp * 1000)}
+                                value={new Date(selectedEvent.event.timestamp * 1000)}
                                 onChange={(e) => handleChangeEvent(e, "date")}
                                 KeyboardButtonProps={{
                                     "aria-label": "change date",
@@ -97,7 +93,7 @@ export default function EventCard({ event, index }) {
                 }
             />
             <CardContent>
-                {event.eventDetails.teamList.map((role, index) => (
+                {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
                         role={role}
                         index={index}
@@ -105,7 +101,7 @@ export default function EventCard({ event, index }) {
                     />
                 ))}
                 <RoleSection
-                    role={event.eventDetails}
+                    role={selectedEvent.eventDetails}
                     index={-1}
                     isEditable={isEditable}
                 />

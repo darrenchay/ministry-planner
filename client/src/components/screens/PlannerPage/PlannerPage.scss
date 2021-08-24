@@ -33,17 +33,20 @@
                 border-width: 0px;
             }
 
-            .add-team-member {
-                width: 800;
-                display: "flex";
-                flex-wrap: "wrap";
-                justify-content: "center";
-                align-items: "center";
+            .team-member {
+                margin-right: 5px;
+                color: black;
+            }
+
+            .tag {
+                margin-right: 5px;
+                color: lightslategrey;
             }
         }
 
         &-actions {
             padding: 16px;
+            margin-top: 16px;
 
             .resources-button {
                 bottom: 0;

@@ -1,4 +1,5 @@
 import React from "react";
+import cloneDeep from "lodash/cloneDeep";
 import {
     IconButton,
 } from '@material-ui/core';
@@ -7,8 +8,10 @@ import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 
-//TO ADD: add a parameter which takes in the appropriate save function required for that section
 // Handles the toggling of the edit/save/cancel buttons
+// On click edit, save a local version of the event
+// Then when click update, take the copy of the event and send that as body, update original event to be the copy
+// Then when click cancel, revert to original version of event
 export default function ButtonGroup({ isEditable, toggleEdit, type, data, updateData, originalData, updateOriginalData }) {
     const handleEdit = () => {
         toggleEdit(!isEditable);
@@ -18,15 +21,33 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
         if (type.toLowerCase() === "event") {
             EventsAPI.updateEvent(data, data._id)
                 .then(resp => {
-                    console.log("successfully updated " + resp.nModified + " event");
+                    console.log("successfully updated " + resp.nModified + " event(s)");
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(err);
                     // Add error handler and do not make editable false, instead show an alert which says an error occured
                 });
+        } else if (type.toLowerCase() === "role") {
+            EventsAPI.updateEventDetails(data, 'worship', 'role')
+                .then(resp => {
+                    console.log("successfully updated " + resp.nModified + " role(s)");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        } else if (type === "eventDetails") {
+            var tempData = cloneDeep(data);
+            delete tempData.teamList;
+            delete tempData.teamMapping;
+            EventsAPI.updateEventDetails(tempData, 'worship', 'eventDetails', data._id)
+                .then(resp => {
+                    console.log("successfully updated " + resp.nModified + " role(s)");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
         toggleEdit(false);
-        // Updating original data and selected data
         updateOriginalData(data);
     }
 
