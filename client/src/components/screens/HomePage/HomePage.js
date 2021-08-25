@@ -1,9 +1,17 @@
 import './HomePage.scss'
 import React from "react";
-import { Box } from "grommet";
-import { Typography, Button, Grid } from '@material-ui/core';
+import { Box, Grid } from "grommet";
+import { Typography, Button, Paper } from '@material-ui/core';
+import { useHistory } from "react-router-dom";
 
 export default function HomePage() {
+  
+  const history = useHistory();
+
+	let redirectToPlanner = (event) => {
+		history.push("planner");
+	};
+  
   return (
     <div className='home-page-wrapper'>
 
@@ -30,33 +38,34 @@ export default function HomePage() {
       </Box>
 
       <Grid
-      spacing={16} 
-      justify='space-around'
-      alignItems='center'
+        rows={["200px", "200px"]}
+        columns={["0.70fr", ".30fr"]}
+        gap="small"
+        areas={[
+          { name: "events-container", start: [0, 0], end: [0, 1] },
+          { name: "home-nav-buttons", start: [1, 0], end: [1, 1] },
+        ]}
+        style={{ margin: 50, marginLeft: 350, marginRight: 350 }}
       >
-        <Button variant="contained" className='home-nav-buttons'>
-          Planner
-        </Button>
-        <Button variant="contained" className='home-nav-buttons'>
-          Resources
-        </Button>
-        <Button variant="contained" className='home-nav-buttons'>
-          Team
-        </Button>
+        <Box gridArea="events-container">
+          <Paper
+            className='home-events'
+          >
+            My upcoming events
+          </Paper>
+        </Box>
+        <Box gridArea="home-nav-buttons">
+          <Button className='home-nav-buttons' onClick={redirectToPlanner}>
+            ALL EVENTS
+          </Button>
+          <Button className='home-nav-buttons'>
+            TEAM
+          </Button>
+          <Button className='home-nav-buttons'>
+            RESOURCES
+          </Button>
+        </Box>
       </Grid>
-
-      {/* <Grid container spacing={16}>
-        <Grid item xs={12}>
-          <Grid container justify="center">
-            {[0, 1, 2].map(value => (
-              <Grid key={value} item>
-                asdasdsdsdsds
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
-      </Grid>
-       */}
     </div>
   );
 }
