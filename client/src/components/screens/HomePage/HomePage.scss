@@ -10,19 +10,31 @@
    }
    
    .main-verse-ref {
-      padding-bottom: 80px;
       color: white;
    }
    
+   .home-events {
+      box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
+      background-color: white;
+      max-width: 500px;
+      height: 330px;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 12px;
+      border-radius: 15px;
+   }
+
    .home-nav-buttons {
       box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
       background-color: white;
-      width: 200px;
-      height: 250px;
+      max-width: "100%";
+      height: 100px;
       font-weight: bold;
       color: #D83B1E;
       font-size: 20px;
       padding: 12px;
       border-radius: 15px;
+      margin-bottom: 25px;
    }
+   
 }
