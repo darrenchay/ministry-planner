@@ -1,19 +1,14 @@
-import express from 'express';
-
 import eventSchema from '../schemas/event-schema';
-import resourceSchema from '../schemas/resource-schema';
-// import userSchema from '../schemas/user-schema';
-import worshipOnDutySchema from '../schemas/worship-on-duty-schema';
+import worshipEventDetailsSchema from '../schemas/worship-event-details-schema';
 
 class PlannerPageActions {
-    //Get all events by type, then retrieve all specific event details, then add that as one property in the events object
     getAll(req, res) {
         (async () => {
             try {
-                // Retrieving all events
+                // Retrieving all events for one type of ministry
                 var events = await new Promise((resolve, reject) => {
                     eventSchema.find({
-                        type: req.params.type
+                        "eventDetails.eventType": req.params.type
                     }, function (err, events) {
                         if (err) {
                             res.status(400).send(err.errmsg);
@@ -31,12 +26,18 @@ class PlannerPageActions {
                     const event = events[i];
                     // Creating promise to find event details for each event
                     promises.push(new Promise((resolve, reject) => {
-                        worshipOnDutySchema.find({
-                            eventId: event.id
-                        }, function (err, worshipDetails) {
+                        worshipEventDetailsSchema.find({
+                            eventId: event._id
+                        }).populate({
+                            path: 'teamList',
+                            populate: {
+                                path: 'teamMember',
+                                model: 'User'
+                            }
+                        })
+                        .exec(function (err, worshipDetails) {
                             if (worshipDetails != '') {
                                 var fullEvent = {}; //Creating a new variable to store the data
-
                                 fullEvent.event = event;
                                 fullEvent.eventDetails = worshipDetails[0];
                                 eventList.push(fullEvent);
@@ -60,6 +61,9 @@ class PlannerPageActions {
 
     //Save a new full event (e.g a new worship event)
 
+    /* Save a new event (keep eventDetailsId as a blank string: " ")
+        save the worship details event and add the event ID to the worship details
+        update the event to include the worship Details ID */
     //Delete an event
 }
 

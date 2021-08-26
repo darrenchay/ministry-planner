@@ -1,11 +1,6 @@
 import { Schema, model } from 'mongoose';
 
 const eventSchema = new Schema({
-	id : {
-		type : String,
-		required : true,
-		unique : true
-	},
 	name : {
 		type : String,
 		required : true
@@ -18,14 +13,12 @@ const eventSchema = new Schema({
         type : String,
         required : true
     },
-	type : {
-		type : String,
-		required : true
-	},
-	eventDetailsId : {
-		type : String,
-		required : true
-	}
+    eventDetails: [
+        {
+            eventDetailsId: String,
+            eventType: String
+        }
+    ]
 });
 
-export default model('event', eventSchema);
+export default model('Event', eventSchema);

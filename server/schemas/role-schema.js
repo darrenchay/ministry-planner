@@ -1,11 +1,6 @@
 import { Schema, model } from 'mongoose';
 
 const roleSchema = new Schema({
-	id : {
-		type : String,
-		required : true,
-		unique : true
-	},
 	name : {
 		type : String,
 		required : true
@@ -14,14 +9,10 @@ const roleSchema = new Schema({
         type : String,
         required : false
     },
-    timestamp : {
-        type : String,
-        required : false
-    }, 
     ministry : {
         type : String,
-        required : true
+        required : true 
     }
 });
 
-export default model('role', roleSchema);
+export default model('Role', roleSchema);

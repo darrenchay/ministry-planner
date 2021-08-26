@@ -1,17 +1,21 @@
+import './Navbar.scss'
 import React from 'react';
-import './Navbar.css'
 import {
-    Box,
-    AppBar,
-    Button,
-    Toolbar
+	Box,
+	AppBar,
+	Button,
+	Toolbar
   } from "@material-ui/core";
+<<<<<<< HEAD
 import { makeStyles } from "@material-ui/core/styles";
+=======
+>>>>>>> main
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import SearchIcon from '@material-ui/icons/Search';
 import logo from './stpaul-logo.png'
 import { Link, useHistory } from "react-router-dom";
+<<<<<<< HEAD
 
 const useStyles = makeStyles((theme) => ({
     logo: {
@@ -100,4 +104,63 @@ export default function Navbar() {
             </AppBar>
         </div>
     )
+=======
+
+export default function Navbar() {
+	const history = useHistory();
+
+	let redirectToPlanner = (event) => {
+		history.push("planner");
+	};
+
+	return (
+		<div>
+			<AppBar position="static">
+				<Toolbar
+				style={{
+					backgroundColor: "white",
+					paddingLeft: 20,
+					paddingTop: 8,
+					paddingBottom: 8,
+				  }}
+				>
+					<Link to="/">
+						<img src={logo} className='logo' alt="logo" />
+					</Link>
+					<Box display='flex' flexGrow={1}>
+						<Button className='nav-buttons' onClick={redirectToPlanner}>
+							Planner
+						</Button>
+						<Button className='nav-buttons'>
+							Resources
+						</Button>
+						<Button className='nav-buttons'>
+							Team
+						</Button>
+						<Button className='nav-buttons'>
+							About Us
+						</Button>
+					</Box>
+
+					<Button
+						startIcon={<SearchIcon className='right-area-icon' />}
+						className='right-area-button'
+					>
+					</Button>
+					<Button
+						startIcon={<AccountCircleIcon className='right-area-icon' />}
+						className='right-area-button'
+					>
+					</Button>
+					<Button
+						startIcon={<HelpOutlineIcon className='right-area-icon' />}
+						className='right-area-button'
+					>
+					</Button>
+					
+				</Toolbar>
+			</AppBar>
+		</div>
+	)
+>>>>>>> main
 }
