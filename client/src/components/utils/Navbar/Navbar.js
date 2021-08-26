@@ -24,7 +24,6 @@ export default function Navbar() {
     };
     
     let redirectToTeam = (event) => {
-		console.log("test")
         history.push("/team")
     };
 
