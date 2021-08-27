@@ -11,6 +11,14 @@ export default function HomePage() {
 	let redirectToPlanner = (event) => {
 		history.push("planner");
 	};
+
+  let redirectToResources = (event) => {
+    history.push("/resources")
+  };
+
+  let redirectToTeam = (event) => {
+    history.push("/team")
+  };
   
   return (
     <div className='home-page-wrapper'>
@@ -58,10 +66,10 @@ export default function HomePage() {
           <Button className='home-nav-buttons' onClick={redirectToPlanner}>
             ALL EVENTS
           </Button>
-          <Button className='home-nav-buttons'>
+          <Button className='home-nav-buttons' onClick={redirectToTeam}>
             TEAM
           </Button>
-          <Button className='home-nav-buttons'>
+          <Button className='home-nav-buttons' onClick={redirectToResources}>
             RESOURCES
           </Button>
         </Box>
