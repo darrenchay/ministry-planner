@@ -8,7 +8,8 @@ import {
     CardActions,
     CardContent,
     Button,
-    TextField
+    TextField,
+    Typography
 } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
@@ -50,18 +51,32 @@ export default function EventCard({ event, index }) {
         <Card key={index} className='card'>
             <CardHeader
                 className='card-header'
-                title={<TextField InputProps={{
-                    classes: {
-                        notchedOutline: classes.noBorder
-                    },
-                }}
-                    multiline={true}
-                    disabled={!isEditable}
-                    id="outlined-basic"
-                    variant="outlined"
-                    placeholder="No event name"
-                    value={selectedEvent.event.name}
-                    onChange={(e) => handleChangeEvent(e, "name")} />}
+                title={
+                    <div className='title-button-wrapper'>
+                        <TextField InputProps={{
+                                classes: {
+                                    notchedOutline: classes.noBorder
+                                },
+                            }}
+                            className='title'
+                            multiline={true}
+                            disabled={!isEditable}
+                            id="outlined-basic"
+                            variant="outlined"
+                            placeholder="No event name"
+                            value={selectedEvent.event.name}
+                            onChange={(e) => handleChangeEvent(e, "name")} />
+                        <ButtonGroup
+                            isEditable={isEditable}
+                            toggleEdit={toggleEdit}
+                            type={"event"}
+                            data={selectedEvent}
+                            updateData={changeSelectedEvent}
+                            originalData={originalEvent}
+                            updateOriginalData={changeOriginalEvent}
+                        />
+                    </div>
+                }
                 subheader={
                     <>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -80,17 +95,17 @@ export default function EventCard({ event, index }) {
                         </MuiPickersUtilsProvider>
                     </>
                 }
-                action={
-                    <ButtonGroup
-                        isEditable={isEditable}
-                        toggleEdit={toggleEdit}
-                        type={"event"}
-                        data={selectedEvent}
-                        updateData={changeSelectedEvent}
-                        originalData={originalEvent}
-                        updateOriginalData={changeOriginalEvent}
-                    />
-                }
+                // action={
+                //     <ButtonGroup
+                //         isEditable={isEditable}
+                //         toggleEdit={toggleEdit}
+                //         type={"event"}
+                //         data={selectedEvent}
+                //         updateData={changeSelectedEvent}
+                //         originalData={originalEvent}
+                //         updateOriginalData={changeOriginalEvent}
+                //     />
+                // }
             />
             <CardContent>
                 {selectedEvent.eventDetails.teamList.map((role, index) => (

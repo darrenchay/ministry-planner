@@ -1,3 +1,5 @@
+@import "./../../../globals.scss";
+
 .planner-page-wrapper {
     margin: 12px;
     display: flex;
@@ -10,7 +12,27 @@
         min-width: 200px;
 
         &-header {
-            margin-bottom: 20px;
+            padding-left: 20px;
+
+            .title-button-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .title {
+                    .MuiOutlinedInput-multiline {
+                        padding: 8px 0;
+
+                        textarea {
+                            font-size: $fontsize-header1;
+                        }
+                    }
+                }
+
+                .edit-button svg {
+                    font-size: 20px;
+                }
+            }
         }
 
         &:last-child {
@@ -18,29 +40,67 @@
         }
 
         &-role-section {
-            width: 100%;
             margin-bottom: 12px;
+            padding: 16px;
 
             &:last-child {
                 margin-bottom: 16px;
             }
 
-            .rolename {
-                margin-bottom: 10px;
+            .rolename-button-wrapper {
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                
+                .rolename {
+                    margin-top: 5px;
+                    font-size: $fontsize-header1;
+                };
+
+                .edit-button svg {
+                    font-size: 20px;
+                }
             }
 
-            .additional-info {
-                border-width: 0px;
-            }
+            .team-members-wrapper {
+                padding: 0;
+                padding-top: 8px;
 
-            .team-member {
-                margin-right: 5px;
-                color: black;
-            }
+                .team-member-wrapper {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    position: relative;
+                    margin-bottom: 8px;
 
-            .tag {
-                margin-right: 5px;
-                color: lightslategrey;
+                    .team-member {
+                        margin-right: 5px;
+                        color: black;
+                    }
+
+                    .tag {
+                        color: lightslategrey;
+                    }
+                }
+
+                .add-team-member {
+                    .team-member-select {
+                        margin-top: 0 !important;
+                        width: 130px;
+                        font-size: $fontsize-base;
+                    }
+                }
+            }
+        }
+
+        .add-info-section {
+            @extend .card-role-section;
+
+            .text-section {
+                .MuiOutlinedInput-multiline {
+                    padding: 0;
+                }
             }
         }
 
@@ -51,7 +111,7 @@
             .resources-button {
                 bottom: 0;
                 position: absolute;
-                background-color: #d15038;
+                background-color: $primary-color;
                 margin-bottom: 16px;
             }
         }

@@ -50,13 +50,7 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, is
     }, [role, teamMember, teamMapping]);
 
     return (
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            position: 'relative',
-            margin: '10px'
-        }} key={teamMember._id}>
+        <div key={teamMember._id} className='team-member-wrapper'>
             <Typography className="team-member">
                 {teamMember.firstname}
             </Typography>
@@ -141,7 +135,7 @@ export default function RoleSection({ role, index, isEditable }) {
         <>
             {index >= 0 &&
                 <Card key={index} className='card-role-section'>
-                    <CardHeader
+                    {/* <CardHeader
                         title={role.roleName}
                         className='rolename'
                         action={
@@ -157,8 +151,22 @@ export default function RoleSection({ role, index, isEditable }) {
                                 />}
                             </>
                         }
-                    />
-                    <CardContent>
+                    /> */}
+                    <CardContent className='rolename-button-wrapper'>
+                        <Typography class='rolename'>
+                            {role.roleName}
+                        </Typography>
+                        {isEditable && <ButtonGroup
+                            isEditable={isRoleEditable}
+                            toggleEdit={toggleRoleEdit}
+                            type={"role"}
+                            data={selectedRole}
+                            updateData={changeSelectedRole}
+                            originalData={originalRole}
+                            updateOriginalData={changeOriginalRole}
+                        />}
+                    </CardContent>
+                    <CardContent className='team-members-wrapper'>
                         {selectedRole.teamMember.length > 0 && selectedRole.teamMember.map(user => (
                             <TeamMember
                                 teamMember={user}
@@ -178,10 +186,11 @@ export default function RoleSection({ role, index, isEditable }) {
                             </div>}
 
                         {(isEditable && isRoleEditable) &&
-                            <form className='add-team-member'>
-                                <FormControl>
-                                    <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
+                            <div>
+                                <FormControl className='add-team-member'>
+                                    <InputLabel id="teamMemberSelect">Team Member</InputLabel>
                                     <Select
+                                        className='team-member-select'
                                         labelId="teamMemberSelect"
                                         id="teamMemberSelect"
                                         placeholder="Select a member"
@@ -237,14 +246,16 @@ export default function RoleSection({ role, index, isEditable }) {
                                 <IconButton onClick={addRole} aria-label="settings">
                                     <AddCircleIcon />
                                 </IconButton>
-                            </form>}
+                            </div>
+                        }
                     </CardContent>
                 </Card>}
             {
                 index < 0 &&
-                <Card className='roleCard'>
-                    <CardHeader
+                <Card className='add-info-section'>
+                    {/* <CardHeader
                         title='Additional Info'
+                        className='rolename'
                         action={
                             <>
                                 {isEditable && <ButtonGroup
@@ -258,13 +269,28 @@ export default function RoleSection({ role, index, isEditable }) {
                                 />}
                             </>
                         }
-                    />
-                    <CardContent>
+                    /> */}
+                    <CardContent className='rolename-button-wrapper'>
+                        <Typography class='rolename'>
+                            Additional Info
+                        </Typography>
+                        {isEditable && <ButtonGroup
+                            isEditable={isRoleEditable}
+                            toggleEdit={toggleRoleEdit}
+                            type={"eventDetails"}
+                            data={selectedRole}
+                            updateData={changeSelectedRole}
+                            originalData={originalRole}
+                            updateOriginalData={changeOriginalRole}
+                        />}
+                    </CardContent>
+                    <Typography>
                         <TextField InputProps={{
                             classes: {
                                 notchedOutline: classes.noBorder
                             },
                         }}
+                            className='text-section'
                             multiline={true}
                             disabled={!isRoleEditable}
                             id="outlined-basic"
@@ -272,7 +298,7 @@ export default function RoleSection({ role, index, isEditable }) {
                             placeholder="no additional info"
                             value={selectedRole.additionalInfo}
                             onChange={(e) => handleChangeRole(e, 'addInfo')} />
-                    </CardContent>
+                    </Typography>
                 </Card>
             }
         </>

@@ -1,0 +1,17 @@
+$fontsize-base: 16px;
+$fontsize-header1: 20px;
+$fontsize-header2: 18px;
+$primary-color: #d15038;
+
+p {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
+}
+
+.MuiIconButton-root { // edit-button Mui class
+    font-size: 20px;
+    padding: 10px;
+}
+
+.MuiInputLabel-formControl {
+    position: relative;
+}

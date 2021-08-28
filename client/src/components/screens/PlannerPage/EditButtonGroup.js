@@ -57,7 +57,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
         toggleEdit(false);
     }
     return (
-        <>
+        <div className='edit-button'>
             {!isEditable && 
             <IconButton onClick={handleEdit} aria-label="settings" >
                 <EditIcon />
@@ -72,6 +72,6 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
                     <ClearIcon />
                 </IconButton>
             </>}
-        </>
+        </div>
     );
 }
