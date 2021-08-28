@@ -70,9 +70,9 @@ export default function EventCard({ event, index }) {
                             isEditable={isEditable}
                             toggleEdit={toggleEdit}
                             type={"event"}
-                            data={selectedEvent.event}
+                            data={selectedEvent}
                             updateData={changeSelectedEvent}
-                            originalData={originalEvent.event}
+                            originalData={originalEvent}
                             updateOriginalData={changeOriginalEvent}
                         />
                     </div>

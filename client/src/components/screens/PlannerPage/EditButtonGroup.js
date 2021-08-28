@@ -19,7 +19,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
 
     const handleSave = () => {
         if (type.toLowerCase() === "event") {
-            EventsAPI.updateEvent(data, data._id)
+            EventsAPI.updateEvent(data.event, data.event._id)
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " event(s)");
                 })

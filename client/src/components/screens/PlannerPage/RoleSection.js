@@ -153,7 +153,7 @@ export default function RoleSection({ role, index, isEditable }) {
                         }
                     /> */}
                     <CardContent className='rolename-button-wrapper'>
-                        <Typography class='rolename'>
+                        <Typography className='rolename'>
                             {role.roleName}
                         </Typography>
                         {isEditable && <ButtonGroup
@@ -271,7 +271,7 @@ export default function RoleSection({ role, index, isEditable }) {
                         }
                     /> */}
                     <CardContent className='rolename-button-wrapper'>
-                        <Typography class='rolename'>
+                        <Typography className='rolename'>
                             Additional Info
                         </Typography>
                         {isEditable && <ButtonGroup
