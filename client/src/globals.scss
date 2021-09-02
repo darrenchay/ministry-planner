@@ -1,6 +1,6 @@
-$fontsize-base: 16px;
-$fontsize-header1: 20px;
-$fontsize-header2: 18px;
+$fontsize-base: 14px;
+$fontsize-header1: $fontsize-base + 4;
+$fontsize-header2: $fontsize-base + 2;
 $primary-color: #d15038;
 
 p {
@@ -9,7 +9,7 @@ p {
 
 .MuiIconButton-root { // edit-button Mui class
     font-size: 20px;
-    padding: 10px;
+    padding: 8px;
 }
 
 .MuiInputLabel-formControl {

@@ -12,7 +12,7 @@
         min-width: 200px;
 
         &-header {
-            padding-left: 20px;
+            padding: 10px 10px 0 20px;
 
             .title-button-wrapper {
                 display: flex;
@@ -22,15 +22,23 @@
                 .title {
                     .MuiOutlinedInput-multiline {
                         padding: 8px 0;
-
+        
                         textarea {
-                            font-size: $fontsize-header1;
+                            color: $primary-color;
                         }
                     }
                 }
 
                 .edit-button svg {
-                    font-size: 20px;
+                    font-size: $fontsize-header1;
+                }
+            }
+
+            .date-picker-wrapper {
+                &-no-margin {
+                    .MuiFormControl-marginNormal {
+                        margin: 0;
+                    }
                 }
             }
         }
@@ -59,13 +67,13 @@
                 };
 
                 .edit-button svg {
-                    font-size: 20px;
+                    font-size: $fontsize-header1;
                 }
             }
 
             .team-members-wrapper {
                 padding: 0;
-                padding-top: 8px;
+                padding-top: 16px;
 
                 .team-member-wrapper {
                     display: flex;
@@ -74,6 +82,11 @@
                     position: relative;
                     margin-bottom: 8px;
 
+                    &-no-margin {
+                        @extend .team-member-wrapper;
+                        margin-bottom: 0;
+                    }
+                    
                     .team-member {
                         margin-right: 5px;
                         color: black;
@@ -84,11 +97,45 @@
                     }
                 }
 
-                .add-team-member {
-                    .team-member-select {
-                        margin-top: 0 !important;
-                        width: 130px;
-                        font-size: $fontsize-base;
+                .no-members-text {
+                    padding: 0;
+                    padding-bottom: 8px;
+
+                    .MuiOutlinedInput-multiline {
+                        padding: 0;
+
+                        textarea {
+                            color: black;
+                        }
+                    }
+                }
+
+                .add-team-member-section {
+                    display: flex;
+                    align-items: center;
+
+                    .add-team-member {
+                        width: 50%;
+                        margin-right: 16px;
+
+                        .team-member-select {
+                            margin-top: 0 !important;
+                            font-size: $fontsize-base;
+                        }
+                    }
+
+                    .add-tag {
+                        width: 25%;
+
+                        .MuiInput-formControl {
+                            margin-top: 0 !important;
+                            height: 29.5px;
+                            font-size: $fontsize-base;
+                        }
+                    }
+                    
+                    .add-button {
+                        margin-top: 14px;
                     }
                 }
             }
@@ -98,8 +145,14 @@
             @extend .card-role-section;
 
             .text-section {
+                padding: 0;
+
                 .MuiOutlinedInput-multiline {
-                    padding: 0;
+                    padding: 16px 0 8px;
+
+                    textarea {
+                        color: black;
+                    }
                 }
             }
         }

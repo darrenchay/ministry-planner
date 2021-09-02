@@ -8,8 +8,7 @@ import {
     CardActions,
     CardContent,
     Button,
-    TextField,
-    Typography
+    TextField
 } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
@@ -24,6 +23,9 @@ const useStyles = makeStyles(() => ({
     noBorder: {
         border: "none",
     },
+    resize: {
+        fontSize: 18
+    }
 }));
 
 export default function EventCard({ event, index }) {
@@ -55,14 +57,15 @@ export default function EventCard({ event, index }) {
                     <div className='title-button-wrapper'>
                         <TextField InputProps={{
                                 classes: {
-                                    notchedOutline: classes.noBorder
+                                    notchedOutline: classes.noBorder,
+                                    input: classes.resize
                                 },
                             }}
                             className='title'
                             multiline={true}
                             disabled={!isEditable}
                             id="outlined-basic"
-                            variant="outlined"
+                            variant={isEditable ? "standard" : "outlined"}
                             placeholder="No event name"
                             value={selectedEvent.event.name}
                             onChange={(e) => handleChangeEvent(e, "name")} />
@@ -78,23 +81,29 @@ export default function EventCard({ event, index }) {
                     </div>
                 }
                 subheader={
-                    <>
+                    <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 variant="inline"
-                                format="MM/dd/yyyy"
+                                format="d MMM yyyy"
                                 margin="normal"
                                 id="pickupDate"
                                 disabled={!isEditable}
                                 value={new Date(selectedEvent.event.timestamp * 1000)}
                                 onChange={(e) => handleChangeEvent(e, "date")}
+                                InputProps={{
+                                    disableUnderline: !isEditable
+                                }}
                                 KeyboardButtonProps={{
                                     "aria-label": "change date",
+                                    style: { display: isEditable ? 'inline-flex' : 'none' }
                                 }}
                             />
                         </MuiPickersUtilsProvider>
-                    </>
+                    </div>
                 }
+
+                /* Had to comment this out because of css display flex issues, found another soln for it */
                 // action={
                 //     <ButtonGroup
                 //         isEditable={isEditable}

@@ -3,7 +3,6 @@ import cloneDeep from "lodash/cloneDeep";
 import {
     makeStyles,
     Card,
-    CardHeader,
     CardContent,
     IconButton,
     Typography,
@@ -50,7 +49,7 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, is
     }, [role, teamMember, teamMapping]);
 
     return (
-        <div key={teamMember._id} className='team-member-wrapper'>
+        <div key={teamMember._id} className={isRoleEditable ? 'team-member-wrapper-no-margin' : 'team-member-wrapper'}>
             <Typography className="team-member">
                 {teamMember.firstname}
             </Typography>
@@ -133,7 +132,8 @@ export default function RoleSection({ role, index, isEditable }) {
 
     return (
         <>
-            {index >= 0 &&
+            {
+                index >= 0 &&
                 <Card key={index} className='card-role-section'>
                     {/* <CardHeader
                         title={role.roleName}
@@ -180,13 +180,24 @@ export default function RoleSection({ role, index, isEditable }) {
 
                         {selectedRole.teamMember.length === 0 &&
                             <div>
-                                <Typography component={'span'} color="textSecondary" gutterBottom>
-                                    No members assigned
-                                </Typography>
-                            </div>}
+                                <CardContent className='no-members-text'>
+                                    <TextField InputProps={{
+                                        classes: {
+                                            notchedOutline: classes.noBorder
+                                        },
+                                    }}
+                                        multiline={true}
+                                        disabled={true}
+                                        color='secondary'
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        placeholder="No members assigned" />
+                                </CardContent>
+                            </div>
+                        }
 
                         {(isEditable && isRoleEditable) &&
-                            <div>
+                            <div className='add-team-member-section'>
                                 <FormControl className='add-team-member'>
                                     <InputLabel id="teamMemberSelect">Team Member</InputLabel>
                                     <Select
@@ -228,7 +239,7 @@ export default function RoleSection({ role, index, isEditable }) {
                                         }
                                     </Select>
                                 </FormControl>
-                                <FormControl>
+                                <FormControl className="add-tag">
                                     <TextField InputProps={{
                                         classes: {
                                             notchedOutline: classes.noBorder
@@ -238,18 +249,19 @@ export default function RoleSection({ role, index, isEditable }) {
                                         disabled={!isEditable}
                                         id="add-role"
                                         label="Tag"
-                                        variant="outlined"
+                                        variant={isRoleEditable ? "standard" : "outlined"}
                                         placeholder="Add a tag"
                                         value={newRoleTag.tag}
                                         onChange={(e) => handleAddRole(e, "tag")} />
                                 </FormControl>
-                                <IconButton onClick={addRole} aria-label="settings">
+                                <IconButton onClick={addRole} aria-label="settings" className='add-button'>
                                     <AddCircleIcon />
                                 </IconButton>
                             </div>
                         }
                     </CardContent>
-                </Card>}
+                </Card>
+            }
             {
                 index < 0 &&
                 <Card className='add-info-section'>
@@ -284,21 +296,20 @@ export default function RoleSection({ role, index, isEditable }) {
                             updateOriginalData={changeOriginalRole}
                         />}
                     </CardContent>
-                    <Typography>
+                    <CardContent className='text-section'>
                         <TextField InputProps={{
                             classes: {
                                 notchedOutline: classes.noBorder
                             },
                         }}
-                            className='text-section'
                             multiline={true}
                             disabled={!isRoleEditable}
                             id="outlined-basic"
-                            variant="outlined"
-                            placeholder="no additional info"
+                            variant={isRoleEditable ? "standard" : "outlined"}
+                            placeholder="No additional info"
                             value={selectedRole.additionalInfo}
                             onChange={(e) => handleChangeRole(e, 'addInfo')} />
-                    </Typography>
+                    </CardContent>
                 </Card>
             }
         </>
