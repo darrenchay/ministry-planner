@@ -1,3 +1,5 @@
+@import './../../../globals.scss';
+
 .logo {
    height: 35px;
    width: 35px;
@@ -5,7 +7,7 @@
 
 .nav-buttons {
    font-weight: bold;
-   color: #D83B1E;
+   color: $primary-color;
    padding: 10px;
    border-radius: 10px;
    margin: 0 0 0 20px;
@@ -20,12 +22,12 @@
 
 .right-area-button {
    border-radius: 50%;
-   color: #D83B1E;
+   color: $primary-color;
    padding: 10px;
    border-radius: 10px;
    
    .right-area-icon {
-      color: #D83B1E;
+      color: $primary-color;
       size: small;
    }
 }
