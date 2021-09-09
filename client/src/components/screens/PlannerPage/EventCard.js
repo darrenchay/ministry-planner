@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
         border: "none",
     },
     resize: {
-        fontSize: 18
+        fontSize: 22
     }
 }));
 
@@ -54,18 +54,19 @@ export default function EventCard({ event, index }) {
             <CardHeader
                 className='card-header'
                 title={
-                    <div className='title-button-wrapper'>
+                    <div className={isEditable ? 'title-button-wrapper-edit' : 'title-button-wrapper'}>
                         <TextField InputProps={{
                                 classes: {
-                                    notchedOutline: classes.noBorder,
+                                    // notchedOutline: classes.noBorder,
                                     input: classes.resize
                                 },
+                                disableUnderline: !isEditable
                             }}
                             className='title'
                             multiline={true}
                             disabled={!isEditable}
                             id="outlined-basic"
-                            variant={isEditable ? "standard" : "outlined"}
+                            variant={isEditable ? "outlined" : "standard"}
                             placeholder="No event name"
                             value={selectedEvent.event.name}
                             onChange={(e) => handleChangeEvent(e, "name")} />
@@ -85,6 +86,7 @@ export default function EventCard({ event, index }) {
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 variant="inline"
+                                inputVariant={isEditable ? "outlined" : "standard"}
                                 format="d MMM yyyy"
                                 margin="normal"
                                 id="pickupDate"

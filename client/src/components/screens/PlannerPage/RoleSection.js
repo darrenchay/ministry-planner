@@ -198,11 +198,12 @@ export default function RoleSection({ role, index, isEditable }) {
 
                         {(isEditable && isRoleEditable) &&
                             <div className='add-team-member-section'>
-                                <FormControl className='add-team-member'>
+                                <FormControl variant="outlined" className='add-team-member' size='small'>
                                     <InputLabel id="teamMemberSelect">Team Member</InputLabel>
                                     <Select
                                         className='team-member-select'
                                         labelId="teamMemberSelect"
+                                        label='Team Member'
                                         id="teamMemberSelect"
                                         placeholder="Select a member"
                                         value={newRoleTag.memberId}
@@ -240,17 +241,13 @@ export default function RoleSection({ role, index, isEditable }) {
                                     </Select>
                                 </FormControl>
                                 <FormControl className="add-tag">
-                                    <TextField InputProps={{
-                                        classes: {
-                                            notchedOutline: classes.noBorder
-                                        },
-                                    }}
+                                    <TextField
                                         multiline={true}
+                                        size='small'
                                         disabled={!isEditable}
                                         id="add-role"
                                         label="Tag"
-                                        variant={isRoleEditable ? "standard" : "outlined"}
-                                        placeholder="Add a tag"
+                                        variant="outlined"
                                         value={newRoleTag.tag}
                                         onChange={(e) => handleAddRole(e, "tag")} />
                                 </FormControl>
