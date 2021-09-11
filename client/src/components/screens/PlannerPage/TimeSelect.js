@@ -6,58 +6,7 @@ import {
     MenuItem
 } from '@material-ui/core';
 
-const marks = [
-    {
-        value: 0,
-        label: 'Jan',
-    },
-    {
-        value: 10,
-        label: 'Feb',
-    },
-    {
-        value: 20,
-        label: 'Mar',
-    },
-    {
-        value: 30,
-        label: 'Apr',
-    },
-    {
-        value: 40,
-        label: 'May',
-    },
-    {
-        value: 50,
-        label: 'Jun',
-    },
-    {
-        value: 60,
-        label: 'Jul',
-    },
-    {
-        value: 70,
-        label: 'Aug',
-    },
-    {
-        value: 80,
-        label: 'Sep',
-    },
-    {
-        value: 90,
-        label: 'Oct',
-    },
-    {
-        value: 100,
-        label: 'Nov',
-    },
-    {
-        value: 110,
-        label: 'Dec',
-    },
-];
-
-export default function TimeSelect({month, setMonth, year, setYear}) {
+export default function TimeSelect({month, setMonth, year, setYear, marks}) {
     const updateYear = (e) => {
         setYear(e.target.value);
     }
@@ -85,12 +34,11 @@ export default function TimeSelect({month, setMonth, year, setYear}) {
                 </Select>
                 <Slider
                     defaultValue={0}
-                    aria-labelledby="discrete-slider-custom"
-                    step={10}
+                    step={1}
                     valueLabelDisplay="off"
                     marks={marks}
                     min={0}
-                    max={110}
+                    max={11}
                     onChange={updateMonth}
                 />
             </div>
