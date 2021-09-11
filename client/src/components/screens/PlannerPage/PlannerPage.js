@@ -1,4 +1,6 @@
 import "./PlannerPage.scss";
+import axios from "axios";
+
 import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard"
 import TimeSelect from './TimeSelect';
@@ -7,6 +9,7 @@ import {
     CircularProgress
 } from '@material-ui/core';
 import convertDate from "../../utils/ConvertDate";
+const baseURL = (process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL);
 
 /* TODO: 
     - Add an add event button
@@ -68,11 +71,24 @@ const steps = [
 export default function PlannerPage() {
     const [events, setEvents] = useState(null);
     const [month, setMonth] = useState('Jan');
-    const [year, setYear] = useState(2021);
+    const [year, setYear] = useState(new Date().getFullYear());
     const ministry = "worship";
 
     // Updates events list when something on the page updates
     useEffect(() => {
+        // axios
+        //     .get(baseURL + "planner/getAll/" + ministry)
+        //     .then((resp) => {
+        //         console.log(resp.data)
+        //         setEvents(resp.data
+        //             .sort((firstEl, secondEl) => {
+        //                 return firstEl.event.timestamp - secondEl.event.timestamp;
+        //             }))
+        //     })
+        //     .catch((err) => {
+        //         console.log(err);
+        //         throw err;
+        //     });
         EventsAPI.getFullEventsList(ministry)
             .then((data) => {
                 console.log("Successfully retrieved " + data.length + " events");
@@ -99,7 +115,7 @@ export default function PlannerPage() {
                 {events?.length > 0 &&
                     events
                         .filter((event) => {
-                            let setTimestamp = new Date(year, (steps.find( ({label}) => label === month)).value, 1).getTime() / 1000;
+                            let setTimestamp = new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000;
                             console.log(setTimestamp, parseInt(event.event.timestamp))
                             return (
                                 parseInt(event.event.timestamp) >= setTimestamp
