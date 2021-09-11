@@ -1,7 +1,21 @@
 .planner-page-wrapper {
     margin: 12px;
-    display: flex;
     text-align: left;
+
+    .time-select {
+        &-wrapper{
+            text-align: center;
+        }
+        &-inputs {
+            // width: 50%;
+            display: flex;
+            margin-right: 20px;
+        }
+    }
+    
+    .cards-wrapper {
+        display: flex;
+    }
 
     .card {
         width: 25%;
