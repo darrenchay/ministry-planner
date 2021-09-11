@@ -7,6 +7,11 @@ export default function convertDate(unix_timestamp) {
     // var hour = a.getHours();
     // var min = a.getMinutes();
     // var timeOfDay = hour + ":" + min;
-    var time = date + ' ' + month + ' ' + year;
+    // var time = date + ' ' + month + ' ' + year;
+    var time = {
+        date: date,
+        month: month,
+        year: year
+    }
     return time;
 }

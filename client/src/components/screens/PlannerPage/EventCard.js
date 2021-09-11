@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function EventCard({ event, index }) {
+export default function EventCard({ event }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
     const [originalEvent, changeOriginalEvent] = useState(event);
@@ -51,7 +51,7 @@ export default function EventCard({ event, index }) {
     }
 
     return (
-        <Card key={index} className='card'>
+        <Card className='card'>
             <CardHeader
                 className='card-header'
                 title={
