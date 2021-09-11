@@ -24,6 +24,9 @@ const useStyles = makeStyles(() => ({
     noBorder: {
         border: "none",
     },
+    resize: {
+        fontSize: 22
+    }
 }));
 
 export default function EventCard({ event, index }) {
@@ -51,47 +54,70 @@ export default function EventCard({ event, index }) {
         <Card key={index} className='card'>
             <CardHeader
                 className='card-header'
-                title={<TextField InputProps={{
-                    classes: {
-                        notchedOutline: classes.noBorder
-                    },
-                }}
-                    multiline={true}
-                    disabled={!isEditable}
-                    id="outlined-basic"
-                    variant="outlined"
-                    placeholder="No event name"
-                    value={selectedEvent.event.name}
-                    onChange={(e) => handleChangeEvent(e, "name")} />}
+                title={
+                    <div className={isEditable ? 'title-button-wrapper-edit' : 'title-button-wrapper'}>
+                        <TextField InputProps={{
+                                classes: {
+                                    // notchedOutline: classes.noBorder,
+                                    input: classes.resize
+                                },
+                                disableUnderline: !isEditable
+                            }}
+                            className='title'
+                            multiline={true}
+                            disabled={!isEditable}
+                            id="outlined-basic"
+                            variant={isEditable ? "outlined" : "standard"}
+                            placeholder="No event name"
+                            value={selectedEvent.event.name}
+                            onChange={(e) => handleChangeEvent(e, "name")} />
+                        <ButtonGroup
+                            isEditable={isEditable}
+                            toggleEdit={toggleEdit}
+                            type={"event"}
+                            data={selectedEvent}
+                            updateData={changeSelectedEvent}
+                            originalData={originalEvent}
+                            updateOriginalData={changeOriginalEvent}
+                        />
+                    </div>
+                }
                 subheader={
-                    <>
+                    <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 variant="inline"
-                                format="MM/dd/yyyy"
+                                inputVariant={isEditable ? "outlined" : "standard"}
+                                format="d MMM yyyy"
                                 margin="normal"
                                 id="pickupDate"
                                 disabled={!isEditable}
                                 value={new Date(selectedEvent.event.timestamp * 1000)}
                                 onChange={(e) => handleChangeEvent(e, "date")}
+                                InputProps={{
+                                    disableUnderline: !isEditable
+                                }}
                                 KeyboardButtonProps={{
                                     "aria-label": "change date",
+                                    style: { display: isEditable ? 'inline-flex' : 'none' }
                                 }}
                             />
                         </MuiPickersUtilsProvider>
-                    </>
+                    </div>
                 }
-                action={
-                    <ButtonGroup
-                        isEditable={isEditable}
-                        toggleEdit={toggleEdit}
-                        type={"event"}
-                        data={selectedEvent}
-                        updateData={changeSelectedEvent}
-                        originalData={originalEvent}
-                        updateOriginalData={changeOriginalEvent}
-                    />
-                }
+
+                /* Had to comment this out because of css display flex issues, found another soln for it */
+                // action={
+                //     <ButtonGroup
+                //         isEditable={isEditable}
+                //         toggleEdit={toggleEdit}
+                //         type={"event"}
+                //         data={selectedEvent}
+                //         updateData={changeSelectedEvent}
+                //         originalData={originalEvent}
+                //         updateOriginalData={changeOriginalEvent}
+                //     />
+                // }
             />
             <CardContent>
                 {selectedEvent.eventDetails.teamList.map((role, index) => (
