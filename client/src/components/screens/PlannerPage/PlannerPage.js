@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core';
 import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded';
 import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
+
+import convertDate from "./../../utils/ConvertDate";
 /* TODO: 
     - Add an add event button
     - Add the pagination of events
@@ -115,19 +117,32 @@ export default function PlannerPage() {
             for (var i = 0; i < events.length; i++) {
                 // Check if current event is at the timestamp, and that the next event exists
                 console.log("for event: " + events[i].event.name);
-                if (events[i].event.timestamp >= currTimestamp && i + 1 < events.length) {
-                    console.log("found next: " + events[i + 1].event.name);
-                    setNextTimestamp(events[i + 1].event.timestamp);
-                    if (events.length - i > 4) {
-                        setNextDisabled(false);
+                if(events[i].event.timestamp >= currTimestamp) {
+                    if (i + 1 < events.length) {
+                        console.log("found next: " + events[i + 1].event.name);
+                        setNextTimestamp(events[i + 1].event.timestamp);
+                        if (events.length - i > 4) {
+                            setNextDisabled(false);
+                        } else {
+                            setNextDisabled(true);
+                        }
+                    }
+                    if (i-1 >= 0) {
+                        console.log("setting previous to: " + events[i-1].event.name)
+                        setPrevDisabled(false);
+                        setPrevTimestamp(events[i-1].event.timestamp);
                     } else {
-                        setNextDisabled(true);
+                        setPrevDisabled(true);
                     }
                     break;
                 }
-                console.log("setting previous to: " + events[i].event.name)
-                setPrevTimestamp(events[i].event.timestamp);
-                setPrevDisabled(false);
+            }
+            var currDate = convertDate(currTimestamp)
+            if(currDate.month !== month) {
+                setMonth(currDate.month);
+            }
+            if (currDate.year !== year) {
+                setYear(currDate.year);
             }
         }
     }, [events, currTimestamp])

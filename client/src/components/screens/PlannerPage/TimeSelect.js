@@ -9,6 +9,8 @@ import {
 export default function TimeSelect({ month, setMonth, year, setYear, marks, setShowLoading }) {
     const currentYear = new Date().getFullYear();
     const [years, setYears] = useState([]);
+    const [valueSlider, setValueSlider] = useState((marks.find( ({ label }) => label === month)).value);
+
     useEffect(() => {
         var tempYears = [];
         for (var i = currentYear - 5; i < currentYear + 5; i++) {
@@ -16,6 +18,11 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
         }
         setYears(tempYears);
     }, [currentYear]);
+
+    // Update the slider based off what month is the first in the list of cards
+    useEffect(() => {
+        setValueSlider((marks.find( ({ label }) => label === month)).value);
+    }, [month, marks]);
 
     const updateYear = (e) => {
         setYear(e.target.value);
@@ -57,6 +64,7 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
                     step={1}
                     valueLabelDisplay="off"
                     marks={marks}
+                    value={valueSlider}
                     min={0}
                     max={11}
                     onChangeCommitted={updateMonth}
