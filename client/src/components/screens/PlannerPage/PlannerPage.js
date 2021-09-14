@@ -77,20 +77,17 @@ export default function PlannerPage() {
     const [year, setYear] = useState(new Date().getFullYear());
     const [filteredEvents, setFilteredEvents] = useState();
     const [showLoading, setShowLoading] = useState(true);
-    const [nextTimestamp, setNextTimestamp] = useState(null);
-    const [prevTimestamp, setPrevTimestamp] = useState(null);
-    const [nextDisabled, setNextDisabled] = useState(true);
-    const [prevDisabled, setPrevDisabled] = useState(true);
-    const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000)
+    const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";
 
     // Updates events list when something on the page updates
     useEffect(() => {
-        //Filter by timestamp, if next, get next by +1 to time, update the month and year if time updates past 1 month
+        //Setting the timestamp that will be used for filtering purposes
         setCurrTimestamp(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
         EventsAPI.getFullEventsList(ministry)
             .then((data) => {
                 setEvents(data);
+                // console.log("Successfully retrieved " + data.length + " events");
             })
             .catch((err) => {
                 console.log(err);
@@ -99,16 +96,22 @@ export default function PlannerPage() {
 
     }, [month, year]);
 
+    const [nextTimestamp, setNextTimestamp] = useState(null);
+    const [prevTimestamp, setPrevTimestamp] = useState(null);
+    const [nextDisabled, setNextDisabled] = useState(true);
+    const [prevDisabled, setPrevDisabled] = useState(true);
+
     useEffect(() => {
         if (events?.length > 0) {
+            //Filters all events that are after the current set timestamp
             setFilteredEvents(events.filter((event) => {
-                //Check previous and next timestamps, and onclick, if click previous get previous timestamp, and update setTimestamp
                 return (
                     parseInt(event.event.timestamp) >= currTimestamp
                 )
             }))
-            console.log("Successfully retrieved " + events.length + " events");
             setShowLoading(false);
+
+            // Setting up the pagination logic (finds the timestamp values of the next and previous events)
             for (var i = 0; i < events.length; i++) {
                 // Check if current event is at the timestamp, and that the next event exists
                 console.log("for event: " + events[i].event.name);
