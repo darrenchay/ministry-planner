@@ -21,14 +21,14 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
         setYear(e.target.value);
     }
     const updateMonth = (e, data) => {
-        // setShowLoading(true);
+        setShowLoading(false);
         setMonth((marks.find(({ value }) => value === data)).label);
     }
     return (
         <div className='time-select-wrapper'>
             <div>
-                <Typography>
-                    {month} {year}
+                <Typography className="time-header">
+                    <b>{month} {year}</b>
                 </Typography>
             </div>
             <div className='time-select-inputs'>
@@ -59,8 +59,7 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
                     marks={marks}
                     min={0}
                     max={11}
-                    onChange={updateMonth}
-                    onChangeCommitted={() => {setShowLoading(false)}}
+                    onChangeCommitted={updateMonth}
                     onMouseDown={() => {setShowLoading(true)}}
                     onTouchMove={() => {setShowLoading(true)}}
                 />

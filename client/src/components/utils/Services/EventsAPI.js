@@ -5,7 +5,9 @@ const baseURL = (process.env.NODE_ENV === 'production' ? process.env.REACT_APP_P
 export const getFullEventsList = (ministry) => {
     return axios
         .get(baseURL + "planner/getAll/" + ministry)
-        .then(resp => resp.data)
+        .then(resp => resp.data.sort((firstEl, secondEl) => {
+            return firstEl.event.timestamp - secondEl.event.timestamp;
+        }))
         .catch((err) => {
             console.log(err);
             throw err;
