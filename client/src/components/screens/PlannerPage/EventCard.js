@@ -51,7 +51,7 @@ export default function EventCard({ event }) {
     }
 
     return (
-        <Card className='card'>
+        <Card key={event.event._id} className='card'>
             <CardHeader
                 className='card-header'
                 title={
@@ -105,19 +105,6 @@ export default function EventCard({ event }) {
                         </MuiPickersUtilsProvider>
                     </div>
                 }
-
-                /* Had to comment this out because of css display flex issues, found another soln for it */
-                // action={
-                //     <ButtonGroup
-                //         isEditable={isEditable}
-                //         toggleEdit={toggleEdit}
-                //         type={"event"}
-                //         data={selectedEvent}
-                //         updateData={changeSelectedEvent}
-                //         originalData={originalEvent}
-                //         updateOriginalData={changeOriginalEvent}
-                //     />
-                // }
             />
             <CardContent>
                 {selectedEvent.eventDetails.teamList.map((role, index) => (
@@ -125,6 +112,7 @@ export default function EventCard({ event }) {
                         role={role}
                         index={index}
                         isEditable={isEditable}
+                        key={role._id}
                     />
                 ))}
                 <RoleSection
