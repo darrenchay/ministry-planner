@@ -15,12 +15,6 @@ import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRo
 import convertDate from "./../../utils/ConvertDate";
 /* TODO: 
     - Add an add event button
-    - Add the pagination of events
-        - have a watcher that watches first event in list?
-        - filter after that watcher
-        - on press next, increment setTimestamp in filter to be 1 day after current event
-        
-    Or: make server side filtering, take in year and month parameters, and then have a previous and next that is sent with the body
  */
 const steps = [
     {
@@ -116,10 +110,8 @@ export default function PlannerPage() {
             // Setting up the pagination logic (finds the timestamp values of the next and previous events)
             for (var i = 0; i < events.length; i++) {
                 // Check if current event is at the timestamp, and that the next event exists
-                console.log("for event: " + events[i].event.name);
-                if(events[i].event.timestamp >= currTimestamp) {
+                if (events[i].event.timestamp >= currTimestamp) {
                     if (i + 1 < events.length) {
-                        console.log("found next: " + events[i + 1].event.name);
                         setNextTimestamp(events[i + 1].event.timestamp);
                         if (events.length - i > 4) {
                             setNextDisabled(false);
@@ -127,10 +119,9 @@ export default function PlannerPage() {
                             setNextDisabled(true);
                         }
                     }
-                    if (i-1 >= 0) {
-                        console.log("setting previous to: " + events[i-1].event.name)
+                    if (i - 1 >= 0) {
                         setPrevDisabled(false);
-                        setPrevTimestamp(events[i-1].event.timestamp);
+                        setPrevTimestamp(events[i - 1].event.timestamp);
                     } else {
                         setPrevDisabled(true);
                     }
@@ -138,13 +129,14 @@ export default function PlannerPage() {
                 }
             }
             var currDate = convertDate(currTimestamp)
-            if(currDate.month !== month) {
+            if (currDate.month !== month) {
                 setMonth(currDate.month);
             }
             if (currDate.year !== year) {
                 setYear(currDate.year);
             }
         }
+        // eslint-disable-next-line
     }, [events, currTimestamp])
 
     const handleNext = () => {

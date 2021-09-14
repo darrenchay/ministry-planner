@@ -9,7 +9,7 @@ import {
 export default function TimeSelect({ month, setMonth, year, setYear, marks, setShowLoading }) {
     const currentYear = new Date().getFullYear();
     const [years, setYears] = useState([]);
-    const [valueSlider, setValueSlider] = useState((marks.find( ({ label }) => label === month)).value);
+    const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
 
     useEffect(() => {
         var tempYears = [];
@@ -21,7 +21,7 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
 
     // Update the slider based off what month is the first in the list of cards
     useEffect(() => {
-        setValueSlider((marks.find( ({ label }) => label === month)).value);
+        setValueSlider((marks.find(({ label }) => label === month)).value);
     }, [month, marks]);
 
     const updateYear = (e) => {
@@ -68,8 +68,8 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
                     min={0}
                     max={11}
                     onChangeCommitted={updateMonth}
-                    onMouseDown={() => {setShowLoading(true)}}
-                    onTouchMove={() => {setShowLoading(true)}}
+                    onMouseDown={() => { setShowLoading(true) }}
+                    onTouchMove={() => { setShowLoading(true) }}
                 />
             </div>
         </div>
