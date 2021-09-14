@@ -3,6 +3,7 @@
 - DO NOT PUSH TO MAIN DIRECTLY 
 - When assigned a pull request, review the code to see if everything is ok then approve or add comments 
 - Generally, the one who did the development on that branch will be the one merging 
+- Check trello board frequently for task and story updates
 ### Running a local instance of the code
 - Create a branch from main when starting a new part of development
 - npm install after branching to new branch (or when cloning for the first time)
