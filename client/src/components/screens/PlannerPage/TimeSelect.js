@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
     Slider,
     Typography,
@@ -6,12 +6,22 @@ import {
     MenuItem
 } from '@material-ui/core';
 
-export default function TimeSelect({month, setMonth, year, setYear, marks}) {
+export default function TimeSelect({ month, setMonth, year, setYear, marks }) {
+    const currentYear = new Date().getFullYear();
+    const [years, setYears] = useState([]);
+    useEffect(() => {
+        var tempYears = [];
+        for (var i = currentYear - 5; i < currentYear + 5; i++) {
+            tempYears.push(i);
+        }
+        setYears(tempYears);
+    }, [currentYear]);
+
     const updateYear = (e) => {
         setYear(e.target.value);
     }
     const updateMonth = (e, data) => {
-        setMonth((marks.find( ({value}) => value === data)).label);
+        setMonth((marks.find(({ value }) => value === data)).label);
     }
     return (
         <div className='time-select-wrapper'>
@@ -28,9 +38,12 @@ export default function TimeSelect({month, setMonth, year, setYear, marks}) {
                     value={year}
                     onChange={updateYear}
                 >
-                    <MenuItem value={2021}>2021</MenuItem>
-                    <MenuItem value={2022}>2022</MenuItem>
-                    <MenuItem value={2023}>2023</MenuItem>
+                    {years?.length > 0 &&
+                        years.map((year, index) => {
+                            return (
+                                <MenuItem key={index} value={year}>{year}</MenuItem>
+                            )
+                        })}
                 </Select>
                 <Slider
                     defaultValue={0}
