@@ -1,195 +1,229 @@
 @import "./../../../globals.scss";
 
 .planner-page-wrapper {
-    margin: 1% 0 1% 1%;
-    display: flex;
-    text-align: left;
+    .time-select-wrapper {
+        margin-top: 10px;
+        text-align: center;
 
-    .card {
-        width: 24%;
-        margin-right: 1%;
-        position: relative;
-        // background: #fff1dc;
-        box-shadow: rgba(50, 50, 105, 0.15) 0px 1px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+        .time-select-inputs {
+            // width: 50%;
+            // text-align: center;
+            display: flex;
+            margin-right: 20px;
+        }
 
-        &-header {
-            padding: 10px 10px 0 18px;
+        .time-header {
+            font-size: $fontsize-header1;
+            color: $primary-color;
+        }
+    }
 
-            .title-button-wrapper {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
+    .cards-wrapper {
+        display: flex;
+        margin: 1% 0 1% 1%;
+        text-align: left;
 
-                .title {
-                    width: 75%;
-
-                    .MuiInputBase-multiline {
-                        padding: 0px;
-        
-                        textarea {
-                            color: $primary-color;
-                            font-size: $fontsize-header1;
-                        }
-                    }
-                }
-
-                .edit-button svg {
-                    font-size: $fontsize-header2;
-                }
-
-                &-edit {
-                    @extend .title-button-wrapper;
-                    .title {
-                        .MuiInputBase-multiline {
-                            padding: 10px;
-                        }
-                    }
-                }
+        .pagination-button {
+            &-previous {
+                margin: 15% 1% 15% 0; //To make cleaner
             }
-
-            .date-picker-wrapper {
-                .MuiFormControl-marginNormal {
-                    margin: 10px 0;
-
-                    .MuiOutlinedInput-adornedEnd {
-                        padding: 0;
-                        width: 70%;
-    
-                        .MuiOutlinedInput-input {
-                            padding: 10px;
-                        }
-                    }
-                }
-
-                &-no-margin {
-                    @extend .date-picker-wrapper;
-                    .MuiFormControl-marginNormal {
-                        margin: 0;
-
-                        .MuiInputBase-input.Mui-disabled {
-                            color:  black;
-                        }
-                    }
-                }
+            &-next {
+                margin: 15% 0 15% 0; //To make cleaner
+            }
+            &-icon {
+                transform: scale(3.0);
             }
         }
 
-        &-role-section {
-            margin-bottom: 12px;
-            padding: 16px;
+        .card {
+            border-radius: 20px;
+            width: 24%;
+            margin-right: 1%;
+            position: relative;
+            background: #fbf1e6;
             box-shadow: rgba(50, 50, 105, 0.15) 0px 1px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 
-            &:last-child {
-                margin-bottom: 16px;
-            }
+            &-header {
+                padding: 10px 10px 0 18px;
 
-            .rolename-button-wrapper {
-                padding: 0;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                
-                .rolename {
-                    font-size: $fontsize-header2;
-                    color: #ec9e00;
-                };
-
-                .edit-button svg {
-                    font-size: $fontsize-header2;
-                }
-            }
-
-            .team-members-wrapper {
-                padding: 0;
-                padding-top: 16px;
-
-                .team-member-wrapper {
+                .title-button-wrapper {
                     display: flex;
                     align-items: center;
-                    flex-wrap: wrap;
-                    position: relative;
-                    margin-bottom: 8px;
-                    
-                    .team-member {
-                        margin-right: 5px;
-                        color: black;
+                    justify-content: space-between;
+
+                    .title {
+                        width: 75%;
+
+                        .MuiInputBase-multiline {
+                            padding: 0px;
+
+                            textarea {
+                                color: $primary-color;
+                                font-size: $fontsize-header1;
+                            }
+                        }
                     }
 
-                    .tag {
-                        color: lightslategrey;
+                    .edit-button svg {
+                        font-size: $fontsize-header2;
+                    }
+
+                    &-edit {
+                        @extend .title-button-wrapper;
+                        .title {
+                            .MuiInputBase-multiline {
+                                padding: 10px;
+                            }
+                        }
+                    }
+                }
+
+                .date-picker-wrapper {
+                    .MuiFormControl-marginNormal {
+                        margin: 10px 0;
+
+                        .MuiOutlinedInput-adornedEnd {
+                            padding: 0;
+                            width: 70%;
+
+                            .MuiOutlinedInput-input {
+                                padding: 10px;
+                            }
+                        }
                     }
 
                     &-no-margin {
-                        @extend .team-member-wrapper;
-                        margin-bottom: 0;
+                        @extend .date-picker-wrapper;
+                        .MuiFormControl-marginNormal {
+                            margin: 0;
+
+                            .MuiInputBase-input.Mui-disabled {
+                                color: black;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &-role-section {
+                border-radius: 15px;
+                margin-bottom: 12px;
+                padding: 16px;
+                box-shadow: rgba(50, 50, 105, 0.15) 0px 1px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+                &:last-child {
+                    margin-bottom: 16px;
+                }
+
+                .rolename-button-wrapper {
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .rolename {
+                        font-size: $fontsize-header2;
+                        color: #a76a4e;
+                    }
+
+                    .edit-button svg {
+                        font-size: $fontsize-header2;
                     }
                 }
 
-                .no-members-text {
+                .team-members-wrapper {
                     padding: 0;
-                    padding-bottom: 8px;
+                    padding-top: 16px;
 
-                    .MuiOutlinedInput-multiline {
+                    .team-member-wrapper {
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        position: relative;
+                        margin-bottom: 8px;
+
+                        .team-member {
+                            margin-right: 5px;
+                            color: black;
+                        }
+
+                        .tag {
+                            color: lightslategrey;
+                        }
+
+                        &-no-margin {
+                            @extend .team-member-wrapper;
+                            margin-bottom: 0;
+                        }
+                    }
+
+                    .no-members-text {
                         padding: 0;
+                        padding-bottom: 8px;
+
+                        .MuiOutlinedInput-multiline {
+                            padding: 0;
+
+                            textarea {
+                                color: black;
+                            }
+                        }
+                    }
+
+                    .add-team-member-section {
+                        display: flex;
+                        align-items: center;
+                        margin-top: 8px;
+
+                        .add-team-member {
+                            width: 56%;
+                            margin-right: 2.5%;
+                        }
+
+                        .add-tag {
+                            width: 28%;
+
+                            .MuiOutlinedInput-multiline {
+                                padding: 0;
+                                padding-bottom: 3px;
+
+                                textarea {
+                                    height: 27px !important;
+                                    padding: 10px 8px 0 8px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .add-info-section {
+                @extend .card-role-section;
+
+                .text-section {
+                    padding: 0;
+
+                    .MuiOutlinedInput-multiline,
+                    .MuiInput-multiline {
+                        padding: 16px 0 8px;
 
                         textarea {
                             color: black;
                         }
                     }
                 }
-
-                .add-team-member-section {
-                    display: flex;
-                    align-items: center;
-                    margin-top: 8px;
-
-                    .add-team-member {
-                        width: 56%;
-                        margin-right: 2.5%;
-                    }
-
-                    .add-tag {
-                        width: 28%;
-
-                        .MuiOutlinedInput-multiline {
-                            padding: 0;
-                            padding-bottom: 3px;
-
-                            textarea {
-                                height: 27px !important;
-                                padding: 10px 8px 0 8px;
-                            }
-                        }
-                    }
-                }
             }
-        }
 
-        .add-info-section {
-            @extend .card-role-section;
+            &-actions {
+                padding: 16px;
+                margin-top: 16px;
 
-            .text-section {
-                padding: 0;
-
-                .MuiOutlinedInput-multiline, .MuiInput-multiline {
-                    padding: 16px 0 8px;
-
-                    textarea {
-                        color: black;
-                    }
+                .resources-button {
+                    bottom: 0;
+                    position: absolute;
+                    background-color: $primary-color;
+                    margin-bottom: 16px;
                 }
-            }
-        }
-
-        &-actions {
-            padding: 16px;
-            margin-top: 16px;
-
-            .resources-button {
-                bottom: 0;
-                position: absolute;
-                background-color: $primary-color;
-                margin-bottom: 16px;
             }
         }
     }

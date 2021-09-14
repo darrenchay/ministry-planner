@@ -135,23 +135,6 @@ export default function RoleSection({ role, index, isEditable }) {
             {
                 index >= 0 &&
                 <Card key={index} className='card-role-section'>
-                    {/* <CardHeader
-                        title={role.roleName}
-                        className='rolename'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                    type={"role"}
-                                    data={selectedRole}
-                                    updateData={changeSelectedRole}
-                                    originalData={originalRole}
-                                    updateOriginalData={changeOriginalRole}
-                                />}
-                            </>
-                        }
-                    /> */}
                     <CardContent className='rolename-button-wrapper'>
                         <Typography className='rolename'>
                             {role.roleName}
@@ -175,6 +158,7 @@ export default function RoleSection({ role, index, isEditable }) {
                                 isRoleEditable={isRoleEditable}
                                 role={selectedRole}
                                 roleHandler={changeSelectedRole}
+                                key={user._id}
                             />
                         ))}
 
@@ -262,23 +246,6 @@ export default function RoleSection({ role, index, isEditable }) {
             {
                 index < 0 &&
                 <Card className='add-info-section'>
-                    {/* <CardHeader
-                        title='Additional Info'
-                        className='rolename'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                    type={"eventDetails"}
-                                    data={selectedRole}
-                                    updateData={changeSelectedRole}
-                                    originalData={originalRole}
-                                    updateOriginalData={changeOriginalRole}
-                                />}
-                            </>
-                        }
-                    /> */}
                     <CardContent className='rolename-button-wrapper'>
                         <Typography className='rolename'>
                             Additional Info

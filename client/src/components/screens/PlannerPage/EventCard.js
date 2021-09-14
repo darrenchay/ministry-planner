@@ -15,6 +15,7 @@ import DateFnsUtils from '@date-io/date-fns';
 
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
+
 // import convertDate from "../../utils/ConvertDate";
 import "./PlannerPage.scss";
 
@@ -28,7 +29,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function EventCard({ event, index }) {
+export default function EventCard({ event }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
     const [originalEvent, changeOriginalEvent] = useState(event);
@@ -50,7 +51,7 @@ export default function EventCard({ event, index }) {
     }
 
     return (
-        <Card key={index} className='card'>
+        <Card key={event.event._id} className='card'>
             <CardHeader
                 className='card-header'
                 title={
@@ -104,19 +105,6 @@ export default function EventCard({ event, index }) {
                         </MuiPickersUtilsProvider>
                     </div>
                 }
-
-                /* Had to comment this out because of css display flex issues, found another soln for it */
-                // action={
-                //     <ButtonGroup
-                //         isEditable={isEditable}
-                //         toggleEdit={toggleEdit}
-                //         type={"event"}
-                //         data={selectedEvent}
-                //         updateData={changeSelectedEvent}
-                //         originalData={originalEvent}
-                //         updateOriginalData={changeOriginalEvent}
-                //     />
-                // }
             />
             <CardContent>
                 {selectedEvent.eventDetails.teamList.map((role, index) => (
@@ -124,6 +112,7 @@ export default function EventCard({ event, index }) {
                         role={role}
                         index={index}
                         isEditable={isEditable}
+                        key={role._id}
                     />
                 ))}
                 <RoleSection
