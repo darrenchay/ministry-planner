@@ -5,7 +5,8 @@ import EventCard from "./EventCard"
 import TimeSelect from './TimeSelect';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 import {
-    CircularProgress
+    CircularProgress,
+    Typography
 } from '@material-ui/core';
 
 /* TODO: 
@@ -69,6 +70,8 @@ export default function PlannerPage() {
     const [events, setEvents] = useState(null);
     const [month, setMonth] = useState('Jan');
     const [year, setYear] = useState(new Date().getFullYear());
+    const [filteredEvents, setFilteredEvents] = useState();
+    const [showLoading, setShowLoading] = useState(true);
     const ministry = "worship";
 
     // Updates events list when something on the page updates
@@ -77,6 +80,13 @@ export default function PlannerPage() {
             .then((data) => {
                 setEvents(data);
                 console.log("Successfully retrieved " + data.length + " events");
+                setFilteredEvents(events.filter((event) => {
+                    let setTimestamp = new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000; //Finding first of selected month
+                    return (
+                        parseInt(event.event.timestamp) >= setTimestamp
+                    )
+                }))
+                setShowLoading(false);
             })
             .catch((err) => {
                 console.log(err);
@@ -92,26 +102,25 @@ export default function PlannerPage() {
                 year={year}
                 setYear={setYear}
                 marks={steps}
+                setShowLoading={setShowLoading}
             />
 
             <div className='cards-wrapper'>
 
-                {!events && (
+                {showLoading && (
                     <CircularProgress
                         style={{ color: "#FE646F" }}
                     />
                 )}
-                {events?.length === 0 &&
-                    <div>No events</div>
+                {filteredEvents?.length === 0 &&
+                    <div>
+                        <Typography variant="h4">
+                            There are no events
+                        </Typography>
+                    </div>
                 }
-                {events?.length > 0 &&
-                    events
-                        .filter((event) => {
-                            let setTimestamp = new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000; //Finding first of selected month
-                            return (
-                                parseInt(event.event.timestamp) >= setTimestamp
-                            )
-                        })
+                {filteredEvents?.length > 0 &&
+                    filteredEvents
                         .map((event) => {
                             return (<EventCard key={event.event._id} event={event} />);
                         })

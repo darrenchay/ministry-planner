@@ -6,7 +6,7 @@ import {
     MenuItem
 } from '@material-ui/core';
 
-export default function TimeSelect({ month, setMonth, year, setYear, marks }) {
+export default function TimeSelect({ month, setMonth, year, setYear, marks, setShowLoading }) {
     const currentYear = new Date().getFullYear();
     const [years, setYears] = useState([]);
     useEffect(() => {
@@ -21,6 +21,7 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks }) {
         setYear(e.target.value);
     }
     const updateMonth = (e, data) => {
+        // setShowLoading(true);
         setMonth((marks.find(({ value }) => value === data)).label);
     }
     return (
@@ -46,6 +47,12 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks }) {
                         })}
                 </Select>
                 <Slider
+                    // classes={{
+                    //     thumb: thumb,
+                    //     rail: rail,
+                    //     track: track,
+                    //     valueLabel: valueLabel,
+                    // }}
                     defaultValue={0}
                     step={1}
                     valueLabelDisplay="off"
@@ -53,6 +60,9 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks }) {
                     min={0}
                     max={11}
                     onChange={updateMonth}
+                    onChangeCommitted={() => {setShowLoading(false)}}
+                    onMouseDown={() => {setShowLoading(true)}}
+                    onTouchMove={() => {setShowLoading(true)}}
                 />
             </div>
         </div>
