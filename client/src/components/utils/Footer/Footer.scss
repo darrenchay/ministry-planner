@@ -1,0 +1,29 @@
+.footer-wrapper {
+    text-align: left;
+}
+
+
+.info {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+
+.icons {
+    margin-right: 10px;
+}
+
+.a {
+    color: black;
+}
+
+a:visited { text-decoration: none; color:black; }
+
+.text {
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+}
