@@ -85,7 +85,7 @@ export default function RoleSection({ role, index, isEditable }) {
         if (selectedRole.roleName !== undefined) {
             UsersAPI.getUserByRole('worship', selectedRole.roleName)
                 .then(resp => {
-                    changeAvailableMembers(resp)
+                    changeAvailableMembers(resp);
                 })
         }
     }, [selectedRole]);

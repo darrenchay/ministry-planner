@@ -36,7 +36,7 @@
         }
 
         .card {
-            border-radius: 20px;
+            border-radius: 15px;
             width: 24%;
             margin-right: 1%;
             position: relative;
@@ -62,6 +62,10 @@
                                 font-size: $fontsize-header1;
                             }
                         }
+                    }
+
+                    .delete-icon {
+                        color: rgb(219, 58, 58);
                     }
 
                     .edit-button svg {

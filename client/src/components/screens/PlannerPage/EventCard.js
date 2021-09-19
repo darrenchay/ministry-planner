@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function EventCard({ event }) {
+export default function EventCard({ event, setDeleteFlag }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
     const [originalEvent, changeOriginalEvent] = useState(event);
@@ -79,6 +79,7 @@ export default function EventCard({ event }) {
                             updateData={changeSelectedEvent}
                             originalData={originalEvent}
                             updateOriginalData={changeOriginalEvent}
+                            setDeleteFlag={setDeleteFlag}
                         />
                     </div>
                 }
