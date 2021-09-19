@@ -14,9 +14,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 
-function ConfirmDelete(props) {
-    const { onClose, open, handleDelete } = props;
-
+const ConfirmDelete = ({onClose, open, handleDelete}) => {
     const handleCancel = () => {
         onClose();
     };
