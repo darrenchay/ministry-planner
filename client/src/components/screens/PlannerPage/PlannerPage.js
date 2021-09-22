@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core';
 import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded';
 import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
+import Modal from '@material-ui/core/Modal';
+import CreateEventModal from "./CreateEventModal";
 
 import convertDate from "./../../utils/ConvertDate";
 /* TODO: 
@@ -75,6 +77,7 @@ export default function PlannerPage() {
     const [showLoading, setShowLoading] = useState(true);
     const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";
+    const [open, setOpen] = React.useState(false);
 
     // Updates events list when something on the page updates
     useEffect(() => {
@@ -147,7 +150,29 @@ export default function PlannerPage() {
         setCurrTimestamp(prevTimestamp)
     }
 
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
+        <>
+        <div>
+            <button type="button" onClick={handleOpen}>
+                Create
+            </button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <CreateEventModal />
+            </Modal>
+        </div>
         <div className='planner-page-wrapper'>
             <TimeSelect
                 month={month}
@@ -189,5 +214,6 @@ export default function PlannerPage() {
 
             </div>
         </div>
+        </>
     );
 }

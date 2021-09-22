@@ -228,3 +228,94 @@
         }
     }
 }
+
+.card-role-section {
+    margin-bottom: 12px;
+    padding: 16px;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 1px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+    &:last-child {
+        margin-bottom: 16px;
+    }
+
+    .rolename-button-wrapper {
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        
+        .rolename {
+            font-size: $fontsize-header2;
+            color: #ec9e00;
+        };
+
+        .edit-button svg {
+            font-size: $fontsize-header2;
+        }
+    }
+
+    .team-members-wrapper {
+        padding: 0;
+        padding-top: 16px;
+
+        .team-member-wrapper {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+            margin-bottom: 8px;
+            
+            .team-member {
+                margin-right: 5px;
+                color: black;
+            }
+
+            .tag {
+                color: lightslategrey;
+            }
+
+            &-no-margin {
+                @extend .team-member-wrapper;
+                margin-bottom: 0;
+            }
+        }
+
+        .no-members-text {
+            padding: 0;
+            padding-bottom: 8px;
+
+            .MuiOutlinedInput-multiline {
+                padding: 0;
+
+                textarea {
+                    color: black;
+                }
+            }
+        }
+
+        .add-team-member-section {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+
+            .add-team-member {
+                width: 56%;
+                margin-right: 2.5%;
+            }
+
+            .add-tag {
+                width: 28%;
+
+                .MuiOutlinedInput-multiline {
+                    padding: 0;
+                    padding-bottom: 3px;
+
+                    textarea {
+                        height: 27px !important;
+                        padding: 10px 8px 0 8px;
+                    }
+                }
+            }
+        }
+    }
+}
