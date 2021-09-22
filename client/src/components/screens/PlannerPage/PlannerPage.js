@@ -75,6 +75,7 @@ export default function PlannerPage() {
     const [showLoading, setShowLoading] = useState(true);
     const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";
+    const [deleteFlag, setDeleteFlag] = useState(true);
 
     // Updates events list when something on the page updates
     useEffect(() => {
@@ -90,7 +91,7 @@ export default function PlannerPage() {
             });
         document.title = "Events";
 
-    }, [month, year]);
+    }, [month, year, deleteFlag]);
 
     const [nextTimestamp, setNextTimestamp] = useState(null);
     const [prevTimestamp, setPrevTimestamp] = useState(null);
@@ -179,7 +180,7 @@ export default function PlannerPage() {
                 {filteredEvents?.length > 0 &&
                     filteredEvents
                         .map((event) => {
-                            return (<EventCard key={event.event._id} event={event} />);
+                            return (<EventCard key={event.event._id} event={event} setDeleteFlag={setDeleteFlag} />);
                         })
                         .slice(0, 4)
                 }

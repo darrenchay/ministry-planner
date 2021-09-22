@@ -27,6 +27,24 @@ export const updateEvent = (data, id) => {
         })
 }
 
+export const deleteFullEvent = (eventId, eventDetailsId) => {
+    return axios({
+        method: "DELETE",
+        url: baseURL + "worshipEventDetails/delete/" + eventDetailsId
+    }).then((resp) => {
+        console.log(resp.data);
+        axios({
+            method: "DELETE",
+            url: baseURL + "events/delete/" + eventId,
+        }).then((resp) => {
+            console.log(resp.data);
+        })
+    }).catch(err => {
+        console.log(err);
+        throw err;
+    })
+}
+
 export const updateEventDetails = (data, ministry, type, id) => {
     //Update the team members for a role
     if (type === 'role') {
@@ -50,7 +68,7 @@ export const updateEventDetails = (data, ministry, type, id) => {
             .then(resp => resp.data)
             .catch(err => {
                 console.log(err);
-                throw err
+                throw err;
             })
     }
 }

@@ -1,18 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import {
     IconButton,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Button
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import DeleteIcon from '@material-ui/icons/Delete';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
+
+const ConfirmDelete = ({onClose, open, handleDelete}) => {
+    const handleCancel = () => {
+        onClose();
+    };
+
+    const handleOk = () => {
+        handleDelete();
+    };
+
+    return (
+        <Dialog
+            sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
+            maxWidth="xs"
+            open={open}
+        >
+            <DialogTitle>Delete Confirmation</DialogTitle>
+            <DialogContent dividers>
+                <p>Are you sure you want to delete this event?</p>
+            </DialogContent>
+            <DialogActions>
+                <Button autoFocus onClick={handleCancel}>
+                    Cancel
+                </Button>
+                <Button onClick={handleOk}>Yes</Button>
+            </DialogActions>
+        </Dialog>
+    );
+}
 
 // Handles the toggling of the edit/save/cancel buttons
 // On click edit, save a local version of the event
 // Then when click update, take the copy of the event and send that as body, update original event to be the copy
 // Then when click cancel, revert to original version of event
-export default function ButtonGroup({ isEditable, toggleEdit, type, data, updateData, originalData, updateOriginalData }) {
+export default function ButtonGroup({ isEditable, toggleEdit, type, data, updateData, originalData, updateOriginalData, setDeleteFlag }) {
+    const [open, setOpen] = useState(false);
     const handleEdit = () => {
         toggleEdit(!isEditable);
     }
@@ -56,22 +92,56 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
         updateData(originalData);
         toggleEdit(false);
     }
+
+    const handleDelete = () => {
+        EventsAPI.deleteFullEvent(originalData.event._id, originalData.eventDetails._id)
+            .then(() => {
+                setOpen(false);
+                setDeleteFlag(false);
+                setDeleteFlag(true);
+                // Trigger a better watcher of useEffect to update list of events
+                // TODO: Add a toast animation when it is successfully deleted
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOpen = () => {
+        setOpen(true);
+    }
     return (
         <div className='edit-button'>
-            {!isEditable && 
-            <IconButton onClick={handleEdit} aria-label="settings" >
-                <EditIcon />
-            </IconButton>
-            // To add a delete icon next to it as well (and delete only appears for event not role), for role its minimize instead of delete
+            {!isEditable &&
+                <>
+                    <IconButton onClick={handleEdit} aria-label="settings" >
+                        <EditIcon />
+                    </IconButton>
+                    {type === "event" &&
+                        <IconButton onClick={handleOpen} aria-label="settings" >
+                            <DeleteIcon className="delete-icon" />
+                        </IconButton>}
+                </>
             }
-            {isEditable && <>
-                <IconButton onClick={handleSave} aria-label="settings">
-                    <DoneIcon />
-                </IconButton>
-                <IconButton onClick={handleCancel} aria-label="settings">
-                    <ClearIcon />
-                </IconButton>
-            </>}
+            {isEditable &&
+                <>
+                    <IconButton onClick={handleSave} aria-label="settings">
+                        <DoneIcon />
+                    </IconButton>
+                    <IconButton onClick={handleCancel} aria-label="settings">
+                        <ClearIcon />
+                    </IconButton>
+                </>}
+            <ConfirmDelete
+                keepMounted
+                open={open}
+                onClose={handleClose}
+                handleDelete={handleDelete}
+            />
         </div>
     );
 }
