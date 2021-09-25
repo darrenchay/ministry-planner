@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import cloneDeep from "lodash/cloneDeep";
 import {
     IconButton,
     Dialog,
@@ -77,7 +76,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
                 })
 
             // saving the event's roles
-            cachedRoles.map(item => {
+            cachedRoles.forEach(item => {
                 EventsAPI.updateEventDetails(item.roleData, 'worship', 'role')
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " role(s)");
@@ -89,9 +88,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
             updateOriginalData(event);
         } else if (type.toLowerCase() === "role") {
             // update cachedRoles
-            console.log("role:", role);
             for (var i = 0; i < cachedRoles.length; i++) {
-                if (cachedRoles[i].roleName == role.roleName) {
+                if (cachedRoles[i].roleName === role.roleName) {
                     cachedRoles[i].roleData = role;
                     updateCachedRoles(cachedRoles);
                     break;

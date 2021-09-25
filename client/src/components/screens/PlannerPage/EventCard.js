@@ -39,7 +39,7 @@ export default function EventCard({ event, setDeleteFlag }) {
 
     const initCachedRoles = (event) => {
         var temp = [];
-        event.eventDetails.teamList.map((role, index) => {
+        event.eventDetails.teamList.forEach(role => {
             var roleObj = {
                 roleName: role.roleName,
                 roleData: role

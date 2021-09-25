@@ -97,7 +97,8 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                 changeSelectedRole(originalRole);
             }
         }
-    }, [isEditable]);
+    }, [isEditable, cachedEventDetails, cachedRoles, index, isSave,
+        originalRole, role.roleName, toggleSave]);
 
     useEffect(() => {
         if (selectedRole.roleName !== undefined) {
