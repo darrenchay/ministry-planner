@@ -66,7 +66,9 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, is
 }
 
 // The cards for each of the roles (includes handling for additional info as well)
-export default function RoleSection({ role, index, isEditable }) {
+export default function RoleSection({ role, index, isEditable, isSave, toggleSave,
+                                      cachedRoles, cachedEventDetails, updateCachedRoles, 
+                                      updateCachedEventDetails }) {
     const classes = useStyles();
     const [isRoleEditable, toggleRoleEdit] = useState(false);
     const [originalRole, changeOriginalRole] = useState(role);
@@ -77,9 +79,25 @@ export default function RoleSection({ role, index, isEditable }) {
     useEffect(() => {
         if (!isEditable) {
             toggleRoleEdit(false);
-            changeSelectedRole(originalRole);
+            if (isSave) {
+                toggleSave(false);
+                if (index >= 0) {
+                    for (var i = 0; i < cachedRoles.length; i++) {
+                        if (cachedRoles[i].roleName === role.roleName) {
+                            changeSelectedRole(cachedRoles[i].roleData);
+                            changeOriginalRole(cachedRoles[i].roleData);
+                            break;
+                        }
+                    }
+                } else if (index < 0) {
+                    changeSelectedRole(cachedEventDetails);
+                    changeOriginalRole(cachedEventDetails);
+                }
+            } else {
+                changeSelectedRole(originalRole);
+            }
         }
-    }, [isEditable, originalRole]);
+    }, [isEditable]);
 
     useEffect(() => {
         if (selectedRole.roleName !== undefined) {
@@ -142,8 +160,14 @@ export default function RoleSection({ role, index, isEditable }) {
                         {isEditable && <ButtonGroup
                             isEditable={isRoleEditable}
                             toggleEdit={toggleRoleEdit}
+                            toggleSave={toggleSave}
                             type={"role"}
-                            data={selectedRole}
+                            event={null}
+                            role={selectedRole}
+                            cachedRoles={cachedRoles}
+                            cachedEventDetails={null}
+                            updateCachedRoles={updateCachedRoles}
+                            updateCachedEventDetails={null}
                             updateData={changeSelectedRole}
                             originalData={originalRole}
                             updateOriginalData={changeOriginalRole}
@@ -253,8 +277,14 @@ export default function RoleSection({ role, index, isEditable }) {
                         {isEditable && <ButtonGroup
                             isEditable={isRoleEditable}
                             toggleEdit={toggleRoleEdit}
+                            toggleSave={toggleSave}
                             type={"eventDetails"}
-                            data={selectedRole}
+                            event={null}
+                            role={selectedRole}
+                            cachedRoles={null}
+                            cachedEventDetails={null}
+                            updateCachedRoles={null}
+                            updateCachedEventDetails={updateCachedEventDetails}
                             updateData={changeSelectedRole}
                             originalData={originalRole}
                             updateOriginalData={changeOriginalRole}
