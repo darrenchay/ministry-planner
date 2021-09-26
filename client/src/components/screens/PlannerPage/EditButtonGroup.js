@@ -76,8 +76,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
                 })
 
             // saving the event's roles
-            cachedRoles.forEach(item => {
-                EventsAPI.updateEventDetails(item.roleData, 'worship', 'role')
+            cachedRoles.forEach(roleElem => {
+                EventsAPI.updateEventDetails(roleElem, 'worship', 'role')
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " role(s)");
                 })
@@ -90,7 +90,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
             // update cachedRoles
             for (var i = 0; i < cachedRoles.length; i++) {
                 if (cachedRoles[i].roleName === role.roleName) {
-                    cachedRoles[i].roleData = role;
+                    cachedRoles[i] = role;
                     updateCachedRoles(cachedRoles);
                     break;
                 }

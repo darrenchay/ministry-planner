@@ -37,19 +37,7 @@ export default function EventCard({ event, setDeleteFlag }) {
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const history = useHistory();
 
-    const initCachedRoles = (event) => {
-        var temp = [];
-        event.eventDetails.teamList.forEach(role => {
-            var roleObj = {
-                roleName: role.roleName,
-                roleData: role
-            }
-            temp.push(roleObj);
-        });
-        return temp;
-    };
-
-    const [cachedRoles, updateCachedRoles] = useState(initCachedRoles(originalEvent));
+    const [cachedRoles, updateCachedRoles] = useState(originalEvent.eventDetails.teamList);
     const [cachedEventDetails, updateCachedEventDetails] = useState(originalEvent.eventDetails);
 
     let redirectToResources = (event) => {
@@ -132,7 +120,7 @@ export default function EventCard({ event, setDeleteFlag }) {
             <CardContent>
                 {cachedRoles.map((role, index) => (
                     <RoleSection
-                        role={role.roleData}
+                        role={role}
                         index={index}
                         isEditable={isEditable}
                         isSave={isSave}

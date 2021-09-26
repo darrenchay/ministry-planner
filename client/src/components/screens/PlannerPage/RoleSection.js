@@ -84,8 +84,8 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                 if (index >= 0) {
                     for (var i = 0; i < cachedRoles.length; i++) {
                         if (cachedRoles[i].roleName === role.roleName) {
-                            changeSelectedRole(cachedRoles[i].roleData);
-                            changeOriginalRole(cachedRoles[i].roleData);
+                            changeSelectedRole(cachedRoles[i]);
+                            changeOriginalRole(cachedRoles[i]);
                             break;
                         }
                     }
