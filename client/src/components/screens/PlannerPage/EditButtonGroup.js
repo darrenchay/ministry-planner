@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import cloneDeep from "lodash/cloneDeep";
 import {
     IconButton,
     Dialog,
@@ -47,7 +46,9 @@ const ConfirmDelete = ({onClose, open, handleDelete}) => {
 // On click edit, save a local version of the event
 // Then when click update, take the copy of the event and send that as body, update original event to be the copy
 // Then when click cancel, revert to original version of event
-export default function ButtonGroup({ isEditable, toggleEdit, type, data, updateData, originalData, updateOriginalData, setDeleteFlag }) {
+export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, event, role,
+                                      cachedRoles, cachedEventDetails, updateCachedRoles, updateCachedEventDetails, 
+                                      updateData, originalData, updateOriginalData, setDeleteFlag }) {
     const [open, setOpen] = useState(false);
     const handleEdit = () => {
         toggleEdit(!isEditable);
@@ -55,7 +56,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
 
     const handleSave = () => {
         if (type.toLowerCase() === "event") {
-            EventsAPI.updateEvent(data.event, data.event._id)
+            // saving the event
+            EventsAPI.updateEvent(event.event, event.event._id)
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " event(s)");
                 })
@@ -63,34 +65,48 @@ export default function ButtonGroup({ isEditable, toggleEdit, type, data, update
                     console.log(err);
                     // Add error handler and do not make editable false, instead show an alert which says an error occured
                 });
+            
+            // saving the eventDetails
+            EventsAPI.updateEventDetails(cachedEventDetails, 'worship', 'eventDetails', cachedEventDetails._id)
+                .then(resp => {
+                    console.log("successfully updated " + resp.nModified + " eventDetail(s)");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
+            // saving the event's roles
+            cachedRoles.forEach(roleElem => {
+                EventsAPI.updateEventDetails(roleElem, 'worship', 'role')
+                .then(resp => {
+                    console.log("successfully updated " + resp.nModified + " role(s)");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            });
+            updateOriginalData(event);
         } else if (type.toLowerCase() === "role") {
-            EventsAPI.updateEventDetails(data, 'worship', 'role')
-                .then(resp => {
-                    console.log("successfully updated " + resp.nModified + " role(s)");
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+            // update cachedRoles
+            for (var i = 0; i < cachedRoles.length; i++) {
+                if (cachedRoles[i].roleName === role.roleName) {
+                    cachedRoles[i] = role;
+                    updateCachedRoles(cachedRoles);
+                    break;
+                }
+            }
         } else if (type === "eventDetails") {
-            var tempData = cloneDeep(data);
-            delete tempData.teamList;
-            delete tempData.teamMapping;
-            EventsAPI.updateEventDetails(tempData, 'worship', 'eventDetails', data._id)
-                .then(resp => {
-                    console.log("successfully updated " + resp.nModified + " role(s)");
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+            updateCachedEventDetails(role);
         }
         toggleEdit(false);
-        updateOriginalData(data);
+        toggleSave(true);
     }
 
     // If you cancel, reverts the changes you made back to original data
     const handleCancel = () => {
         updateData(originalData);
         toggleEdit(false);
+        toggleSave(false);
     }
 
     const handleDelete = () => {

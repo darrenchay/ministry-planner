@@ -32,9 +32,13 @@ const useStyles = makeStyles(() => ({
 export default function EventCard({ event, setDeleteFlag }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
+    const [isSave, toggleSave] = useState(false);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const history = useHistory();
+
+    const [cachedRoles, updateCachedRoles] = useState(originalEvent.eventDetails.teamList);
+    const [cachedEventDetails, updateCachedEventDetails] = useState(originalEvent.eventDetails);
 
     let redirectToResources = (event) => {
         history.push("resources");
@@ -74,8 +78,14 @@ export default function EventCard({ event, setDeleteFlag }) {
                         <ButtonGroup
                             isEditable={isEditable}
                             toggleEdit={toggleEdit}
+                            toggleSave={toggleSave}
                             type={"event"}
-                            data={selectedEvent}
+                            event={selectedEvent}
+                            role={null}
+                            cachedRoles={cachedRoles}
+                            cachedEventDetails={cachedEventDetails}
+                            updateCachedRoles={updateCachedRoles}
+                            updateCachedEventDetails={updateCachedEventDetails}
                             updateData={changeSelectedEvent}
                             originalData={originalEvent}
                             updateOriginalData={changeOriginalEvent}
@@ -108,18 +118,30 @@ export default function EventCard({ event, setDeleteFlag }) {
                 }
             />
             <CardContent>
-                {selectedEvent.eventDetails.teamList.map((role, index) => (
+                {cachedRoles.map((role, index) => (
                     <RoleSection
                         role={role}
                         index={index}
                         isEditable={isEditable}
+                        isSave={isSave}
+                        toggleSave={toggleSave}
+                        cachedRoles={cachedRoles}
+                        cachedEventDetails={null}
+                        updateCachedRoles={updateCachedRoles}
+                        updateCachedEventDetails={null}
                         key={role._id}
                     />
                 ))}
                 <RoleSection
-                    role={selectedEvent.eventDetails}
+                    role={cachedEventDetails}
                     index={-1}
                     isEditable={isEditable}
+                    isSave={isSave}
+                    toggleSave={toggleSave}
+                    cachedRoles={null}
+                    cachedEventDetails={cachedEventDetails}
+                    updateCachedRoles={null}
+                    updateCachedEventDetails={updateCachedEventDetails}
                 />
             </CardContent>
             <CardActions className='card-actions'>
