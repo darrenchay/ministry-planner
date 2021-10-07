@@ -45,7 +45,7 @@ class UserActions {
             if (err) {
                 res.status(400).send(err);
             } else if (users == '') {
-                res.status(204).send("No users with role '" + req.body.role + "' not found");
+                res.status(404).send("No users with role '" + req.body.role + "' not found");
             } else {
                 res.status(200).send(users);
             }

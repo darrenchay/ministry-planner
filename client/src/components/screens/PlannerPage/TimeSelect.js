@@ -26,6 +26,7 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
 
     const updateYear = (e) => {
         setYear(e.target.value);
+        setMonth('Jan');
     }
     const updateMonth = (e, data) => {
         setShowLoading(false);
