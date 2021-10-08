@@ -5,6 +5,7 @@ import Router from "./Router";
 import { StylesProvider } from '@material-ui/core/styles';
 
 function App() {
+    document.title = "Ministry Planner";
     return (
         <StylesProvider injectFirst>
             <div className="App">
