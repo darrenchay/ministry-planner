@@ -50,8 +50,6 @@ export default function Navbar() {
 							Planner
 						</Button>
 						<Button className='nav-buttons' onClick={redirectToResources}>
-							Resources
-						<Button className='nav-buttons' onClick={redirectToResources}>
 							Song Book
 						</Button>
 						<Button className='nav-buttons' onClick={redirectToTeam}>

@@ -65,7 +65,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
         toggleEdit(!isEditable);
     };
 
-    const handleClose = () => {
+    const handleCloseSnack = () => {
         setOpenSuccessUpdateEvent(false);
         setOpenErrorUpdateEvent(false);
         setOpenSuccessUpdateRole(false);
@@ -78,7 +78,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
             EventsAPI.updateEvent(event.event, event.event._id)
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " event(s)");
-                    handleClose();
+                    handleCloseSnack();
                     setOpenSuccessUpdateEvent(true);
                 })
                 .catch(err => {
@@ -91,8 +91,6 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
             EventsAPI.updateEventDetails(cachedEventDetails, 'worship', 'eventDetails', cachedEventDetails._id)
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " role(s)");
-                    handleClose();
-                    setOpenSuccessUpdateRole(true);
                 })
                 .catch(err => {
                     setOpenErrorUpdateRole(true)
@@ -178,27 +176,26 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
             </>}
 
             {/* Status update toast notifications */}
-            <Snackbar open={openSuccessUpdateEvent} autoHideDuration={5000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success">
+            <Snackbar open={openSuccessUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="success">
                     Event successfully updated!
                 </Alert>
             </Snackbar>
-            <Snackbar open={openErrorUpdateEvent} autoHideDuration={5000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="error">
+            <Snackbar open={openErrorUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="error">
                     An error occured when updating the event.
                 </Alert>
             </Snackbar>
-            <Snackbar open={openSuccessUpdateRole} autoHideDuration={5000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="success">
+            <Snackbar open={openSuccessUpdateRole} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="success">
                     Role successfully updated!
                 </Alert>
             </Snackbar>
-            <Snackbar open={openErrorUpdateRole} autoHideDuration={5000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="error">
+            <Snackbar open={openErrorUpdateRole} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="error">
                     An error occured when updating the role.
                 </Alert>
             </Snackbar>
-        </>
             <ConfirmDelete
                 keepMounted
                 open={open}
