@@ -7,14 +7,14 @@ import {
 	Toolbar
   } from "@material-ui/core";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
 import SearchIcon from '@material-ui/icons/Search';
 import logo from './stpaul-logo.png'
 import { Link, useHistory } from "react-router-dom";
 
 export default function Navbar() {
 	const history = useHistory();
-
+	
 	let redirectToPlanner = (event) => {
 		history.push("planner");
 	};
@@ -38,7 +38,7 @@ export default function Navbar() {
 							Planner
 						</Button>
 						<Button className='nav-buttons'>
-							Resources
+							Song Book
 						</Button>
 						<Button className='nav-buttons'>
 							Team
@@ -59,7 +59,7 @@ export default function Navbar() {
 					>
 					</Button>
 					<Button
-						startIcon={<HelpOutlineIcon className='right-area-icon' />}
+						startIcon={<SettingsRoundedIcon className='right-area-icon' />}
 						className='right-area-button'
 					>
 					</Button>
