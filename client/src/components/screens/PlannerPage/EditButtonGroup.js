@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+    Snackbar,
     IconButton,
     Dialog,
     DialogActions,
@@ -12,6 +13,11 @@ import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const ConfirmDelete = ({onClose, open, handleDelete}) => {
     const handleCancel = () => {
@@ -46,13 +52,25 @@ const ConfirmDelete = ({onClose, open, handleDelete}) => {
 // On click edit, save a local version of the event
 // Then when click update, take the copy of the event and send that as body, update original event to be the copy
 // Then when click cancel, revert to original version of event
+
 export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, event, role,
                                       cachedRoles, cachedEventDetails, updateCachedRoles, updateCachedEventDetails, 
                                       updateData, originalData, updateOriginalData, setDeleteFlag }) {
+    const [openSuccessUpdateEvent, setOpenSuccessUpdateEvent] = React.useState(false);
+    const [openErrorUpdateEvent, setOpenErrorUpdateEvent] = React.useState(false);
+    const [openSuccessUpdateRole, setOpenSuccessUpdateRole] = React.useState(false);
+    const [openErrorUpdateRole, setOpenErrorUpdateRole] = React.useState(false);
     const [open, setOpen] = useState(false);
     const handleEdit = () => {
         toggleEdit(!isEditable);
-    }
+    };
+
+    const handleCloseSnack = () => {
+        setOpenSuccessUpdateEvent(false);
+        setOpenErrorUpdateEvent(false);
+        setOpenSuccessUpdateRole(false);
+        setOpenErrorUpdateRole(false);
+    };
 
     const handleSave = () => {
         if (type.toLowerCase() === "event") {
@@ -60,8 +78,11 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
             EventsAPI.updateEvent(event.event, event.event._id)
                 .then(resp => {
                     console.log("successfully updated " + resp.nModified + " event(s)");
+                    handleCloseSnack();
+                    setOpenSuccessUpdateEvent(true);
                 })
                 .catch(err => {
+                    setOpenErrorUpdateEvent(true)
                     console.log(err);
                     // Add error handler and do not make editable false, instead show an alert which says an error occured
                 });
@@ -69,9 +90,10 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
             // saving the eventDetails
             EventsAPI.updateEventDetails(cachedEventDetails, 'worship', 'eventDetails', cachedEventDetails._id)
                 .then(resp => {
-                    console.log("successfully updated " + resp.nModified + " eventDetail(s)");
+                    console.log("successfully updated " + resp.nModified + " role(s)");
                 })
                 .catch(err => {
+                    setOpenErrorUpdateRole(true)
                     console.log(err);
                 })
 
@@ -130,6 +152,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
     const handleOpen = () => {
         setOpen(true);
     }
+
     return (
         <div className='edit-button'>
             {!isEditable &&
@@ -143,15 +166,36 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
                         </IconButton>}
                 </>
             }
-            {isEditable &&
-                <>
-                    <IconButton onClick={handleSave} aria-label="settings">
-                        <DoneIcon />
-                    </IconButton>
-                    <IconButton onClick={handleCancel} aria-label="settings">
-                        <ClearIcon />
-                    </IconButton>
-                </>}
+            {isEditable && <>
+                <IconButton onClick={handleSave} aria-label="settings">
+                    <DoneIcon />
+                </IconButton>
+                <IconButton onClick={handleCancel} aria-label="settings">
+                    <ClearIcon />
+                </IconButton>
+            </>}
+
+            {/* Status update toast notifications */}
+            <Snackbar open={openSuccessUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="success">
+                    Event successfully updated!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openErrorUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="error">
+                    An error occured when updating the event.
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openSuccessUpdateRole} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="success">
+                    Role successfully updated!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openErrorUpdateRole} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="error">
+                    An error occured when updating the role.
+                </Alert>
+            </Snackbar>
             <ConfirmDelete
                 keepMounted
                 open={open}

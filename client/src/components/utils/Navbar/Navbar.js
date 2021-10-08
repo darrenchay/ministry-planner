@@ -16,8 +16,20 @@ export default function Navbar() {
 	const history = useHistory();
 	
 	let redirectToPlanner = (event) => {
-		history.push("planner");
+		history.push("/planner");
 	};
+
+    let redirectToResources = (event) => {
+        history.push("/resources")
+    };
+    
+    let redirectToTeam = (event) => {
+        history.push("/team")
+    };
+
+	let redirectToAboutUs = (event) => {
+        history.push("/aboutus")
+    };
 
 	return (
 		<div>
@@ -37,13 +49,13 @@ export default function Navbar() {
 						<Button className='nav-buttons' onClick={redirectToPlanner}>
 							Planner
 						</Button>
-						<Button className='nav-buttons'>
+						<Button className='nav-buttons' onClick={redirectToResources}>
 							Song Book
 						</Button>
-						<Button className='nav-buttons'>
+						<Button className='nav-buttons' onClick={redirectToTeam}>
 							Team
 						</Button>
-						<Button className='nav-buttons'>
+						<Button className='nav-buttons' onClick={redirectToAboutUs}>
 							About Us
 						</Button>
 					</Box>

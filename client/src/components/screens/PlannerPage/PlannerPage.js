@@ -89,7 +89,6 @@ export default function PlannerPage() {
             .catch((err) => {
                 console.log(err);
             });
-        document.title = "Events";
 
     }, [month, year, deleteFlag]);
 
