@@ -1,5 +1,7 @@
+@import './../../../globals.scss';
+
 .home-page-wrapper {
-   background: linear-gradient(#D83B1E 0%, #FE9969 100%);
+   background: linear-gradient($primary-color 0%, #FE9969 100%);
    
    .main-verse {
       flex-grow: 1;
@@ -10,19 +12,31 @@
    }
    
    .main-verse-ref {
-      padding-bottom: 80px;
       color: white;
    }
    
-   .home-nav-buttons {
+   .home-events {
       box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
       background-color: white;
-      width: 200px;
-      height: 250px;
+      max-width: 500px;
+      height: 330px;
       font-weight: bold;
-      color: #D83B1E;
       font-size: 20px;
       padding: 12px;
       border-radius: 15px;
    }
+
+   .home-nav-buttons {
+      box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
+      background-color: white;
+      max-width: "100%";
+      height: 100px;
+      font-weight: bold;
+      color: $primary-color;
+      font-size: 20px;
+      padding: 12px;
+      border-radius: 15px;
+      margin-bottom: 25px;
+   }
+   
 }

@@ -15,6 +15,7 @@ import DateFnsUtils from '@date-io/date-fns';
 
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
+
 // import convertDate from "../../utils/ConvertDate";
 import "./PlannerPage.scss";
 
@@ -23,14 +24,21 @@ const useStyles = makeStyles(() => ({
     noBorder: {
         border: "none",
     },
+    resize: {
+        fontSize: 22
+    }
 }));
 
-export default function EventCard({ event, index }) {
+export default function EventCard({ event, setDeleteFlag }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
+    const [isSave, toggleSave] = useState(false);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const history = useHistory();
+
+    const [cachedRoles, updateCachedRoles] = useState(originalEvent.eventDetails.teamList);
+    const [cachedEventDetails, updateCachedEventDetails] = useState(originalEvent.eventDetails);
 
     let redirectToResources = (event) => {
         history.push("resources");
@@ -47,63 +55,93 @@ export default function EventCard({ event, index }) {
     }
 
     return (
-        <Card key={index} className='card'>
+        <Card key={event.event._id} className='card'>
             <CardHeader
                 className='card-header'
-                title={<TextField InputProps={{
-                    classes: {
-                        notchedOutline: classes.noBorder
-                    },
-                }}
-                    multiline={true}
-                    disabled={!isEditable}
-                    id="outlined-basic"
-                    variant="outlined"
-                    placeholder="No event name"
-                    value={selectedEvent.event.name}
-                    onChange={(e) => handleChangeEvent(e, "name")} />}
+                title={
+                    <div className={isEditable ? 'title-button-wrapper-edit' : 'title-button-wrapper'}>
+                        <TextField InputProps={{
+                                classes: {
+                                    // notchedOutline: classes.noBorder,
+                                    input: classes.resize
+                                },
+                                disableUnderline: !isEditable
+                            }}
+                            className='title'
+                            multiline={true}
+                            disabled={!isEditable}
+                            id="outlined-basic"
+                            variant={isEditable ? "outlined" : "standard"}
+                            placeholder="No event name"
+                            value={selectedEvent.event.name}
+                            onChange={(e) => handleChangeEvent(e, "name")} />
+                        <ButtonGroup
+                            isEditable={isEditable}
+                            toggleEdit={toggleEdit}
+                            toggleSave={toggleSave}
+                            type={"event"}
+                            event={selectedEvent}
+                            role={null}
+                            cachedRoles={cachedRoles}
+                            cachedEventDetails={cachedEventDetails}
+                            updateCachedRoles={updateCachedRoles}
+                            updateCachedEventDetails={updateCachedEventDetails}
+                            updateData={changeSelectedEvent}
+                            originalData={originalEvent}
+                            updateOriginalData={changeOriginalEvent}
+                            setDeleteFlag={setDeleteFlag}
+                        />
+                    </div>
+                }
                 subheader={
-                    <>
+                    <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 variant="inline"
-                                format="MM/dd/yyyy"
+                                inputVariant={isEditable ? "outlined" : "standard"}
+                                format="d MMM yyyy"
                                 margin="normal"
                                 id="pickupDate"
                                 disabled={!isEditable}
                                 value={new Date(selectedEvent.event.timestamp * 1000)}
                                 onChange={(e) => handleChangeEvent(e, "date")}
+                                InputProps={{
+                                    disableUnderline: !isEditable
+                                }}
                                 KeyboardButtonProps={{
                                     "aria-label": "change date",
+                                    style: { display: isEditable ? 'inline-flex' : 'none' }
                                 }}
                             />
                         </MuiPickersUtilsProvider>
-                    </>
-                }
-                action={
-                    <ButtonGroup
-                        isEditable={isEditable}
-                        toggleEdit={toggleEdit}
-                        type={"event"}
-                        data={selectedEvent}
-                        updateData={changeSelectedEvent}
-                        originalData={originalEvent}
-                        updateOriginalData={changeOriginalEvent}
-                    />
+                    </div>
                 }
             />
             <CardContent>
-                {selectedEvent.eventDetails.teamList.map((role, index) => (
+                {cachedRoles.map((role, index) => (
                     <RoleSection
                         role={role}
                         index={index}
                         isEditable={isEditable}
+                        isSave={isSave}
+                        toggleSave={toggleSave}
+                        cachedRoles={cachedRoles}
+                        cachedEventDetails={null}
+                        updateCachedRoles={updateCachedRoles}
+                        updateCachedEventDetails={null}
+                        key={role._id}
                     />
                 ))}
                 <RoleSection
-                    role={selectedEvent.eventDetails}
+                    role={cachedEventDetails}
                     index={-1}
                     isEditable={isEditable}
+                    isSave={isSave}
+                    toggleSave={toggleSave}
+                    cachedRoles={null}
+                    cachedEventDetails={cachedEventDetails}
+                    updateCachedRoles={null}
+                    updateCachedEventDetails={updateCachedEventDetails}
                 />
             </CardContent>
             <CardActions className='card-actions'>

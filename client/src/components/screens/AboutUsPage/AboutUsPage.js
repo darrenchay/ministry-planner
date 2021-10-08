@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function ResourcesPage() {
+export default function AboutUsPage() {
   return (
     <div>
-      SONG BOOK
+        ABOUT US
     </div>
   );
 }

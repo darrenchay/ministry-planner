@@ -3,7 +3,6 @@ import cloneDeep from "lodash/cloneDeep";
 import {
     makeStyles,
     Card,
-    CardHeader,
     CardContent,
     IconButton,
     Typography,
@@ -50,13 +49,7 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, is
     }, [role, teamMember, teamMapping]);
 
     return (
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            position: 'relative',
-            margin: '10px'
-        }} key={teamMember._id}>
+        <div key={teamMember._id} className={isRoleEditable ? 'team-member-wrapper-no-margin' : 'team-member-wrapper'}>
             <Typography className="team-member">
                 {teamMember.firstname}
             </Typography>
@@ -73,7 +66,9 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, is
 }
 
 // The cards for each of the roles (includes handling for additional info as well)
-export default function RoleSection({ role, index, isEditable }) {
+export default function RoleSection({ role, index, isEditable, isSave, toggleSave,
+                                      cachedRoles, cachedEventDetails, updateCachedRoles, 
+                                      updateCachedEventDetails }) {
     const classes = useStyles();
     const [isRoleEditable, toggleRoleEdit] = useState(false);
     const [originalRole, changeOriginalRole] = useState(role);
@@ -84,15 +79,32 @@ export default function RoleSection({ role, index, isEditable }) {
     useEffect(() => {
         if (!isEditable) {
             toggleRoleEdit(false);
-            changeSelectedRole(originalRole);
+            if (isSave) {
+                toggleSave(false);
+                if (index >= 0) {
+                    for (var i = 0; i < cachedRoles.length; i++) {
+                        if (cachedRoles[i].roleName === role.roleName) {
+                            changeSelectedRole(cachedRoles[i]);
+                            changeOriginalRole(cachedRoles[i]);
+                            break;
+                        }
+                    }
+                } else if (index < 0) {
+                    changeSelectedRole(cachedEventDetails);
+                    changeOriginalRole(cachedEventDetails);
+                }
+            } else {
+                changeSelectedRole(originalRole);
+            }
         }
-    }, [isEditable, originalRole]);
+    }, [isEditable, cachedEventDetails, cachedRoles, index, isSave,
+        originalRole, role.roleName, toggleSave]);
 
     useEffect(() => {
         if (selectedRole.roleName !== undefined) {
             UsersAPI.getUserByRole('worship', selectedRole.roleName)
                 .then(resp => {
-                    changeAvailableMembers(resp)
+                    changeAvailableMembers(resp);
                 })
         }
     }, [selectedRole]);
@@ -139,26 +151,30 @@ export default function RoleSection({ role, index, isEditable }) {
 
     return (
         <>
-            {index >= 0 &&
+            {
+                index >= 0 &&
                 <Card key={index} className='card-role-section'>
-                    <CardHeader
-                        title={role.roleName}
-                        className='rolename'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                    type={"role"}
-                                    data={selectedRole}
-                                    updateData={changeSelectedRole}
-                                    originalData={originalRole}
-                                    updateOriginalData={changeOriginalRole}
-                                />}
-                            </>
-                        }
-                    />
-                    <CardContent>
+                    <CardContent className='rolename-button-wrapper'>
+                        <Typography className='rolename'>
+                            {role.roleName}
+                        </Typography>
+                        {isEditable && <ButtonGroup
+                            isEditable={isRoleEditable}
+                            toggleEdit={toggleRoleEdit}
+                            toggleSave={toggleSave}
+                            type={"role"}
+                            event={null}
+                            role={selectedRole}
+                            cachedRoles={cachedRoles}
+                            cachedEventDetails={null}
+                            updateCachedRoles={updateCachedRoles}
+                            updateCachedEventDetails={null}
+                            updateData={changeSelectedRole}
+                            originalData={originalRole}
+                            updateOriginalData={changeOriginalRole}
+                        />}
+                    </CardContent>
+                    <CardContent className='team-members-wrapper'>
                         {selectedRole.teamMember.length > 0 && selectedRole.teamMember.map(user => (
                             <TeamMember
                                 teamMember={user}
@@ -167,22 +183,36 @@ export default function RoleSection({ role, index, isEditable }) {
                                 isRoleEditable={isRoleEditable}
                                 role={selectedRole}
                                 roleHandler={changeSelectedRole}
+                                key={user._id}
                             />
                         ))}
 
                         {selectedRole.teamMember.length === 0 &&
                             <div>
-                                <Typography component={'span'} color="textSecondary" gutterBottom>
-                                    No members assigned
-                                </Typography>
-                            </div>}
+                                <CardContent className='no-members-text'>
+                                    <TextField InputProps={{
+                                        classes: {
+                                            notchedOutline: classes.noBorder
+                                        },
+                                    }}
+                                        multiline={true}
+                                        disabled={true}
+                                        color='secondary'
+                                        id="outlined-basic"
+                                        variant="outlined"
+                                        placeholder="No members assigned" />
+                                </CardContent>
+                            </div>
+                        }
 
                         {(isEditable && isRoleEditable) &&
-                            <form className='add-team-member'>
-                                <FormControl>
-                                    <InputLabel shrink id="teamMemberSelect">Team Member</InputLabel>
+                            <div className='add-team-member-section'>
+                                <FormControl variant="outlined" className='add-team-member' size='small'>
+                                    <InputLabel id="teamMemberSelect">Team Member</InputLabel>
                                     <Select
+                                        className='team-member-select'
                                         labelId="teamMemberSelect"
+                                        label='Team Member'
                                         id="teamMemberSelect"
                                         placeholder="Select a member"
                                         value={newRoleTag.memberId}
@@ -219,47 +249,49 @@ export default function RoleSection({ role, index, isEditable }) {
                                         }
                                     </Select>
                                 </FormControl>
-                                <FormControl>
-                                    <TextField InputProps={{
-                                        classes: {
-                                            notchedOutline: classes.noBorder
-                                        },
-                                    }}
+                                <FormControl className="add-tag">
+                                    <TextField
                                         multiline={true}
+                                        size='small'
                                         disabled={!isEditable}
                                         id="add-role"
                                         label="Tag"
                                         variant="outlined"
-                                        placeholder="Add a tag"
                                         value={newRoleTag.tag}
                                         onChange={(e) => handleAddRole(e, "tag")} />
                                 </FormControl>
-                                <IconButton onClick={addRole} aria-label="settings">
+                                <IconButton onClick={addRole} aria-label="settings" className='add-button'>
                                     <AddCircleIcon />
                                 </IconButton>
-                            </form>}
+                            </div>
+                        }
                     </CardContent>
-                </Card>}
+                </Card>
+            }
             {
                 index < 0 &&
-                <Card className='roleCard'>
-                    <CardHeader
-                        title='Additional Info'
-                        action={
-                            <>
-                                {isEditable && <ButtonGroup
-                                    isEditable={isRoleEditable}
-                                    toggleEdit={toggleRoleEdit}
-                                    type={"eventDetails"}
-                                    data={selectedRole}
-                                    updateData={changeSelectedRole}
-                                    originalData={originalRole}
-                                    updateOriginalData={changeOriginalRole}
-                                />}
-                            </>
-                        }
-                    />
-                    <CardContent>
+                <Card className='add-info-section'>
+                    <CardContent className='rolename-button-wrapper'>
+                        <Typography className='rolename'>
+                            Additional Info
+                        </Typography>
+                        {isEditable && <ButtonGroup
+                            isEditable={isRoleEditable}
+                            toggleEdit={toggleRoleEdit}
+                            toggleSave={toggleSave}
+                            type={"eventDetails"}
+                            event={null}
+                            role={selectedRole}
+                            cachedRoles={null}
+                            cachedEventDetails={null}
+                            updateCachedRoles={null}
+                            updateCachedEventDetails={updateCachedEventDetails}
+                            updateData={changeSelectedRole}
+                            originalData={originalRole}
+                            updateOriginalData={changeOriginalRole}
+                        />}
+                    </CardContent>
+                    <CardContent className='text-section'>
                         <TextField InputProps={{
                             classes: {
                                 notchedOutline: classes.noBorder
@@ -268,8 +300,8 @@ export default function RoleSection({ role, index, isEditable }) {
                             multiline={true}
                             disabled={!isRoleEditable}
                             id="outlined-basic"
-                            variant="outlined"
-                            placeholder="no additional info"
+                            variant={isRoleEditable ? "standard" : "outlined"}
+                            placeholder="No additional info"
                             value={selectedRole.additionalInfo}
                             onChange={(e) => handleChangeRole(e, 'addInfo')} />
                     </CardContent>
