@@ -1,0 +1,39 @@
+@import "./../../../globals.scss";
+
+.footer-wrapper {
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.divider {
+    margin-bottom: 1%;
+}
+
+.info {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.copyright {
+    text-align: center;
+}
+
+.icons {
+    margin-right: 10px;
+}
+
+.a {
+    color: black;
+}
+
+a:visited { text-decoration: none; color:black; }
+
+.text {
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    vertical-align: middle;
+}
