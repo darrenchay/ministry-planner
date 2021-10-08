@@ -1,16 +1,25 @@
+@import "./../../../globals.scss";
+
 .footer-wrapper {
-    text-align: left;
     margin-left: 2%;
+    margin-right: 2%;
 }
 
+.divider {
+    margin-bottom: 1%;
+}
 
 .info {
+    text-align: left;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     margin-bottom: 10px;
 }
 
+.copyright {
+    text-align: center;
+}
 
 .icons {
     margin-right: 10px;
