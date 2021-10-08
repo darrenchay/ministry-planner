@@ -62,7 +62,7 @@ export default function HomePage() {
             TEAM
           </Button>
           <Button className='home-nav-buttons'>
-            RESOURCES
+            SONG BOOK
           </Button>
         </Box>
       </Grid>
