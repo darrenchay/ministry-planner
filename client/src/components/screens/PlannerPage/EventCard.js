@@ -8,15 +8,20 @@ import {
     CardActions,
     CardContent,
     Button,
-    TextField
+    TextField,
+    MenuItem,
+    Select,
+    InputLabel
 } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
+import SendIcon from '@material-ui/icons/Send';
 
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
 
 // import convertDate from "../../utils/ConvertDate";
+import * as UsersAPI from "../../utils/Services/UsersAPI";
 import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here
@@ -35,11 +40,32 @@ export default function EventCard({ event, setDeleteFlag }) {
     const [originalEvent, changeOriginalEvent] = useState(cloneDeep(event));
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const [selectedEventDetails, setSelectedEventDetails] = useState(selectedEvent.eventDetails);
+    const [worshipLeaders, setWorshipLeaders] = useState();
     const history = useHistory();
 
     let redirectToResources = (event) => {
         history.push("resources");
     };
+
+    useEffect(() => {
+        setSelectedEventDetails(selectedEvent.eventDetails);
+    // eslint-disable-next-line
+    }, [isEditable]);
+
+    useEffect(() => {
+        UsersAPI.getUserByRole('worship', "Worship-Leader")
+            .then((users) => {
+                setWorshipLeaders(users);
+            });
+    }, [])
+
+    // Updates the event object when the event details section is updated
+    useEffect(() => {
+        var tempEvent = cloneDeep(selectedEvent);
+        tempEvent.eventDetails = selectedEventDetails;
+        changeSelectedEvent(tempEvent);
+        // eslint-disable-next-line
+    }, [selectedEventDetails]);
 
     const handleChangeEvent = (e, type) => {
         var tempEvent = cloneDeep(selectedEvent);
@@ -51,13 +77,12 @@ export default function EventCard({ event, setDeleteFlag }) {
         changeSelectedEvent(tempEvent);
     }
 
-    // Updates the event object when the event details section is updated
-    useEffect(() => {
-        var tempEvent = cloneDeep(selectedEvent);
-        tempEvent.eventDetails = selectedEventDetails;
-        changeSelectedEvent(tempEvent);
-        // eslint-disable-next-line
-    }, [selectedEventDetails])
+    // Update the worship leader
+    const handleChangeWorshipLeader = (e) => {
+        var tempEventDetails = cloneDeep(selectedEventDetails);
+        tempEventDetails.worshipLeader = e.target.value;
+        setSelectedEventDetails(tempEventDetails);
+    }
 
     return (
         <Card key={event.event._id} className='card'>
@@ -116,6 +141,30 @@ export default function EventCard({ event, setDeleteFlag }) {
                 }
             />
             <CardContent>
+                <div className='worship-leader'>
+                    <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
+                    <Select
+                        className='team-member-select'
+                        labelId="teamMemberSelect"
+                        label='Team Member'
+                        id="teamMemberSelect"
+                        placeholder="Select a member"
+                        value={selectedEventDetails.worshipLeader}
+                        onChange={handleChangeWorshipLeader}
+                        disabled={!isEditable}
+                    >
+                        {worshipLeaders?.length > 0 &&
+                            worshipLeaders
+                                .map((user, index) => {
+                                    return <MenuItem value={user._id}>{user.firstname}</MenuItem>
+                                })
+                        }
+
+                        {worshipLeaders?.length === 0 &&
+                            <MenuItem value={0} disabled={true}>No Members</MenuItem>
+                        }
+                    </Select>
+                </div>
                 {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
                         data={role}
@@ -139,6 +188,11 @@ export default function EventCard({ event, setDeleteFlag }) {
                 <Button className='resources-button' variant="contained"
                     color='primary' size="small" onClick={redirectToResources}>
                     Resources
+                </Button>
+
+                <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon"/>}
+                    color='primary' size="small" onClick={()=> {console.log("Notified")}}>
+                    Notify
                 </Button>
             </CardActions>
         </Card>

@@ -1,8 +1,11 @@
 import { Schema, model } from 'mongoose';
-import user from './user-schema';
 
 const worshipEventDetails = new Schema({
     eventId: {
+        type: String,
+        required: true
+    },
+    worshipLeader: {
         type: String,
         required: true
     },
