@@ -140,7 +140,7 @@ export default function EventCard({ event, setDeleteFlag }) {
                 }
             />
             <CardContent>
-                <div>
+                <div className='worship-leader'>
                     <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
                     <Select
                         className='team-member-select'
