@@ -48,6 +48,7 @@ export default function EventCard({ event, setDeleteFlag }) {
 
     useEffect(() => {
         setSelectedEventDetails(selectedEvent.eventDetails);
+    // eslint-disable-next-line
     }, [isEditable]);
 
     useEffect(() => {
