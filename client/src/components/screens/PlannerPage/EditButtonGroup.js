@@ -19,7 +19,7 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const ConfirmDelete = ({onClose, open, handleDelete}) => {
+const ConfirmDelete = ({ onClose, open, handleDelete }) => {
     const handleCancel = () => {
         onClose();
     };
@@ -53,9 +53,8 @@ const ConfirmDelete = ({onClose, open, handleDelete}) => {
 // Then when click update, take the copy of the event and send that as body, update original event to be the copy
 // Then when click cancel, revert to original version of event
 
-export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, event, role,
-                                      cachedRoles, cachedEventDetails, updateCachedRoles, updateCachedEventDetails, 
-                                      updateData, originalData, updateOriginalData, setDeleteFlag }) {
+export default function ButtonGroup({ isEditable, toggleEdit, event,
+                                    updateSelectedEvent, originalData, updateOriginalData, setDeleteFlag }) {
     const [openSuccessUpdateEvent, setOpenSuccessUpdateEvent] = React.useState(false);
     const [openErrorUpdateEvent, setOpenErrorUpdateEvent] = React.useState(false);
     const [openSuccessUpdateRole, setOpenSuccessUpdateRole] = React.useState(false);
@@ -73,62 +72,47 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
     };
 
     const handleSave = () => {
-        if (type.toLowerCase() === "event") {
-            // saving the event
-            EventsAPI.updateEvent(event.event, event.event._id)
-                .then(resp => {
-                    console.log("successfully updated " + resp.nModified + " event(s)");
-                    handleCloseSnack();
-                    setOpenSuccessUpdateEvent(true);
-                })
-                .catch(err => {
-                    setOpenErrorUpdateEvent(true)
-                    console.log(err);
-                    // Add error handler and do not make editable false, instead show an alert which says an error occured
-                });
-            
-            // saving the eventDetails
-            EventsAPI.updateEventDetails(cachedEventDetails, 'worship', 'eventDetails', cachedEventDetails._id)
-                .then(resp => {
-                    console.log("successfully updated " + resp.nModified + " role(s)");
-                })
-                .catch(err => {
-                    setOpenErrorUpdateRole(true)
-                    console.log(err);
-                })
-
-            // saving the event's roles
-            cachedRoles.forEach(roleElem => {
-                EventsAPI.updateEventDetails(roleElem, 'worship', 'role')
-                .then(resp => {
-                    console.log("successfully updated " + resp.nModified + " role(s)");
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+        // saving the event
+        EventsAPI.updateEvent(event.event, event.event._id)
+            .then(resp => {
+                console.log("successfully updated " + resp.nModified + " event(s)");
+                handleCloseSnack();
+                setOpenSuccessUpdateEvent(true);
+            })
+            .catch(err => {
+                setOpenErrorUpdateEvent(true)
+                console.log(err);
+                // Add error handler and do not make editable false, instead show an alert which says an error occured
             });
-            updateOriginalData(event);
-        } else if (type.toLowerCase() === "role") {
-            // update cachedRoles
-            for (var i = 0; i < cachedRoles.length; i++) {
-                if (cachedRoles[i].roleName === role.roleName) {
-                    cachedRoles[i] = role;
-                    updateCachedRoles(cachedRoles);
-                    break;
-                }
-            }
-        } else if (type === "eventDetails") {
-            updateCachedEventDetails(role);
-        }
+
+        // saving the eventDetails
+        EventsAPI.updateEventDetails(event.eventDetails, 'worship', 'eventDetails', event.eventDetails._id)
+            .then(resp => {
+                console.log("successfully updated " + resp.nModified + " role(s)");
+            })
+            .catch(err => {
+                setOpenErrorUpdateRole(true)
+                console.log(err);
+            })
+
+        // saving the event's roles
+        event.eventDetails.teamList.forEach(roleElem => {
+            EventsAPI.updateEventDetails(roleElem, 'worship', 'role')
+                .then(resp => {
+                    console.log("successfully updated " + resp.nModified + " role(s)");
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        });
+        updateOriginalData(event);
         toggleEdit(false);
-        toggleSave(true);
     }
 
     // If you cancel, reverts the changes you made back to original data
     const handleCancel = () => {
-        updateData(originalData);
+        updateSelectedEvent(originalData);
         toggleEdit(false);
-        toggleSave(false);
     }
 
     const handleDelete = () => {
@@ -160,10 +144,9 @@ export default function ButtonGroup({ isEditable, toggleEdit, toggleSave, type, 
                     <IconButton onClick={handleEdit} aria-label="settings" >
                         <EditIcon />
                     </IconButton>
-                    {type === "event" &&
-                        <IconButton onClick={handleOpen} aria-label="settings" >
-                            <DeleteIcon className="delete-icon" />
-                        </IconButton>}
+                    <IconButton onClick={handleOpen} aria-label="settings" >
+                        <DeleteIcon className="delete-icon" />
+                    </IconButton>
                 </>
             }
             {isEditable && <>
