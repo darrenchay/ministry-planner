@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
+import SendIcon from '@material-ui/icons/Send';
 
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
@@ -187,6 +188,11 @@ export default function EventCard({ event, setDeleteFlag }) {
                 <Button className='resources-button' variant="contained"
                     color='primary' size="small" onClick={redirectToResources}>
                     Resources
+                </Button>
+
+                <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon"/>}
+                    color='primary' size="small" onClick={()=> {console.log("Notified")}}>
+                    Notify
                 </Button>
             </CardActions>
         </Card>
