@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import {
     makeStyles,
@@ -72,6 +72,11 @@ export default function RoleSection({ role, index, isEditable, selectedEventDeta
     const [availableMembers, changeAvailableMembers] = useState([]);
 
     useEffect(() => {
+        changeSelectedRole(role);
+    // eslint-disable-next-line
+    }, [isEditable]);
+
+    useEffect(() => {
         if (index >= 0) {
             //Update that role in the teamList array in event details with the selected role object
             var tempSelectedEventDetails = cloneDeep(selectedEventDetails);
@@ -79,11 +84,14 @@ export default function RoleSection({ role, index, isEditable, selectedEventDeta
             tempSelectedEventDetails.teamList[roleIdx] = selectedRole;
             setSelectedEventDetails(tempSelectedEventDetails);
         } else {
-            selectedEventDetails.additionalInfo = selectedRole.additionalInfo;
-            setSelectedEventDetails(selectedEventDetails);
+            var tempEventDetails = cloneDeep(selectedEventDetails);
+            tempEventDetails.additionalInfo = selectedRole.additionalInfo;
+            setSelectedEventDetails(tempEventDetails);
         }
+    // eslint-disable-next-line
     }, [selectedRole]);
 
+    // Updates the list of available members if role was updated (member added or deleted)
     useEffect(() => {
         if (selectedRole.roleName !== undefined) {
             UsersAPI.getUserByRole('worship', selectedRole.roleName)
@@ -104,7 +112,7 @@ export default function RoleSection({ role, index, isEditable, selectedEventDeta
     //Can be refactored to use available members instead of calling users again
     const addRole = () => {
         var tempRole = cloneDeep(selectedRole);
-        console.log(tempRole);
+        // console.log(tempRole);
         if (newRoleTag.memberId !== null && newRoleTag.memberId !== "") {
             UsersAPI.getUser(newRoleTag.memberId)
                 .then(resp => {

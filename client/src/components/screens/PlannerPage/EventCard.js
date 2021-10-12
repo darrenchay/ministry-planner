@@ -32,7 +32,7 @@ const useStyles = makeStyles(() => ({
 export default function EventCard({ event, setDeleteFlag }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
-    const [originalEvent, changeOriginalEvent] = useState(event);
+    const [originalEvent, changeOriginalEvent] = useState(cloneDeep(event));
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const [selectedEventDetails, setSelectedEventDetails] = useState(selectedEvent.eventDetails);
     const history = useHistory();
@@ -53,10 +53,10 @@ export default function EventCard({ event, setDeleteFlag }) {
 
     // Updates the event object when the event details section is updated
     useEffect(() => {
-        selectedEvent.eventDetails = selectedEventDetails;
-        changeSelectedEvent(selectedEvent);
-        console.log("selected event details updated (event.js)", selectedEventDetails);
-        console.log(selectedEvent)
+        var tempEvent = cloneDeep(selectedEvent);
+        tempEvent.eventDetails = selectedEventDetails;
+        changeSelectedEvent(tempEvent);
+    // eslint-disable-next-line
     }, [selectedEventDetails])
 
     return (
@@ -85,8 +85,7 @@ export default function EventCard({ event, setDeleteFlag }) {
                             toggleEdit={toggleEdit}
                             type={"event"}
                             event={selectedEvent}
-                            role={null}
-                            updateData={changeSelectedEvent}
+                            updateSelectedEvent={changeSelectedEvent}
                             originalData={originalEvent}
                             updateOriginalData={changeOriginalEvent}
                             setDeleteFlag={setDeleteFlag}
