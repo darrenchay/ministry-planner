@@ -340,3 +340,26 @@
         }
     }
 }
+
+.add-info-section {
+    @extend .card-role-section;
+
+    .text-section {
+        padding: 0;
+
+        .MuiOutlinedInput-multiline,
+        .MuiInput-multiline {
+            padding: 16px 0 8px;
+
+            textarea {
+                color: black;
+            }
+        }
+    }
+}
+
+.resources-button {
+    bottom: 0;
+    background-color: $primary-color;
+    margin-bottom: 16px;
+}

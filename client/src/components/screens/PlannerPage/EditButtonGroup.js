@@ -54,7 +54,7 @@ const ConfirmDelete = ({ onClose, open, handleDelete }) => {
 // Then when click cancel, revert to original version of event
 
 export default function ButtonGroup({ isEditable, toggleEdit, event,
-                                    updateSelectedEvent, originalData, updateOriginalData, setDeleteFlag }) {
+                                    updateSelectedEvent, originalData, updateOriginalData, setUpdateFlag }) {
     const [openSuccessUpdateEvent, setOpenSuccessUpdateEvent] = React.useState(false);
     const [openErrorUpdateEvent, setOpenErrorUpdateEvent] = React.useState(false);
     const [openSuccessUpdateRole, setOpenSuccessUpdateRole] = React.useState(false);
@@ -119,8 +119,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
         EventsAPI.deleteFullEvent(originalData.event._id, originalData.eventDetails._id)
             .then(() => {
                 setOpen(false);
-                setDeleteFlag(false);
-                setDeleteFlag(true);
+                setUpdateFlag(false);
+                setUpdateFlag(true);
                 // Trigger a better watcher of useEffect to update list of events
                 // TODO: Add a toast animation when it is successfully deleted
             })
