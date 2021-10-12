@@ -56,7 +56,7 @@ export default function EventCard({ event, setDeleteFlag }) {
         var tempEvent = cloneDeep(selectedEvent);
         tempEvent.eventDetails = selectedEventDetails;
         changeSelectedEvent(tempEvent);
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [selectedEventDetails])
 
     return (
@@ -83,7 +83,6 @@ export default function EventCard({ event, setDeleteFlag }) {
                         <ButtonGroup
                             isEditable={isEditable}
                             toggleEdit={toggleEdit}
-                            type={"event"}
                             event={selectedEvent}
                             updateSelectedEvent={changeSelectedEvent}
                             originalData={originalEvent}
@@ -119,8 +118,9 @@ export default function EventCard({ event, setDeleteFlag }) {
             <CardContent>
                 {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
-                        role={role}
+                        data={role}
                         index={index}
+                        type={"role"}
                         isEditable={isEditable}
                         key={role._id}
                         selectedEventDetails={selectedEventDetails}
@@ -128,8 +128,8 @@ export default function EventCard({ event, setDeleteFlag }) {
                     />
                 ))}
                 <RoleSection
-                    role={selectedEvent.eventDetails}
-                    index={-1}
+                    data={selectedEvent.eventDetails}
+                    type={"addInfo"}
                     isEditable={isEditable}
                     selectedEventDetails={selectedEventDetails}
                     setSelectedEventDetails={setSelectedEventDetails}

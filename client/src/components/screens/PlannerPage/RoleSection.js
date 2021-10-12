@@ -65,15 +65,15 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable }) 
 }
 
 // The cards for each of the roles (includes handling for additional info as well)
-export default function RoleSection({ role, index, isEditable, selectedEventDetails, setSelectedEventDetails }) {
+export default function RoleSection({ data, index, type, isEditable, selectedEventDetails, setSelectedEventDetails }) {
     const classes = useStyles();
-    const [selectedRole, changeSelectedRole] = useState(role);
+    const [selectedRole, changeSelectedRole] = useState(data);
     const [newRoleTag, changeNewRoleTag] = useState({ memberId: "", tag: "" });
     const [availableMembers, changeAvailableMembers] = useState([]);
 
     useEffect(() => {
-        changeSelectedRole(role);
-    // eslint-disable-next-line
+        changeSelectedRole(data);
+        // eslint-disable-next-line
     }, [isEditable]);
 
     useEffect(() => {
@@ -88,7 +88,7 @@ export default function RoleSection({ role, index, isEditable, selectedEventDeta
             tempEventDetails.additionalInfo = selectedRole.additionalInfo;
             setSelectedEventDetails(tempEventDetails);
         }
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [selectedRole]);
 
     // Updates the list of available members if role was updated (member added or deleted)
@@ -144,11 +144,11 @@ export default function RoleSection({ role, index, isEditable, selectedEventDeta
     return (
         <>
             {
-                index >= 0 &&
+                type === "role" &&
                 <Card key={index} className='card-role-section'>
                     <CardContent className='rolename-button-wrapper'>
                         <Typography className='rolename'>
-                            {role.roleName}
+                            {data.roleName}
                         </Typography>
                     </CardContent>
                     <CardContent className='team-members-wrapper'>
@@ -244,7 +244,7 @@ export default function RoleSection({ role, index, isEditable, selectedEventDeta
                 </Card>
             }
             {
-                index < 0 &&
+                type === "addInfo" &&
                 <Card className='add-info-section'>
                     <CardContent className='rolename-button-wrapper'>
                         <Typography className='rolename'>
