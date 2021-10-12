@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import {
     makeStyles,
@@ -15,9 +15,8 @@ import {
 import CancelIcon from '@material-ui/icons/Cancel';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import ButtonGroup from './EditButtonGroup'
 import "./PlannerPage.scss";
-import * as UsersAPI from './../../utils/Services/UsersAPI'
+import * as UsersAPI from './../../utils/Services/UsersAPI';
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles(() => ({
@@ -26,7 +25,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, isRoleEditable }) => {
+const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable }) => {
     const [tag, setTag] = useState({})
 
     // Creates a copy of the role object and deletes the member (and mapping) from the copy and updates the selected role with the copy
@@ -49,14 +48,14 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, is
     }, [role, teamMember, teamMapping]);
 
     return (
-        <div key={teamMember._id} className={isRoleEditable ? 'team-member-wrapper-no-margin' : 'team-member-wrapper'}>
+        <div key={teamMember._id} className={isEditable ? 'team-member-wrapper-no-margin' : 'team-member-wrapper'}>
             <Typography className="team-member">
                 {teamMember.firstname}
             </Typography>
             {tag?.length > 0 && <Typography className="tag" color="textSecondary">
                 - {tag}
             </Typography>}
-            {(isEditable && isRoleEditable) &&
+            {isEditable &&
                 <IconButton className='clearIcon' onClick={handleDeleteMember}>
                     <CancelIcon />
                 </IconButton>
@@ -66,39 +65,24 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable, is
 }
 
 // The cards for each of the roles (includes handling for additional info as well)
-export default function RoleSection({ role, index, isEditable, isSave, toggleSave,
-                                      cachedRoles, cachedEventDetails, updateCachedRoles, 
-                                      updateCachedEventDetails }) {
+export default function RoleSection({ role, index, isEditable, selectedEventDetails, setSelectedEventDetails }) {
     const classes = useStyles();
-    const [isRoleEditable, toggleRoleEdit] = useState(false);
-    const [originalRole, changeOriginalRole] = useState(role);
     const [selectedRole, changeSelectedRole] = useState(role);
     const [newRoleTag, changeNewRoleTag] = useState({ memberId: "", tag: "" });
     const [availableMembers, changeAvailableMembers] = useState([]);
 
     useEffect(() => {
-        if (!isEditable) {
-            toggleRoleEdit(false);
-            if (isSave) {
-                toggleSave(false);
-                if (index >= 0) {
-                    for (var i = 0; i < cachedRoles.length; i++) {
-                        if (cachedRoles[i].roleName === role.roleName) {
-                            changeSelectedRole(cachedRoles[i]);
-                            changeOriginalRole(cachedRoles[i]);
-                            break;
-                        }
-                    }
-                } else if (index < 0) {
-                    changeSelectedRole(cachedEventDetails);
-                    changeOriginalRole(cachedEventDetails);
-                }
-            } else {
-                changeSelectedRole(originalRole);
-            }
+        if (index >= 0) {
+            //Update that role in the teamList array in event details with the selected role object
+            var tempSelectedEventDetails = cloneDeep(selectedEventDetails);
+            var roleIdx = tempSelectedEventDetails.teamList.findIndex((role) => role._id === selectedRole._id);
+            tempSelectedEventDetails.teamList[roleIdx] = selectedRole;
+            setSelectedEventDetails(tempSelectedEventDetails);
+        } else {
+            selectedEventDetails.additionalInfo = selectedRole.additionalInfo;
+            setSelectedEventDetails(selectedEventDetails);
         }
-    }, [isEditable, cachedEventDetails, cachedRoles, index, isSave,
-        originalRole, role.roleName, toggleSave]);
+    }, [selectedRole]);
 
     useEffect(() => {
         if (selectedRole.roleName !== undefined) {
@@ -158,21 +142,6 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                         <Typography className='rolename'>
                             {role.roleName}
                         </Typography>
-                        {isEditable && <ButtonGroup
-                            isEditable={isRoleEditable}
-                            toggleEdit={toggleRoleEdit}
-                            toggleSave={toggleSave}
-                            type={"role"}
-                            event={null}
-                            role={selectedRole}
-                            cachedRoles={cachedRoles}
-                            cachedEventDetails={null}
-                            updateCachedRoles={updateCachedRoles}
-                            updateCachedEventDetails={null}
-                            updateData={changeSelectedRole}
-                            originalData={originalRole}
-                            updateOriginalData={changeOriginalRole}
-                        />}
                     </CardContent>
                     <CardContent className='team-members-wrapper'>
                         {selectedRole.teamMember.length > 0 && selectedRole.teamMember.map(user => (
@@ -180,7 +149,6 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                                 teamMember={user}
                                 teamMapping={selectedRole.teamMapping}
                                 isEditable={isEditable}
-                                isRoleEditable={isRoleEditable}
                                 role={selectedRole}
                                 roleHandler={changeSelectedRole}
                                 key={user._id}
@@ -205,7 +173,7 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                             </div>
                         }
 
-                        {(isEditable && isRoleEditable) &&
+                        {isEditable &&
                             <div className='add-team-member-section'>
                                 <FormControl variant="outlined" className='add-team-member' size='small'>
                                     <InputLabel id="teamMemberSelect">Team Member</InputLabel>
@@ -253,7 +221,6 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                                     <TextField
                                         multiline={true}
                                         size='small'
-                                        disabled={!isEditable}
                                         id="add-role"
                                         label="Tag"
                                         variant="outlined"
@@ -275,21 +242,6 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                         <Typography className='rolename'>
                             Additional Info
                         </Typography>
-                        {isEditable && <ButtonGroup
-                            isEditable={isRoleEditable}
-                            toggleEdit={toggleRoleEdit}
-                            toggleSave={toggleSave}
-                            type={"eventDetails"}
-                            event={null}
-                            role={selectedRole}
-                            cachedRoles={null}
-                            cachedEventDetails={null}
-                            updateCachedRoles={null}
-                            updateCachedEventDetails={updateCachedEventDetails}
-                            updateData={changeSelectedRole}
-                            originalData={originalRole}
-                            updateOriginalData={changeOriginalRole}
-                        />}
                     </CardContent>
                     <CardContent className='text-section'>
                         <TextField InputProps={{
@@ -298,9 +250,9 @@ export default function RoleSection({ role, index, isEditable, isSave, toggleSav
                             },
                         }}
                             multiline={true}
-                            disabled={!isRoleEditable}
+                            disabled={!isEditable}
                             id="outlined-basic"
-                            variant={isRoleEditable ? "standard" : "outlined"}
+                            variant={isEditable ? "standard" : "outlined"}
                             placeholder="No additional info"
                             value={selectedRole.additionalInfo}
                             onChange={(e) => handleChangeRole(e, 'addInfo')} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
 import {
@@ -32,13 +32,10 @@ const useStyles = makeStyles(() => ({
 export default function EventCard({ event, setDeleteFlag }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
-    const [isSave, toggleSave] = useState(false);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
+    const [selectedEventDetails, setSelectedEventDetails] = useState(selectedEvent.eventDetails);
     const history = useHistory();
-
-    const [cachedRoles, updateCachedRoles] = useState(originalEvent.eventDetails.teamList);
-    const [cachedEventDetails, updateCachedEventDetails] = useState(originalEvent.eventDetails);
 
     let redirectToResources = (event) => {
         history.push("resources");
@@ -54,6 +51,14 @@ export default function EventCard({ event, setDeleteFlag }) {
         changeSelectedEvent(tempEvent);
     }
 
+    // Updates the event object when the event details section is updated
+    useEffect(() => {
+        selectedEvent.eventDetails = selectedEventDetails;
+        changeSelectedEvent(selectedEvent);
+        console.log("selected event details updated (event.js)", selectedEventDetails);
+        console.log(selectedEvent)
+    }, [selectedEventDetails])
+
     return (
         <Card key={event.event._id} className='card'>
             <CardHeader
@@ -61,12 +66,12 @@ export default function EventCard({ event, setDeleteFlag }) {
                 title={
                     <div className={isEditable ? 'title-button-wrapper-edit' : 'title-button-wrapper'}>
                         <TextField InputProps={{
-                                classes: {
-                                    // notchedOutline: classes.noBorder,
-                                    input: classes.resize
-                                },
-                                disableUnderline: !isEditable
-                            }}
+                            classes: {
+                                // notchedOutline: classes.noBorder,
+                                input: classes.resize
+                            },
+                            disableUnderline: !isEditable
+                        }}
                             className='title'
                             multiline={true}
                             disabled={!isEditable}
@@ -78,14 +83,9 @@ export default function EventCard({ event, setDeleteFlag }) {
                         <ButtonGroup
                             isEditable={isEditable}
                             toggleEdit={toggleEdit}
-                            toggleSave={toggleSave}
                             type={"event"}
                             event={selectedEvent}
                             role={null}
-                            cachedRoles={cachedRoles}
-                            cachedEventDetails={cachedEventDetails}
-                            updateCachedRoles={updateCachedRoles}
-                            updateCachedEventDetails={updateCachedEventDetails}
                             updateData={changeSelectedEvent}
                             originalData={originalEvent}
                             updateOriginalData={changeOriginalEvent}
@@ -118,30 +118,22 @@ export default function EventCard({ event, setDeleteFlag }) {
                 }
             />
             <CardContent>
-                {cachedRoles.map((role, index) => (
+                {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
                         role={role}
                         index={index}
                         isEditable={isEditable}
-                        isSave={isSave}
-                        toggleSave={toggleSave}
-                        cachedRoles={cachedRoles}
-                        cachedEventDetails={null}
-                        updateCachedRoles={updateCachedRoles}
-                        updateCachedEventDetails={null}
                         key={role._id}
+                        selectedEventDetails={selectedEventDetails}
+                        setSelectedEventDetails={setSelectedEventDetails}
                     />
                 ))}
                 <RoleSection
-                    role={cachedEventDetails}
+                    role={selectedEvent.eventDetails}
                     index={-1}
                     isEditable={isEditable}
-                    isSave={isSave}
-                    toggleSave={toggleSave}
-                    cachedRoles={null}
-                    cachedEventDetails={cachedEventDetails}
-                    updateCachedRoles={null}
-                    updateCachedEventDetails={updateCachedEventDetails}
+                    selectedEventDetails={selectedEventDetails}
+                    setSelectedEventDetails={setSelectedEventDetails}
                 />
             </CardContent>
             <CardActions className='card-actions'>
