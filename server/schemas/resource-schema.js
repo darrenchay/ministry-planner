@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const resourceSchema = new Schema({
-	eventId : {
+	eventDetailsId : {
 		type : String,
 		required : true
 	},

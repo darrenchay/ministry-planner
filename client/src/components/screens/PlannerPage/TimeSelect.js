@@ -3,13 +3,18 @@ import {
     Slider,
     Typography,
     Select,
+    Button,
     MenuItem
 } from '@material-ui/core';
+import Modal from '@material-ui/core/Modal';
+import CreateEventModal from "./CreateEventModal";
 
-export default function TimeSelect({ month, setMonth, year, setYear, marks, setShowLoading }) {
+export default function TimeSelect({ month, setMonth, year, setYear, 
+                                    marks, setShowLoading, setUpdateFlag }) {
     const currentYear = new Date().getFullYear();
     const [years, setYears] = useState([]);
     const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
+    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         var tempYears = [];
@@ -32,6 +37,13 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
         setShowLoading(false);
         setMonth((marks.find(({ value }) => value === data)).label);
     }
+    const handleOpen = () => {
+        setOpen(true);
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
     return (
         <div className='time-select-wrapper'>
             <div>
@@ -72,6 +84,17 @@ export default function TimeSelect({ month, setMonth, year, setYear, marks, setS
                     onMouseDown={() => { setShowLoading(true) }}
                     onTouchMove={() => { setShowLoading(true) }}
                 />
+                <Button className='resources-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
+                    Create Event
+                </Button>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                >
+                    <CreateEventModal setUpdateFlag={setUpdateFlag} setOpen={setOpen}/>
+                </Modal>
             </div>
         </div>
 

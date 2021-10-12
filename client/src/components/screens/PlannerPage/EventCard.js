@@ -34,14 +34,20 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-export default function EventCard({ event, setDeleteFlag }) {
+export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEvent }) {
     const classes = useStyles();
-    const [isEditable, toggleEdit] = useState(false);
+    const [isEditable, toggleEdit] = useState(isCreateEvent);
     const [originalEvent, changeOriginalEvent] = useState(cloneDeep(event));
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const [selectedEventDetails, setSelectedEventDetails] = useState(selectedEvent.eventDetails);
     const [worshipLeaders, setWorshipLeaders] = useState();
     const history = useHistory();
+
+    useEffect(() => {
+        if (isCreateEvent) {
+            setEvent(selectedEvent);
+        }
+    }, [selectedEvent, isCreateEvent, setEvent])
 
     let redirectToResources = (event) => {
         history.push("resources");
@@ -105,15 +111,17 @@ export default function EventCard({ event, setDeleteFlag }) {
                             placeholder="No event name"
                             value={selectedEvent.event.name}
                             onChange={(e) => handleChangeEvent(e, "name")} />
-                        <ButtonGroup
-                            isEditable={isEditable}
-                            toggleEdit={toggleEdit}
-                            event={selectedEvent}
-                            updateSelectedEvent={changeSelectedEvent}
-                            originalData={originalEvent}
-                            updateOriginalData={changeOriginalEvent}
-                            setDeleteFlag={setDeleteFlag}
-                        />
+                        {!isCreateEvent &&
+                            <ButtonGroup
+                                isEditable={isEditable}
+                                toggleEdit={toggleEdit}
+                                event={selectedEvent}
+                                updateSelectedEvent={changeSelectedEvent}
+                                originalData={originalEvent}
+                                updateOriginalData={changeOriginalEvent}
+                                setUpdateFlag={setUpdateFlag}
+                            />
+                        }
                     </div>
                 }
                 subheader={
@@ -184,17 +192,19 @@ export default function EventCard({ event, setDeleteFlag }) {
                     setSelectedEventDetails={setSelectedEventDetails}
                 />
             </CardContent>
-            <CardActions className='card-actions'>
-                <Button className='resources-button' variant="contained"
-                    color='primary' size="small" onClick={redirectToResources}>
-                    Resources
-                </Button>
+            {!isCreateEvent &&
+                <CardActions className='card-actions'>
+                    <Button className='resources-button' variant="contained"
+                        color='primary' size="small" onClick={redirectToResources}>
+                        Resources
+                    </Button>
 
-                <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon"/>}
-                    color='primary' size="small" onClick={()=> {console.log("Notified")}}>
-                    Notify
-                </Button>
-            </CardActions>
+                    <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon"/>}
+                        color='primary' size="small" onClick={()=> {console.log("Notified")}}>
+                        Notify
+                    </Button>
+                </CardActions>
+            }
         </Card>
     );
 }

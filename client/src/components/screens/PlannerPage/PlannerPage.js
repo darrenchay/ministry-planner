@@ -75,7 +75,8 @@ export default function PlannerPage() {
     const [showLoading, setShowLoading] = useState(true);
     const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";
-    const [deleteFlag, setDeleteFlag] = useState(true);
+    // const [open, setOpen] = React.useState(false);
+    const [updateFlag, setUpdateFlag] = useState(true);
 
     // Updates events list when something on the page updates
     useEffect(() => {
@@ -90,7 +91,7 @@ export default function PlannerPage() {
                 console.log(err);
             });
 
-    }, [month, year, deleteFlag]);
+    }, [month, year, updateFlag]);
 
     const [nextTimestamp, setNextTimestamp] = useState(null);
     const [prevTimestamp, setPrevTimestamp] = useState(null);
@@ -148,6 +149,7 @@ export default function PlannerPage() {
     }
 
     return (
+        <>
         <div className='planner-page-wrapper'>
             <TimeSelect
                 month={month}
@@ -156,7 +158,19 @@ export default function PlannerPage() {
                 setYear={setYear}
                 marks={steps}
                 setShowLoading={setShowLoading}
+                setUpdateFlag={setUpdateFlag}
             />
+            {/* <Button className='resources-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
+                Create Event
+            </Button>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                <CreateEventModal />
+            </Modal> */}
 
             {showLoading && (
                 <CircularProgress
@@ -179,7 +193,7 @@ export default function PlannerPage() {
                 {filteredEvents?.length > 0 &&
                     filteredEvents
                         .map((event) => {
-                            return (<EventCard key={event.event._id} event={event} setDeleteFlag={setDeleteFlag} />);
+                            return (<EventCard key={event.event._id} event={event} setUpdateFlag={setUpdateFlag} isCreateEvent={false} setEvent={null} />);
                         })
                         .slice(0, 4)
                 }
@@ -189,5 +203,6 @@ export default function PlannerPage() {
 
             </div>
         </div>
+        </>
     );
 }
