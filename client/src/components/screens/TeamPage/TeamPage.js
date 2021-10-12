@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function ResourcesPage() {
+export default function TeamPage() {
   return (
     <div>
-      SONG BOOK
+        TEAM
     </div>
   );
 }

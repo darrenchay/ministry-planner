@@ -18,3 +18,8 @@
 - git push -> pushes changes to remote repository
 - git branch 'branchName' -> changes the branch you are working on and goes to branch 'branchName'
 - git checkout -b 'newbranchName' -> creates a new local branch and names this branch 'newBranchName'
+
+
+### Updating heroku server
+1. cd to server
+2. add and commit changes there and git push heroku master 

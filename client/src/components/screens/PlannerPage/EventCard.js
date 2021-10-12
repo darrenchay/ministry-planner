@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
 import {
@@ -8,15 +8,20 @@ import {
     CardActions,
     CardContent,
     Button,
-    TextField
+    TextField,
+    MenuItem,
+    Select,
+    InputLabel
 } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
+import SendIcon from '@material-ui/icons/Send';
 
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
 
 // import convertDate from "../../utils/ConvertDate";
+import * as UsersAPI from "../../utils/Services/UsersAPI";
 import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here
@@ -32,17 +37,35 @@ const useStyles = makeStyles(() => ({
 export default function EventCard({ event, setDeleteFlag }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(false);
-    const [isSave, toggleSave] = useState(false);
-    const [originalEvent, changeOriginalEvent] = useState(event);
+    const [originalEvent, changeOriginalEvent] = useState(cloneDeep(event));
     const [selectedEvent, changeSelectedEvent] = useState(event);
+    const [selectedEventDetails, setSelectedEventDetails] = useState(selectedEvent.eventDetails);
+    const [worshipLeaders, setWorshipLeaders] = useState();
     const history = useHistory();
-
-    const [cachedRoles, updateCachedRoles] = useState(originalEvent.eventDetails.teamList);
-    const [cachedEventDetails, updateCachedEventDetails] = useState(originalEvent.eventDetails);
 
     let redirectToResources = (event) => {
         history.push("resources");
     };
+
+    useEffect(() => {
+        setSelectedEventDetails(selectedEvent.eventDetails);
+    // eslint-disable-next-line
+    }, [isEditable]);
+
+    useEffect(() => {
+        UsersAPI.getUserByRole('worship', "Worship-Leader")
+            .then((users) => {
+                setWorshipLeaders(users);
+            });
+    }, [])
+
+    // Updates the event object when the event details section is updated
+    useEffect(() => {
+        var tempEvent = cloneDeep(selectedEvent);
+        tempEvent.eventDetails = selectedEventDetails;
+        changeSelectedEvent(tempEvent);
+        // eslint-disable-next-line
+    }, [selectedEventDetails]);
 
     const handleChangeEvent = (e, type) => {
         var tempEvent = cloneDeep(selectedEvent);
@@ -54,6 +77,13 @@ export default function EventCard({ event, setDeleteFlag }) {
         changeSelectedEvent(tempEvent);
     }
 
+    // Update the worship leader
+    const handleChangeWorshipLeader = (e) => {
+        var tempEventDetails = cloneDeep(selectedEventDetails);
+        tempEventDetails.worshipLeader = e.target.value;
+        setSelectedEventDetails(tempEventDetails);
+    }
+
     return (
         <Card key={event.event._id} className='card'>
             <CardHeader
@@ -61,12 +91,12 @@ export default function EventCard({ event, setDeleteFlag }) {
                 title={
                     <div className={isEditable ? 'title-button-wrapper-edit' : 'title-button-wrapper'}>
                         <TextField InputProps={{
-                                classes: {
-                                    // notchedOutline: classes.noBorder,
-                                    input: classes.resize
-                                },
-                                disableUnderline: !isEditable
-                            }}
+                            classes: {
+                                // notchedOutline: classes.noBorder,
+                                input: classes.resize
+                            },
+                            disableUnderline: !isEditable
+                        }}
                             className='title'
                             multiline={true}
                             disabled={!isEditable}
@@ -78,15 +108,8 @@ export default function EventCard({ event, setDeleteFlag }) {
                         <ButtonGroup
                             isEditable={isEditable}
                             toggleEdit={toggleEdit}
-                            toggleSave={toggleSave}
-                            type={"event"}
                             event={selectedEvent}
-                            role={null}
-                            cachedRoles={cachedRoles}
-                            cachedEventDetails={cachedEventDetails}
-                            updateCachedRoles={updateCachedRoles}
-                            updateCachedEventDetails={updateCachedEventDetails}
-                            updateData={changeSelectedEvent}
+                            updateSelectedEvent={changeSelectedEvent}
                             originalData={originalEvent}
                             updateOriginalData={changeOriginalEvent}
                             setDeleteFlag={setDeleteFlag}
@@ -118,36 +141,58 @@ export default function EventCard({ event, setDeleteFlag }) {
                 }
             />
             <CardContent>
-                {cachedRoles.map((role, index) => (
+                <div className='worship-leader'>
+                    <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
+                    <Select
+                        className='team-member-select'
+                        labelId="teamMemberSelect"
+                        label='Team Member'
+                        id="teamMemberSelect"
+                        placeholder="Select a member"
+                        value={selectedEventDetails.worshipLeader}
+                        onChange={handleChangeWorshipLeader}
+                        disabled={!isEditable}
+                    >
+                        {worshipLeaders?.length > 0 &&
+                            worshipLeaders
+                                .map((user, index) => {
+                                    return <MenuItem value={user._id}>{user.firstname}</MenuItem>
+                                })
+                        }
+
+                        {worshipLeaders?.length === 0 &&
+                            <MenuItem value={0} disabled={true}>No Members</MenuItem>
+                        }
+                    </Select>
+                </div>
+                {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
-                        role={role}
+                        data={role}
                         index={index}
+                        type={"role"}
                         isEditable={isEditable}
-                        isSave={isSave}
-                        toggleSave={toggleSave}
-                        cachedRoles={cachedRoles}
-                        cachedEventDetails={null}
-                        updateCachedRoles={updateCachedRoles}
-                        updateCachedEventDetails={null}
                         key={role._id}
+                        selectedEventDetails={selectedEventDetails}
+                        setSelectedEventDetails={setSelectedEventDetails}
                     />
                 ))}
                 <RoleSection
-                    role={cachedEventDetails}
-                    index={-1}
+                    data={selectedEvent.eventDetails}
+                    type={"addInfo"}
                     isEditable={isEditable}
-                    isSave={isSave}
-                    toggleSave={toggleSave}
-                    cachedRoles={null}
-                    cachedEventDetails={cachedEventDetails}
-                    updateCachedRoles={null}
-                    updateCachedEventDetails={updateCachedEventDetails}
+                    selectedEventDetails={selectedEventDetails}
+                    setSelectedEventDetails={setSelectedEventDetails}
                 />
             </CardContent>
             <CardActions className='card-actions'>
                 <Button className='resources-button' variant="contained"
                     color='primary' size="small" onClick={redirectToResources}>
                     Resources
+                </Button>
+
+                <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon"/>}
+                    color='primary' size="small" onClick={()=> {console.log("Notified")}}>
+                    Notify
                 </Button>
             </CardActions>
         </Card>
