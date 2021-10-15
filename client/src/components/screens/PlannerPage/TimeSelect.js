@@ -48,7 +48,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
         <div className='time-select-wrapper'>
             <div>
                 <Typography className="time-header">
-                    <b>{month} {year}</b>
+                    <b>{(marks.find(({ label }) => label === month)).full} {year}</b>
                 </Typography>
             </div>
             <div className='time-select-inputs'>
