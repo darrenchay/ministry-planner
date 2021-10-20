@@ -57,6 +57,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                                     updateSelectedEvent, originalData, updateOriginalData, setUpdateFlag }) {
     const [openSuccessUpdateEvent, setOpenSuccessUpdateEvent] = React.useState(false);
     const [openErrorUpdateEvent, setOpenErrorUpdateEvent] = React.useState(false);
+    const [openSuccessDeleteEvent, setOpenSuccessDeleteEvent] = React.useState(false);
+    const [openErrorDeleteEvent, setOpenErrorDeleteEvent] = React.useState(false);
     const [openSuccessUpdateRole, setOpenSuccessUpdateRole] = React.useState(false);
     const [openErrorUpdateRole, setOpenErrorUpdateRole] = React.useState(false);
     const [open, setOpen] = useState(false);
@@ -67,6 +69,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
     const handleCloseSnack = () => {
         setOpenSuccessUpdateEvent(false);
         setOpenErrorUpdateEvent(false);
+        setOpenSuccessDeleteEvent(false);
+        setOpenErrorDeleteEvent(false);
         setOpenSuccessUpdateRole(false);
         setOpenErrorUpdateRole(false);
     };
@@ -121,10 +125,12 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                 setOpen(false);
                 setUpdateFlag(false);
                 setUpdateFlag(true);
+                handleCloseSnack();
+                setOpenSuccessDeleteEvent(true);
                 // Trigger a better watcher of useEffect to update list of events
-                // TODO: Add a toast animation when it is successfully deleted
             })
             .catch(err => {
+                setOpenErrorDeleteEvent(true);
                 console.log(err);
             })
     }
@@ -179,6 +185,16 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                     An error occured when updating the role.
                 </Alert>
             </Snackbar>
+            <Snackbar open={openSuccessDeleteEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="success">
+                    Event successfully deleted!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openErrorDeleteEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="error">
+                    An error occured when deleting the event.
+                </Alert>
+            </Snackbar> 
             <ConfirmDelete
                 keepMounted
                 open={open}

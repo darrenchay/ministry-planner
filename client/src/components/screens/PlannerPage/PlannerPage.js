@@ -7,12 +7,17 @@ import * as EventsAPI from './../../utils/Services/EventsAPI'
 import {
     CircularProgress,
     Typography,
-    IconButton
+    IconButton,
+    Snackbar
 } from '@material-ui/core';
 import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded';
 import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
-
 import convertDate from "./../../utils/ConvertDate";
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 /* TODO: 
     - Add an add event button
  */
@@ -87,8 +92,16 @@ export default function PlannerPage() {
     const [showLoading, setShowLoading] = useState(true);
     const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";
+    const [isCreate, setIsCreate] = useState(0)
+    const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
+    const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
     // const [open, setOpen] = React.useState(false);
     const [updateFlag, setUpdateFlag] = useState(true);
+
+    const handleCloseSnack = () => {
+        setOpenSuccessCreateEvent(false);
+        setOpenErrorCreateEvent(false);
+    };
 
     // Updates events list when something on the page updates
     useEffect(() => {
@@ -104,6 +117,17 @@ export default function PlannerPage() {
             });
 
     }, [month, year, updateFlag]);
+
+    useEffect(() => {
+        if (isCreate === 1) {
+            setOpenSuccessCreateEvent(true)
+        }
+        if (isCreate === 2) {
+            setOpenErrorCreateEvent(true)
+        }
+        setIsCreate(false);
+    }, [isCreate])
+
 
     const [nextTimestamp, setNextTimestamp] = useState(null);
     const [prevTimestamp, setPrevTimestamp] = useState(null);
@@ -171,6 +195,7 @@ export default function PlannerPage() {
                 marks={steps}
                 setShowLoading={setShowLoading}
                 setUpdateFlag={setUpdateFlag}
+                setIsCreate={setIsCreate}
             />
             {/* <Button className='resources-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
                 Create Event
@@ -212,9 +237,19 @@ export default function PlannerPage() {
                 <IconButton disabled={nextDisabled} onClick={handleNext} className="pagination-button-next">
                     <KeyboardArrowRightRoundedIcon className='pagination-button-icon' />
                 </IconButton>
-
             </div>
         </div>
+        {/* Status update toast notifications */}
+        <Snackbar open={openSuccessCreateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+            <Alert onClose={handleCloseSnack} severity="success">
+                Event successfully created!
+            </Alert>
+        </Snackbar>
+        <Snackbar open={openErrorCreateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+            <Alert onClose={handleCloseSnack} severity="error">
+                An error occured when creating the event.
+            </Alert>
+        </Snackbar>
         </>
     );
 }

@@ -10,7 +10,7 @@ import Modal from '@material-ui/core/Modal';
 import CreateEventModal from "./CreateEventModal";
 
 export default function TimeSelect({ month, setMonth, year, setYear, 
-                                    marks, setShowLoading, setUpdateFlag }) {
+                                    marks, setShowLoading, setUpdateFlag, setIsCreate }) {
     const currentYear = new Date().getFullYear();
     const [years, setYears] = useState([]);
     const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
@@ -93,7 +93,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                 >
-                    <CreateEventModal setUpdateFlag={setUpdateFlag} setOpen={setOpen}/>
+                    <CreateEventModal setUpdateFlag={setUpdateFlag} setIsCreate={setIsCreate} setOpen={setOpen}/>
                 </Modal>
             </div>
         </div>

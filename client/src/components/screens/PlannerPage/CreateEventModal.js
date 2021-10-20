@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import * as RolesAPI from './../../utils/Services/RolesAPI';
 import * as ResourcesAPI from './../../utils/Services/ResourcesAPI';
-    
+
 function getModalStyle() {
     const top = 50;
     const left = 50;
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function CreateEventModal({setUpdateFlag, setOpen}) {
+export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) {
     const classes = useStyles();
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
@@ -109,16 +109,20 @@ export default function CreateEventModal({setUpdateFlag, setOpen}) {
                                     setOpen(false);
                                     setUpdateFlag(false);
                                     setUpdateFlag(true);
+                                    setIsCreate(1);
                                 });
                             }).catch(err => {
                                 console.log("eventDetails err", err);
+                                setIsCreate(2);
                             });
                     }).catch(err => {
                         console.log("resource err", err);
+                        setIsCreate(2);
                     });
-            })
+                })
             .catch(err => {
                 console.log("event err", err);
+                setIsCreate(2);
             });
     }
 
