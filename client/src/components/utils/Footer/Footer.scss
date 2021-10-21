@@ -10,7 +10,7 @@
 }
 
 .info {
-    text-align: left;
+    text-align: center;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -23,6 +23,8 @@
 
 .icons {
     margin-right: 10px;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .a {
@@ -32,7 +34,8 @@
 a:visited { text-decoration: none; color:black; }
 
 .text {
-    height: 20px;
+    height: 10px;
+    margin-right: 35px;
     line-height: 20px;
     text-align: center;
     vertical-align: middle;
