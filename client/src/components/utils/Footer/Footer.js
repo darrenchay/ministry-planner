@@ -13,26 +13,26 @@ export default function Footer() {
     return (
         <>
             <div className="footer-wrapper">
-                <Divider variant="middle" className="divider" />
+
+
+
+                <Divider variant="middle" className="divider" orientation="vertical"/>
                 <div className="info">
                     <HomeIcon className="icons" />
                     <div className="text">31 Magon Street, Plaine Verte, Port Louis, MAURITIUS</div>
-                </div>
-
-                <div className="info">
+                
                     <PhoneIcon className="icons" />
                     <div className="text">(+230) 242 1120 / (+230) 242 1119</div>
-                </div>
-
-                <div className="info">
+                
                     <LanguageIcon className="icons" />
-                    <a href="https://stpaulmauritius.church">stpaulmauritius.church</a>
-                </div>
-
-                <div className="info">
+                    <div className="text"><a href="https://stpaulmauritius.church">stpaulmauritius.church</a></div>
+                
                     <EmailIcon className="icons" />
                     <div className="text">stpaulpv@gmail.com</div>
                 </div>
+
+
+
 
                 <Typography variant="caption" color="inherit" className="copyright">
                     © {new Date().getFullYear()} Wazaza Team
@@ -40,5 +40,5 @@ export default function Footer() {
 
             </div>
         </>
-    );
+  );
 }
