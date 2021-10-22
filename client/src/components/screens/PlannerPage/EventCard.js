@@ -9,13 +9,20 @@ import {
     CardContent,
     Button,
     TextField,
+    Menu,
     MenuItem,
     Select,
-    InputLabel
+    InputLabel,
+    IconButton
 } from '@material-ui/core';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from "@material-ui/pickers";
+
 import DateFnsUtils from '@date-io/date-fns';
 import SendIcon from '@material-ui/icons/Send';
+
+import ClearIcon from '@material-ui/icons/Clear';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
@@ -34,6 +41,46 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
+const RehearsalTime = ({ rehearsals, rehearsal, isEditable }) => {
+    const handleDelete = () => {
+        var idx = rehearsals.indexOf(rehearsal)
+        if (idx !== -1) {
+            rehearsals.splice(idx, 1);
+        }
+    }
+    useEffect(() => {
+        // console.log("rehearsals", rehearsals);
+        // console.log("rehearsal", rehearsal);
+    }, [rehearsals])
+    return (
+        <>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDateTimePicker
+                    variant="inline"
+                    margin="normal"
+                    id="pickupDate"
+                    inputVariant={"standard"}
+                    format="d MMM yyyy - HH:mm"
+                    ampm={false}
+                    disabled={true}
+                    value={new Date(rehearsal * 1000)}
+                    InputProps={{
+                        disableUnderline: true
+                    }}
+                    KeyboardButtonProps={{
+                        "aria-label": "change date",
+                        style: { display: 'none' }
+                    }}
+                />
+            </MuiPickersUtilsProvider>
+            <IconButton onClick={handleDelete} aria-label="settings" >
+                <ClearIcon />
+            </IconButton>
+        </>
+    )
+
+}
+
 export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEvent }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreateEvent);
@@ -41,6 +88,8 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const [selectedEventDetails, setSelectedEventDetails] = useState(selectedEvent.eventDetails);
     const [worshipLeaders, setWorshipLeaders] = useState();
+    const [addDateTime, setAddDateTime] = useState(new Date());
+    const [anchorEl, setAnchorEl] = useState(false);
     const history = useHistory();
 
     useEffect(() => {
@@ -55,7 +104,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
 
     useEffect(() => {
         setSelectedEventDetails(selectedEvent.eventDetails);
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [isEditable]);
 
     useEffect(() => {
@@ -70,6 +119,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
         var tempEvent = cloneDeep(selectedEvent);
         tempEvent.eventDetails = selectedEventDetails;
         changeSelectedEvent(tempEvent);
+        console.log(selectedEventDetails.rehearsals)
         // eslint-disable-next-line
     }, [selectedEventDetails]);
 
@@ -78,7 +128,9 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
         if (type.toLowerCase() === 'name') {
             tempEvent.event.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {
+            console.log(e);
             tempEvent.event.timestamp = (e.getTime() / 1000);
+            // tempEvent.event.timestamp = e.timestamp;
         }
         changeSelectedEvent(tempEvent);
     }
@@ -88,6 +140,20 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
         var tempEventDetails = cloneDeep(selectedEventDetails);
         tempEventDetails.worshipLeader = e.target.value;
         setSelectedEventDetails(tempEventDetails);
+    }
+
+    const handleRehearsalClick = (e) => {
+        setAnchorEl(e.currentTarget);
+    }
+
+    const handleCloseRehearsals = () => {
+        setAnchorEl(null);
+    }
+
+    const addRehearsal = () => {
+        selectedEventDetails.rehearsals.push(addDateTime.getTime() / 1000);
+        setAddDateTime(new Date())
+        console.log(selectedEventDetails.rehearsals);
     }
 
     return (
@@ -127,12 +193,13 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                 subheader={
                     <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardDatePicker
+                            <KeyboardDateTimePicker
                                 variant="inline"
-                                inputVariant={isEditable ? "outlined" : "standard"}
-                                format="d MMM yyyy"
                                 margin="normal"
                                 id="pickupDate"
+                                inputVariant={isEditable ? "outlined" : "standard"}
+                                format="d MMM yyyy - HH:mm"
+                                ampm={false}
                                 disabled={!isEditable}
                                 value={new Date(selectedEvent.event.timestamp * 1000)}
                                 onChange={(e) => handleChangeEvent(e, "date")}
@@ -149,29 +216,84 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                 }
             />
             <CardContent>
-                <div className='worship-leader'>
-                    <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
-                    <Select
-                        className='team-member-select'
-                        labelId="teamMemberSelect"
-                        label='Team Member'
-                        id="teamMemberSelect"
-                        placeholder="Select a member"
-                        value={selectedEventDetails.worshipLeader}
-                        onChange={handleChangeWorshipLeader}
-                        disabled={!isEditable}
-                    >
-                        {worshipLeaders?.length > 0 &&
-                            worshipLeaders
-                                .map((user, index) => {
-                                    return <MenuItem value={user._id}>{user.firstname}</MenuItem>
-                                })
-                        }
+                <div className='event-info'>
 
-                        {worshipLeaders?.length === 0 &&
-                            <MenuItem value={0} disabled={true}>No Members</MenuItem>
-                        }
-                    </Select>
+                    <div className='worship-leader'>
+                        <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
+                        <Select
+                            className='team-member-select'
+                            labelId="teamMemberSelect"
+                            label='Team Member'
+                            id="teamMemberSelect"
+                            placeholder="Select a member"
+                            value={selectedEventDetails.worshipLeader}
+                            onChange={handleChangeWorshipLeader}
+                            disabled={!isEditable}
+                        >
+                            {worshipLeaders?.length > 0 &&
+                                worshipLeaders
+                                    .map((user, index) => {
+                                        return <MenuItem value={user._id}>{user.firstname}</MenuItem>
+                                    })
+                            }
+
+                            {worshipLeaders?.length === 0 &&
+                                <MenuItem value={0} disabled={true}>No Members</MenuItem>
+                            }
+                        </Select>
+                    </div>
+                    <div className="rehearsals">
+                        {/* <InputLabel id="rehearsal">Rehearsals</InputLabel> */}
+                        <Button onClick={handleRehearsalClick}>
+                            Rehearsals <KeyboardArrowDownIcon />
+                        </Button>
+                        <Menu
+                            className='rehearsal-menu'
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleCloseRehearsals}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value={0} disabled={true}>Rehearsals</MenuItem>
+                            {selectedEventDetails.rehearsal?.length > 0 && selectedEventDetails.rehearsal.map(rehearsal => (
+                                <MenuItem value={0} disabled={true}>
+                                    <RehearsalTime
+                                        rehearsals={selectedEventDetails.rehearsal}
+                                        rehearsal={rehearsal}
+                                        isEditable={isEditable}
+                                    />
+                                </MenuItem>
+                            ))}
+                            <div>
+                                <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardDateTimePicker
+                                            variant="inline"
+                                            margin="normal"
+                                            id="pickupDate"
+                                            inputVariant={isEditable ? "outlined" : "standard"}
+                                            format="d MMM yyyy - HH:mm"
+                                            ampm={false}
+                                            disabled={!isEditable}
+                                            value={new Date()}
+                                            onChange={setAddDateTime}
+                                            InputProps={{
+                                                disableUnderline: !isEditable
+                                            }}
+                                            KeyboardButtonProps={{
+                                                "aria-label": "change date",
+                                                style: { display: isEditable ? 'inline-flex' : 'none' }
+                                            }}
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                    <Button onClick={addRehearsal} disabled={!isEditable} aria-label="settings" className='add-button'>
+                                        Add <AddCircleIcon />
+                                    </Button>
+                                </div>
+                            </div>
+                        </Menu>
+                    </div>
                 </div>
                 {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
@@ -199,8 +321,8 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                         Resources
                     </Button>
 
-                    <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon"/>}
-                        color='primary' size="small" onClick={()=> {console.log("Notified")}}>
+                    <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon" />}
+                        color='primary' size="small" onClick={() => { console.log("Notified") }}>
                         Notify
                     </Button>
                 </CardActions>
