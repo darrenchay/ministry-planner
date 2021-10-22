@@ -204,6 +204,11 @@
                     }
                 }
             }
+            .scroll-area {
+                margin-bottom: 0.2%;
+                height: 580px;
+                overflow-y: scroll;
+            }
 
             .add-info-section {
                 @extend .card-role-section;

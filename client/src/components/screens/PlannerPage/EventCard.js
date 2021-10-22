@@ -173,24 +173,26 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                         }
                     </Select>
                 </div>
-                {selectedEvent.eventDetails.teamList.map((role, index) => (
+                <div className="scroll-area">
+                    {selectedEvent.eventDetails.teamList.map((role, index) => (
+                        <RoleSection
+                            data={role}
+                            index={index}
+                            type={"role"}
+                            isEditable={isEditable}
+                            key={role._id}
+                            selectedEventDetails={selectedEventDetails}
+                            setSelectedEventDetails={setSelectedEventDetails}
+                        />
+                    ))}
                     <RoleSection
-                        data={role}
-                        index={index}
-                        type={"role"}
+                        data={selectedEvent.eventDetails}
+                        type={"addInfo"}
                         isEditable={isEditable}
-                        key={role._id}
                         selectedEventDetails={selectedEventDetails}
                         setSelectedEventDetails={setSelectedEventDetails}
                     />
-                ))}
-                <RoleSection
-                    data={selectedEvent.eventDetails}
-                    type={"addInfo"}
-                    isEditable={isEditable}
-                    selectedEventDetails={selectedEventDetails}
-                    setSelectedEventDetails={setSelectedEventDetails}
-                />
+                </div>
             </CardContent>
             {!isCreateEvent &&
                 <CardActions className='card-actions'>
