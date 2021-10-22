@@ -13,18 +13,28 @@
     text-align: center;
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-bottom: 10px;
+}
+
+.icons {
+    margin-right: 1%;
+    margin-left: 2%;
+    margin-top: 10px;
+    flex: 1;
+}
+
+.text {
+    height: 10px;
+    flex: auto;
+    flex-direction: row;
+    //line-height: 20px;
+    text-align: left;
+    vertical-align: middle;
 }
 
 .copyright {
     text-align: center;
-}
-
-.icons {
-    margin-right: 10px;
-    margin-left: 20px;
-    margin-top: 10px;
 }
 
 .a {
@@ -33,10 +43,3 @@
 
 a:visited { text-decoration: none; color:black; }
 
-.text {
-    height: 10px;
-    margin-right: 35px;
-    line-height: 20px;
-    text-align: center;
-    vertical-align: middle;
-}

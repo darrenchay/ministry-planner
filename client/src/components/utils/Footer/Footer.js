@@ -17,7 +17,7 @@ export default function Footer() {
                 <div className="info">
                     <HomeIcon className="icons" />
                     <div className="text">31 Magon Street, Plaine Verte, Port Louis, MAURITIUS</div>
-                
+    
                     <PhoneIcon className="icons" />
                     <div className="text">(+230) 242 1120 / (+230) 242 1119</div>
                 
