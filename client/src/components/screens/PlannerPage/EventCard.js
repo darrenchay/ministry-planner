@@ -2,6 +2,7 @@ import "./EventCard.scss";
 import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
+import { CustomScrollbar } from "../../utils/CustomScrollbar/CustomScrollbar";
 import {
     makeStyles,
     Card,
@@ -181,7 +182,8 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                 }
             />
             <CardContent>
-                <div class='role-section-wrapper'>
+                <CustomScrollbar className='role-section-wrapper' 
+                    autoHide autoHideTimeout={500} autoHideDuration={200} color="grey">
                 {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
                         data={role}
@@ -200,7 +202,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                     selectedEventDetails={selectedEventDetails}
                     setSelectedEventDetails={setSelectedEventDetails}
                 />
-                </div>
+                </CustomScrollbar>
             </CardContent>
             </div>
             {!isCreateEvent &&
