@@ -1,10 +1,12 @@
+import './TimeSelect.scss';
 import React, { useEffect, useState } from "react";
 import {
     Slider,
     Typography,
     Select,
     Button,
-    MenuItem
+    MenuItem,
+    FormControl
 } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import CreateEventModal from "./CreateEventModal";
@@ -51,10 +53,18 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     <b>{(marks.find(({ label }) => label === month)).full} {year}</b>
                 </Typography>
             </div>
-            <div className='time-select-inputs'>
+            <div className='slider-event-section'>
+                <FormControl variant="outlined" className='select-year' size='small'>
                 <Select
-                    labelId="teamMemberSelect"
-                    id="teamMemberSelect"
+                    MenuProps={{
+                        anchorOrigin: {
+                            vertical: "bottom",
+                            horizontal: "left"
+                        },
+                        getContentAnchorEl: null
+                    }}
+                    labelId="select-year"
+                    id="select-year"
                     placeholder="Year"
                     value={year}
                     onChange={updateYear}
@@ -66,6 +76,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                             )
                         })}
                 </Select>
+                </FormControl>
                 <Slider
                     // classes={{
                     //     thumb: thumb,
@@ -73,6 +84,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     //     track: track,
                     //     valueLabel: valueLabel,
                     // }}
+                    className='slider'
                     defaultValue={0}
                     step={1}
                     valueLabelDisplay="off"
@@ -84,7 +96,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     onMouseDown={() => { setShowLoading(true) }}
                     onTouchMove={() => { setShowLoading(true) }}
                 />
-                <Button className='resources-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
+                <Button className='create-event-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
                     Create Event
                 </Button>
                 <Modal
@@ -97,6 +109,5 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                 </Modal>
             </div>
         </div>
-
     );
 }

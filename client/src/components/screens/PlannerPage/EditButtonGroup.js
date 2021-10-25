@@ -1,3 +1,4 @@
+import './EditButtonGroup.scss';
 import React, { useState } from "react";
 import {
     Snackbar,
@@ -144,7 +145,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
     }
 
     return (
-        <div className='edit-button'>
+        <div className='edit-button-section'>
             {!isEditable &&
                 <>
                     <IconButton onClick={handleEdit} aria-label="settings" >
@@ -155,14 +156,16 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                     </IconButton>
                 </>
             }
-            {isEditable && <>
-                <IconButton onClick={handleSave} aria-label="settings">
-                    <DoneIcon />
-                </IconButton>
-                <IconButton onClick={handleCancel} aria-label="settings">
-                    <ClearIcon />
-                </IconButton>
-            </>}
+            {isEditable && 
+                <>
+                    <IconButton className='save-button' onClick={handleSave} aria-label="settings">
+                        <DoneIcon />
+                    </IconButton>
+                    <IconButton className='cancel-button' onClick={handleCancel} aria-label="settings">
+                        <ClearIcon />
+                    </IconButton>
+                </>
+            }
 
             {/* Status update toast notifications */}
             <Snackbar open={openSuccessUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>

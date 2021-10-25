@@ -1,0 +1,118 @@
+@import "./../../../globals.scss";
+
+.card {
+    max-height: 900px;
+    border-radius: 10px;
+    width: 21.75%;
+    margin-right: 1%;
+    position: relative;
+    background: #FFE7CB;
+    box-shadow: #cfcfcf 3px 3px 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    &-past {
+        @extend .card;
+        
+        background: #e3e3e3;
+    }
+
+    .card-header {
+        padding: 10px 10px 0 18px;
+
+        .title-button-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+
+            .title {
+                width: 75%;
+
+                .MuiInputBase-multiline {
+                    padding: 0px;
+
+                    textarea {
+                        color: $primary-color;
+                        font-size: $fontsize-header1;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            &-edit {
+                @extend .title-button-wrapper;
+                .title {
+                    .MuiInputBase-multiline {
+                        padding: 10px;
+                    }
+                }
+            }
+        }
+
+        .date-picker-wrapper {
+            margin-bottom: 8px;
+
+            .MuiFormControl-marginNormal {
+                margin: 0;
+
+                .MuiInputBase-adornedEnd {
+                    .MuiInputBase-input {
+                        padding: 0;
+                    }
+                }
+
+                .MuiOutlinedInput-adornedEnd {
+                    padding: 0;
+                    width: 70%;
+
+                    .MuiOutlinedInput-input {
+                        padding: 10px;
+                    }
+                }
+            }
+
+            &-no-margin {
+                @extend .date-picker-wrapper;
+                .MuiFormControl-marginNormal {
+                    margin: 0;
+
+                    .MuiInputBase-input.Mui-disabled {
+                        color: black;
+                    }
+                }
+            }
+        }
+
+        .worship-leader {
+            .MuiSelect-outlined.MuiSelect-outlined {
+                min-width: 70px;
+            }
+        }
+    }
+
+    .role-section-wrapper {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .card-actions {
+        padding: 0 16px 16px 16px;
+        margin-top: 16px;
+        justify-content: space-between;
+
+        .resources-button {
+            background-color: $primary-color;
+        }
+
+        .notify-button {
+            background-color: rgba(42, 118, 233, 0.9);
+
+            .send-icon {
+                margin-bottom: 5px;
+                transform: rotate(-45deg);
+            }
+        }
+    }
+}

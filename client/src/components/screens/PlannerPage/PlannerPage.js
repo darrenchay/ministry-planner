@@ -1,5 +1,4 @@
 import "./PlannerPage.scss";
-
 import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard"
 import TimeSelect from './TimeSelect';
@@ -216,10 +215,11 @@ export default function PlannerPage() {
             )}
 
             <div className='cards-wrapper'>
-                <IconButton disabled={prevDisabled} onClick={handlePrevious} className="pagination-button-previous">
+                <div className='previous-button-wrapper'>
+                <IconButton disabled={prevDisabled} onClick={handlePrevious} className="previous-button">
                     <KeyboardArrowLeftRoundedIcon className='pagination-button-icon' />
                 </IconButton>
-
+                </div>
                 {(filteredEvents?.length === 0 || events?.length === 0) &&
                     <div>
                         <Typography variant="h4">
@@ -234,9 +234,11 @@ export default function PlannerPage() {
                         })
                         .slice(0, 4)
                 }
-                <IconButton disabled={nextDisabled} onClick={handleNext} className="pagination-button-next">
+                <div className='next-button-wrapper'>
+                <IconButton disabled={nextDisabled} onClick={handleNext} className="next-button">
                     <KeyboardArrowRightRoundedIcon className='pagination-button-icon' />
                 </IconButton>
+                </div>
             </div>
         </div>
         {/* Status update toast notifications */}
