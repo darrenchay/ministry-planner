@@ -1,6 +1,8 @@
+import "./EventCard.scss";
 import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
+import { CustomScrollbar } from "../../utils/CustomScrollbar/CustomScrollbar";
 import {
     makeStyles,
     Card,
@@ -11,7 +13,8 @@ import {
     TextField,
     MenuItem,
     Select,
-    InputLabel
+    InputLabel,
+    FormControl
 } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
@@ -22,7 +25,6 @@ import RoleSection from './RoleSection';
 
 // import convertDate from "../../utils/ConvertDate";
 import * as UsersAPI from "../../utils/Services/UsersAPI";
-import "./PlannerPage.scss";
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles(() => ({
@@ -91,7 +93,12 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
     }
 
     return (
-        <Card key={event.event._id} className='card'>
+        <Card key={event.event._id} 
+            className={
+                !isCreateEvent && selectedEvent.event.timestamp < Math.round((new Date()).getTime() / 1000) ?
+                'card-past' : 'card'
+            }>
+            <div>
             <CardHeader
                 className='card-header'
                 title={
@@ -125,6 +132,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                     </div>
                 }
                 subheader={
+                    <>
                     <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
@@ -146,54 +154,57 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                             />
                         </MuiPickersUtilsProvider>
                     </div>
+                    <div className='worship-leader'>
+                        <FormControl variant='outlined' size='small'>
+                            <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
+                            <Select
+                                className='worship-leader-select'
+                                labelId="teamMemberSelect"
+                                label='Worship Leader'
+                                value={selectedEventDetails.worshipLeader}
+                                onChange={handleChangeWorshipLeader}
+                                disabled={!isEditable}
+                            >
+                                {worshipLeaders?.length > 0 &&
+                                    worshipLeaders
+                                        .map((user, index) => {
+                                            return <MenuItem value={user._id}>{user.firstname}</MenuItem>
+                                        })
+                                }
+
+                                {worshipLeaders?.length === 0 &&
+                                    <MenuItem value={0} disabled={true}>No Members</MenuItem>
+                                }
+                            </Select>
+                        </FormControl>
+                    </div>
+                    </>
                 }
             />
             <CardContent>
-                <div className='worship-leader'>
-                    <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
-                    <Select
-                        className='team-member-select'
-                        labelId="teamMemberSelect"
-                        label='Team Member'
-                        id="teamMemberSelect"
-                        placeholder="Select a member"
-                        value={selectedEventDetails.worshipLeader}
-                        onChange={handleChangeWorshipLeader}
-                        disabled={!isEditable}
-                    >
-                        {worshipLeaders?.length > 0 &&
-                            worshipLeaders
-                                .map((user, index) => {
-                                    return <MenuItem value={user._id}>{user.firstname}</MenuItem>
-                                })
-                        }
-
-                        {worshipLeaders?.length === 0 &&
-                            <MenuItem value={0} disabled={true}>No Members</MenuItem>
-                        }
-                    </Select>
-                </div>
-                <div className="scroll-area">
-                    {selectedEvent.eventDetails.teamList.map((role, index) => (
-                        <RoleSection
-                            data={role}
-                            index={index}
-                            type={"role"}
-                            isEditable={isEditable}
-                            key={role._id}
-                            selectedEventDetails={selectedEventDetails}
-                            setSelectedEventDetails={setSelectedEventDetails}
-                        />
-                    ))}
+                <CustomScrollbar className='role-section-wrapper' 
+                    autoHide autoHideTimeout={500} autoHideDuration={200} color="grey">
+                {selectedEvent.eventDetails.teamList.map((role, index) => (
                     <RoleSection
-                        data={selectedEvent.eventDetails}
-                        type={"addInfo"}
+                        data={role}
+                        index={index}
+                        type={"role"}
                         isEditable={isEditable}
+                        key={role._id}
                         selectedEventDetails={selectedEventDetails}
                         setSelectedEventDetails={setSelectedEventDetails}
                     />
-                </div>
+                ))}
+                <RoleSection
+                    data={selectedEvent.eventDetails}
+                    type={"addInfo"}
+                    isEditable={isEditable}
+                    selectedEventDetails={selectedEventDetails}
+                    setSelectedEventDetails={setSelectedEventDetails}
+                />
+                </CustomScrollbar>
             </CardContent>
+            </div>
             {!isCreateEvent &&
                 <CardActions className='card-actions'>
                     <Button className='resources-button' variant="contained"
