@@ -85,7 +85,7 @@ const steps = [
 
 export default function PlannerPage() {
     const [events, setEvents] = useState(null);
-    const [month, setMonth] = useState('Jan');
+    const [month, setMonth] = useState(steps.find(({value}) => value === new Date().getMonth()).label);
     const [year, setYear] = useState(new Date().getFullYear());
     const [filteredEvents, setFilteredEvents] = useState();
     const [showLoading, setShowLoading] = useState(true);
@@ -104,6 +104,7 @@ export default function PlannerPage() {
 
     // Updates events list when something on the page updates
     useEffect(() => {
+        console.log(month)
         //Setting the timestamp that will be used for filtering purposes
         setCurrTimestamp(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
         EventsAPI.getFullEventsList(ministry)
@@ -196,18 +197,6 @@ export default function PlannerPage() {
                 setUpdateFlag={setUpdateFlag}
                 setIsCreate={setIsCreate}
             />
-            {/* <Button className='resources-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
-                Create Event
-            </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            >
-                <CreateEventModal />
-            </Modal> */}
-
             {showLoading && (
                 <CircularProgress
                     style={{ color: "#FE646F" }}
