@@ -60,22 +60,15 @@ export default function Navbar() {
 						</Button>
 					</Box>
 
-					<Button
-						startIcon={<SearchIcon className='right-area-icon' />}
-						className='right-area-button'
-					>
+					<Button className='right-area-button'>
+						<SearchIcon className='right-area-icon' />
 					</Button>
-					<Button
-						startIcon={<AccountCircleIcon className='right-area-icon' />}
-						className='right-area-button'
-					>
+					<Button className='right-area-button'>
+						<AccountCircleIcon className='right-area-icon' />
 					</Button>
-					<Button
-						startIcon={<SettingsRoundedIcon className='right-area-icon' />}
-						className='right-area-button'
-					>
+					<Button className='right-area-button'>
+						<SettingsRoundedIcon className='right-area-icon' />
 					</Button>
-					
 				</Toolbar>
 			</AppBar>
 		</div>

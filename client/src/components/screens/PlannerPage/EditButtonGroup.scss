@@ -1,0 +1,26 @@
+@import "./../../../globals.scss";
+
+.edit-button-section {
+    .MuiIconButton-root {
+        padding: 6px;
+        margin-left: 5px;
+    }
+
+    .delete-icon {
+        color: $primary-color;
+    }
+
+    .save-button {
+        border: 1px solid green;
+        color: green;
+    }
+
+    .cancel-button {
+        border: 1px solid $primary-color;
+        color: $primary-color;
+    }
+
+    svg {
+        font-size: $fontsize-header2;
+    }
+}

@@ -3,6 +3,7 @@
 .logo {
    height: 35px;
    width: 35px;
+   padding-left: 4px;
 }
 
 .nav-buttons {
@@ -27,7 +28,8 @@
    border-radius: 10px;
    
    .right-area-icon {
+      margin: 0;
       color: $primary-color;
-      size: small;
+      font-size: 22px;
    }
 }

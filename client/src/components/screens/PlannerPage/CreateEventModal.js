@@ -1,4 +1,4 @@
-import "./PlannerPage.scss";
+import "./CreateEventModal.scss";
 import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard";
 import * as EventsAPI from '../../utils/Services/EventsAPI';
@@ -64,7 +64,7 @@ export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) 
                                 eventType: "worship"
                             }
                         ],
-                        timestamp: (new Date()/1000).toString()
+                        timestamp: Math.round((new Date()).getTime() / 1000)
                     },
                     eventDetails: {
                         eventId: "",
@@ -128,13 +128,15 @@ export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) 
 
     return (
         <div style={modalStyle} className={classes.paper}>
-            <h2 id="simple-modal-title">Create new event</h2>
+            <div className='header'>Create New Event</div>
             {event &&
-                <>
-                <EventCard event={event} setUpdateFlag={null} isCreateEvent={true} setEvent={setEvent} />
-                <Button className='resources-button' variant="contained" color='primary' size="small"
-                    onClick={handleSave}>Create Event</Button>
-                </>
+                <div className='create-event-modal'>
+                    <EventCard event={event} setUpdateFlag={null} isCreateEvent={true} setEvent={setEvent} />
+                    <div className='create-button-wrapper'>
+                    <Button className='create-button' variant="contained" color='primary' size="small"
+                        onClick={handleSave}>Create event</Button>
+                    </div>
+                </div>
             }
         </div>
     )

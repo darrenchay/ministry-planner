@@ -1,0 +1,44 @@
+@import "./../../../globals.scss";
+
+.time-select-wrapper {
+    margin: 15px 0 25px;
+    text-align: center;
+
+    .time-header {
+        font-size: $fontsize-header1;
+        color: $primary-color;
+    }
+
+    .slider-event-section {
+        display: flex;
+        padding: 0 15%;
+        align-items: center;
+        
+        .select-year {
+            width: 8%;
+            margin-right: 3%;
+            margin-left: 2%;
+            margin-bottom: 8px;
+
+            .MuiOutlinedInput-root {
+                height: 30px;
+
+                .MuiSelect-outlined.MuiSelect-outlined {
+                    padding: 1px 12px 0 0;
+                }
+            }
+        }
+
+        .slider {
+            width: 71%;
+            margin-right: 3%;
+            color: $primary-color;
+        }
+
+        .create-event-button {
+            width: 13%;
+            margin-bottom: 8px;
+            background-color: $primary-color;
+        }
+    }
+}
