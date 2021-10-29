@@ -75,9 +75,11 @@ const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEdi
                         }}
                     />
                 </MuiPickersUtilsProvider>
-                <Button onClick={handleDelete} disabled={!isEditable} aria-label="settings" >
-                    <ClearIcon />
-                </Button>
+                {isEditable &&
+                    <Button onClick={handleDelete} disabled={!isEditable} aria-label="settings" >
+                        <ClearIcon />
+                    </Button>
+                }
             </div>
         </>
     )
@@ -94,7 +96,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
     const [addDateTime, setAddDateTime] = useState(new Date());
     const [anchorEl, setAnchorEl] = useState(false);
     const history = useHistory();
-    
+
     let redirectToResources = (event) => {
         history.push("resources");
     };
@@ -141,7 +143,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
 
     const handleChangeSelectedEventDetails = (e, type) => {
         var tempEventDetails = cloneDeep(selectedEventDetails);
-        if(type === "worshipLeader") {
+        if (type === "worshipLeader") {
             tempEventDetails.worshipLeader = e.target.value;
         } else if (type === "rehearsals") {
             tempEventDetails.rehearsals.push(addDateTime.getTime() / 1000);
