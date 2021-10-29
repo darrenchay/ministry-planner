@@ -94,7 +94,6 @@ export default function PlannerPage() {
     const [isCreate, setIsCreate] = useState(0)
     const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
     const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
-    // const [open, setOpen] = React.useState(false);
     const [updateFlag, setUpdateFlag] = useState(true);
 
     const handleCloseSnack = () => {
@@ -104,7 +103,6 @@ export default function PlannerPage() {
 
     // Updates events list when something on the page updates
     useEffect(() => {
-        console.log(month)
         //Setting the timestamp that will be used for filtering purposes
         setCurrTimestamp(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
         EventsAPI.getFullEventsList(ministry)

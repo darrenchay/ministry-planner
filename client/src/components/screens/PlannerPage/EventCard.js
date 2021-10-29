@@ -89,15 +89,15 @@ const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEdi
 export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEvent }) {
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreateEvent);
-    const [originalEvent, changeOriginalEvent] = useState(cloneDeep(event));
+    const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
-    const [selectedEventDetails, setSelectedEventDetails] = useState(selectedEvent.eventDetails);
+    const [selectedEventDetails, setSelectedEventDetails] = useState(event.eventDetails);
     const [worshipLeaders, setWorshipLeaders] = useState();
     const [addDateTime, setAddDateTime] = useState(new Date());
     const [anchorEl, setAnchorEl] = useState(false);
     const history = useHistory();
 
-    let redirectToResources = (event) => {
+    let redirectToResources = () => {
         history.push("resources");
     };
 
@@ -136,20 +136,21 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
             tempEvent.event.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {
             tempEvent.event.timestamp = (e.getTime() / 1000);
-            // tempEvent.event.timestamp = e.timestamp;
         }
         changeSelectedEvent(tempEvent);
     }
 
-    const handleChangeSelectedEventDetails = (e, type) => {
+    const handleChangeWorshipLeader = (e) => {
         var tempEventDetails = cloneDeep(selectedEventDetails);
-        if (type === "worshipLeader") {
-            tempEventDetails.worshipLeader = e.target.value;
-        } else if (type === "rehearsals") {
-            tempEventDetails.rehearsals.push(addDateTime.getTime() / 1000);
-            setAddDateTime(new Date());
-        }
+        tempEventDetails.worshipLeader = e.target.value;
         setSelectedEventDetails(tempEventDetails);
+    }
+
+    const handleRehearsals = () => {
+        var tempEventDetails = cloneDeep(selectedEventDetails);
+        tempEventDetails.rehearsals.push(addDateTime.getTime() / 1000);
+        setSelectedEventDetails(tempEventDetails);
+        setAddDateTime(new Date());
     }
 
     const handleRehearsalClick = (e) => {
@@ -232,7 +233,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                             labelId="teamMemberSelect"
                                             label='Worship Leader'
                                             value={selectedEventDetails.worshipLeader}
-                                            onChange={(e) => handleChangeSelectedEventDetails(e, "worshipLeader")}
+                                            onChange={handleChangeWorshipLeader}
                                             disabled={!isEditable}
                                         >
                                             {worshipLeaders?.length > 0 &&
@@ -270,6 +271,9 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                                 isEditable={isEditable}
                                             />
                                         ))}
+                                        {selectedEventDetails.rehearsals?.length === 0 &&
+                                            <MenuItem value={0} disabled={true}>No Rehearsal Times</MenuItem>
+                                        }
                                         {isEditable &&
                                             <>
                                                 <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
@@ -294,7 +298,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                                         />
                                                     </MuiPickersUtilsProvider>
                                                 </div>
-                                                <Button onClick={(e) => handleChangeSelectedEventDetails(e, "rehearsals")} disabled={!isEditable} aria-label="settings" className='add-button'>
+                                                <Button onClick={handleRehearsals} disabled={!isEditable} aria-label="settings" className='add-button'>
                                                     Add <AddCircleIcon />
                                                 </Button>
                                             </>
