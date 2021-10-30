@@ -85,7 +85,7 @@ const steps = [
 
 export default function PlannerPage() {
     const [events, setEvents] = useState(null);
-    const [month, setMonth] = useState('Jan');
+    const [month, setMonth] = useState(steps.find(({value}) => value === new Date().getMonth()).label);
     const [year, setYear] = useState(new Date().getFullYear());
     const [filteredEvents, setFilteredEvents] = useState();
     const [showLoading, setShowLoading] = useState(true);
@@ -94,7 +94,6 @@ export default function PlannerPage() {
     const [isCreate, setIsCreate] = useState(0)
     const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
     const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
-    // const [open, setOpen] = React.useState(false);
     const [updateFlag, setUpdateFlag] = useState(true);
 
     const handleCloseSnack = () => {
@@ -196,18 +195,6 @@ export default function PlannerPage() {
                 setUpdateFlag={setUpdateFlag}
                 setIsCreate={setIsCreate}
             />
-            {/* <Button className='resources-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
-                Create Event
-            </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            >
-                <CreateEventModal />
-            </Modal> */}
-
             {showLoading && (
                 <CircularProgress
                     style={{ color: "#FE646F" }}

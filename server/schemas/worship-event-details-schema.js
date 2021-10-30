@@ -29,8 +29,7 @@ const worshipEventDetails = new Schema({
     ],
     rehearsals: [
         {
-            timestamp: String,
-            location: String
+            type: String,
         }
     ],
     resourceId: {

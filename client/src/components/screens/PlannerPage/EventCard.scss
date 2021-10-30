@@ -6,15 +6,15 @@
     width: 21.75%;
     margin-right: 1%;
     position: relative;
-    background: #FFE7CB;
+    background: #ffe7cb;
     box-shadow: #cfcfcf 3px 3px 7px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
+
     &-past {
         @extend .card;
-        
+
         background: #e3e3e3;
     }
 
@@ -65,7 +65,7 @@
 
                 .MuiOutlinedInput-adornedEnd {
                     padding: 0;
-                    width: 70%;
+                    width: 90%;
 
                     .MuiOutlinedInput-input {
                         padding: 10px;
@@ -85,9 +85,25 @@
             }
         }
 
-        .worship-leader {
-            .MuiSelect-outlined.MuiSelect-outlined {
-                min-width: 70px;
+        .event-info-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .worship-leader {
+                .MuiSelect-outlined.MuiSelect-outlined {
+                    min-width: 90px;
+                }
+            }
+
+            .rehearsals {
+                margin-left: 20%;
+                margin-right: 3%;
+                .rehearsal-time {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
             }
         }
     }
