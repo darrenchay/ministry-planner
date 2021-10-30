@@ -36,28 +36,6 @@
     }
 }
 
-@for $i from 1 through 100 {
-    .makeStyles-paper-#{$i} { // mui modal popup
-        padding: 10px;
-        width: 480px;
-        height: 500px;
-        border-radius: 10px;
-        
-        .header {
-            font-size: $fontsize-header1;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .worship-leader {
-            .MuiSelect-outlined.MuiSelect-outlined {
-                min-width: 118px !important;
-            }
-        }
-    }
-}
-
 .MuiMenu-list {
     max-height: 200px;
     overflow: auto;

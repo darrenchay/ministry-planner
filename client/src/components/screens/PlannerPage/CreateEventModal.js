@@ -128,9 +128,9 @@ export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) 
 
     return (
         <div style={modalStyle} className={classes.paper}>
-            <div className='header'>Create New Event</div>
             {event &&
                 <div className='create-event-modal'>
+                    <div className='header'>Create New Event</div>
                     <EventCard event={event} setUpdateFlag={null} isCreateEvent={true} setEvent={setEvent} />
                     <div className='create-button-wrapper'>
                     <Button className='create-button' variant="contained" color='primary' size="small"

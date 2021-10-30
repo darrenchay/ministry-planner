@@ -33,14 +33,19 @@ import RoleSection from './RoleSection';
 import * as UsersAPI from "../../utils/Services/UsersAPI";
 
 // TODO: To find a way to use scss instead of makestyles here
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
     noBorder: {
-        border: "none",
+        border: "none"
     },
     resize: {
         fontSize: 22
+    },
+    popover: {
+        '& .MuiMenu-list': {
+            padding: '8px 10px 4px !important'
+        }
     }
-}));
+});
 
 const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEditable }) => {
     const handleDelete = () => {
@@ -59,7 +64,6 @@ const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEdi
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDateTimePicker
                         variant="inline"
-                        margin="normal"
                         id="pickupDate"
                         inputVariant={"standard"}
                         format="d MMM yyyy - HH:mm"
@@ -261,8 +265,11 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                         open={Boolean(anchorEl)}
                                         onClose={handleCloseRehearsals}
                                         inputProps={{ 'aria-label': 'Without label' }}
+                                        PopoverClasses={{
+                                            paper: classes.popover
+                                        }}
                                     >
-                                        <MenuItem value={0} disabled={true}>Rehearsals</MenuItem>
+                                        <div className='rehearsal-inner-header'>Rehearsals</div>
                                         {selectedEventDetails.rehearsals?.length > 0 && selectedEventDetails.rehearsals.map(rehearsal => (
                                             <RehearsalTime
                                                 eventDetails={selectedEventDetails}
@@ -272,15 +279,14 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                             />
                                         ))}
                                         {selectedEventDetails.rehearsals?.length === 0 &&
-                                            <MenuItem value={0} disabled={true}>No Rehearsal Times</MenuItem>
+                                            <div className='no-rehearsal-message'>No Rehearsal Times</div>
                                         }
                                         {isEditable &&
                                             <>
-                                                <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
+                                                <div className='rehearsal-date-picker-wrapper'>
                                                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                                         <KeyboardDateTimePicker
                                                             variant="inline"
-                                                            margin="normal"
                                                             id="pickupDate"
                                                             inputVariant={isEditable ? "outlined" : "standard"}
                                                             format="d MMM yyyy - HH:mm"
@@ -298,9 +304,11 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                                         />
                                                     </MuiPickersUtilsProvider>
                                                 </div>
-                                                <Button onClick={handleRehearsals} disabled={!isEditable} aria-label="settings" className='add-button'>
-                                                    Add <AddCircleIcon />
+                                                <div className='rehearsal-add-button-wrapper'>
+                                                <Button onClick={handleRehearsals} disabled={!isEditable} aria-label="settings" className='rehearsal-add-button'>
+                                                    <div className='add-text'>Add</div><AddCircleIcon />
                                                 </Button>
+                                                </div>
                                             </>
                                         }
                                     </Menu>

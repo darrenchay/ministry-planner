@@ -25,10 +25,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
 
             .title {
-                width: 75%;
+                width: 70%;
 
                 .MuiInputBase-multiline {
                     padding: 0px;
@@ -52,10 +52,11 @@
         }
 
         .date-picker-wrapper {
-            margin-bottom: 8px;
+            margin-bottom: 9px;
 
             .MuiFormControl-marginNormal {
                 margin: 0;
+                width: 100%;
 
                 .MuiInputBase-adornedEnd {
                     .MuiInputBase-input {
@@ -65,7 +66,7 @@
 
                 .MuiOutlinedInput-adornedEnd {
                     padding: 0;
-                    width: 90%;
+                    width: 70%;
 
                     .MuiOutlinedInput-input {
                         padding: 10px;
@@ -93,16 +94,21 @@
             .worship-leader {
                 .MuiSelect-outlined.MuiSelect-outlined {
                     min-width: 90px;
+                    color: black;
+                }
+
+                .MuiSelect-icon.Mui-disabled {
+                    display: none;
+                }
+
+                .MuiInputLabel-outlined.MuiInputLabel-shrink {
+                    color: black;
                 }
             }
 
             .rehearsals {
-                margin-left: 20%;
-                margin-right: 3%;
-                .rehearsal-time {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                .MuiButton-text {
+                    padding: 6px 0 6px 8px;
                 }
             }
         }
@@ -128,6 +134,60 @@
                 margin-bottom: 5px;
                 transform: rotate(-45deg);
             }
+        }
+    }
+}
+
+.rehearsal-inner-header {
+    padding: 0;
+    font-size: $fontsize-base + 1;
+    margin-bottom: 2px;
+}
+
+.rehearsal-time {
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    .MuiInputBase-input.Mui-disabled {
+        color: black;
+    }
+}
+
+.rehearsal-date-picker-wrapper {
+    padding: 8px 0 0;
+
+    .MuiInputBase-adornedEnd {
+        .MuiInputBase-input {
+            padding: 0;
+        }
+    }
+
+    .MuiOutlinedInput-adornedEnd {
+        padding: 0;
+
+        .MuiOutlinedInput-input {
+            padding: 10px;
+        }
+    }
+}
+
+.no-rehearsal-message {
+    padding: 10px 0;
+    color: rgba(0, 0, 0, .38)
+}
+
+.rehearsal-add-button-wrapper {
+    display: flex;
+    justify-content: space-around;
+
+    .rehearsal-add-button {
+        display: flex;
+        align-items: center;
+
+        .add-text {
+            margin-right: 2px;
+            padding-top: 2px;
         }
     }
 }

@@ -56,6 +56,13 @@
                 .tag {
                     color: lightslategrey;
                     margin-left: 6px;
+
+                    .tag-text {
+                        width: 100px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                 }
             }
 
@@ -92,7 +99,7 @@
         .before {
             padding: 2px 0;
             margin-bottom: 2px;
-            width: 65%;
+            width: 70%;
             color: grey;
 
             &:hover {

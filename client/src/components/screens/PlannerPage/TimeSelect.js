@@ -6,10 +6,17 @@ import {
     Select,
     Button,
     MenuItem,
-    FormControl
+    FormControl,
+    makeStyles
 } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import CreateEventModal from "./CreateEventModal";
+
+const useStyles = makeStyles(() => ({
+    modal: {
+        padding: '0 !important'
+    }
+}));
 
 export default function TimeSelect({ month, setMonth, year, setYear, 
                                     marks, setShowLoading, setUpdateFlag, setIsCreate }) {
@@ -17,6 +24,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
     const [years, setYears] = useState([]);
     const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
     const [open, setOpen] = React.useState(false);
+    const classes = useStyles();
 
     useEffect(() => {
         var tempYears = [];
@@ -104,6 +112,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     onClose={handleClose}
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
+                    className={classes.modal}
                 >
                     <CreateEventModal setUpdateFlag={setUpdateFlag} setIsCreate={setIsCreate} setOpen={setOpen}/>
                 </Modal>
