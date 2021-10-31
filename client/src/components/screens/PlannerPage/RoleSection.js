@@ -51,7 +51,7 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable }) 
             <Typography className="team-member">
                 {teamMember.firstname}
                 {tag?.length > 0 && <Typography className="tag" color="textSecondary">
-                    - {tag}
+                    <div className='tag-text' title={tag}>- {tag}</div>
                 </Typography>}
             </Typography>
             {isEditable &&
