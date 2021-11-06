@@ -69,7 +69,7 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
     const [selectedRole, changeSelectedRole] = useState(data);
     const [newRoleTag, changeNewRoleTag] = useState({ memberId: "", tag: "" });
     const [availableMembers, changeAvailableMembers] = useState([]);
-    const [isShow, changeIsSHow] = useState(false);
+    const [isShow, changeIsShow] = useState(false);
 
     useEffect(() => {
         changeSelectedRole(data);
@@ -80,8 +80,10 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
         if (index >= 0) {
             //Update that role in the teamList array in event details with the selected role object
             var tempSelectedEventDetails = cloneDeep(selectedEventDetails);
-            var roleIdx = tempSelectedEventDetails.teamList.findIndex((role) => role._id === selectedRole._id);
-            tempSelectedEventDetails.teamList[roleIdx] = selectedRole;
+            /* roleIdx commented out due to index mapping of roles always being 0 for createEvent modal,
+               might need to investigate later. */
+            // var roleIdx = tempSelectedEventDetails.teamList.findIndex((role) => role._id === selectedRole._id);
+            tempSelectedEventDetails.teamList[index] = selectedRole;
             setSelectedEventDetails(tempSelectedEventDetails);
         } else {
             var tempEventDetails = cloneDeep(selectedEventDetails);
@@ -121,7 +123,8 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
                     tempRole.teamMember.push(resp);
                     changeNewRoleTag({ memberId: "", tag: "" }); //reset add member section
                     changeSelectedRole(tempRole);
-                    changeIsSHow(false);
+                    changeIsShow(false);
+                    console.log("selectedRole", selectedRole);
                 })
                 .catch(err => {
                     console.log(err);
@@ -143,7 +146,7 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
     }
 
     const showAddTM = () => {
-        changeIsSHow(!isShow);
+        changeIsShow(!isShow);
     }
 
     return (
