@@ -333,6 +333,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                         ))}
                         <RoleSection
                             data={selectedEvent.eventDetails}
+                            index={-1}
                             type={"addInfo"}
                             isEditable={isEditable}
                             selectedEventDetails={selectedEventDetails}
