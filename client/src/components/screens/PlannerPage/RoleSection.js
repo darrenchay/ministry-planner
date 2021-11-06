@@ -124,7 +124,6 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
                     changeNewRoleTag({ memberId: "", tag: "" }); //reset add member section
                     changeSelectedRole(tempRole);
                     changeIsShow(false);
-                    console.log("selectedRole", selectedRole);
                 })
                 .catch(err => {
                     console.log(err);
