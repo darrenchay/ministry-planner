@@ -4,7 +4,6 @@ import EventCard from "./EventCard"
 import TimeSelect from './TimeSelect';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 import {
-    CircularProgress,
     Typography,
     IconButton,
     Snackbar
@@ -13,6 +12,8 @@ import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRight
 import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
 import convertDate from "./../../utils/ConvertDate";
 import MuiAlert from '@material-ui/lab/Alert';
+import LoadingOverlay from 'react-loading-overlay'
+
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -195,32 +196,34 @@ export default function PlannerPage() {
                 setUpdateFlag={setUpdateFlag}
                 setIsCreate={setIsCreate}
             />
-            {showLoading && (
-                <CircularProgress
-                    style={{ color: "#FE646F" }}
-                />
-            )}
-
             <div className='cards-wrapper'>
                 <div className='previous-button-wrapper'>
                 <IconButton disabled={prevDisabled} onClick={handlePrevious} className="previous-button">
                     <KeyboardArrowLeftRoundedIcon className='pagination-button-icon' />
                 </IconButton>
                 </div>
-                {(filteredEvents?.length === 0 || events?.length === 0) &&
+                <LoadingOverlay
+                active={showLoading}
+                spinner={true}
+                fadeSpeed={0}
+                >
+                <div className='cards-content-wrapper'>
+                    {(filteredEvents?.length === 0 || events?.length === 0) &&
                     <div>
                         <Typography variant="h4">
                             There are no events
                         </Typography>
                     </div>
-                }
-                {filteredEvents?.length > 0 &&
+                    }
+                    {filteredEvents?.length > 0 &&
                     filteredEvents
                         .map((event) => {
                             return (<EventCard key={event.event._id} event={event} setUpdateFlag={setUpdateFlag} isCreateEvent={false} setEvent={null} />);
                         })
                         .slice(0, 4)
-                }
+                    }
+                </div>
+                </LoadingOverlay>
                 <div className='next-button-wrapper'>
                 <IconButton disabled={nextDisabled} onClick={handleNext} className="next-button">
                     <KeyboardArrowRightRoundedIcon className='pagination-button-icon' />
