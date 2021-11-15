@@ -4,7 +4,6 @@ import EventCard from "./EventCard"
 import TimeSelect from './TimeSelect';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 import {
-    CircularProgress,
     Typography,
     IconButton,
     Snackbar
