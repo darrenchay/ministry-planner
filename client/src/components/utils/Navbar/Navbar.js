@@ -11,8 +11,11 @@ import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
 import SearchIcon from '@material-ui/icons/Search';
 import logo from './stpaul-logo.png'
 import { Link, useHistory } from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function Navbar() {
+    const { isAuthenticated } = useAuth0();
+
 	const history = useHistory();
 	
 	let redirectToPlanner = (event) => {
@@ -32,6 +35,9 @@ export default function Navbar() {
     };
 
 	return (
+        <>
+        {isAuthenticated ?
+
 		<div>
 			<AppBar position="static">
 				<Toolbar
@@ -72,5 +78,9 @@ export default function Navbar() {
 				</Toolbar>
 			</AppBar>
 		</div>
+        :
+        <div></div>
+        }
+        </>
 	)
 }
