@@ -1,0 +1,35 @@
+@import "./../../../globals.scss";
+
+.login-wrapper {
+    background: linear-gradient($primary-color 0%, #e6b9a2 100%);
+    align-items: center;
+    height: 500px;
+    width: 200px;
+    min-width: 80%;
+    min-height: max-content;
+
+    .title {
+        flex-grow: 1;
+        font-weight: bold;
+        color: white;
+        padding-top: 50px;
+        border-radius: 10px;
+    }
+
+    .logo-background {
+        background-color: white;
+        max-width: 20%;
+        align-items: center;
+    }
+
+    .login-button {
+        box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
+        background-color: white;
+        max-width: "100%";
+        font-weight: bold;
+        color: $primary-color;
+        padding: 12px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+}

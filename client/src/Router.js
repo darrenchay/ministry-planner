@@ -18,8 +18,8 @@ export default function Router() {
                 <Auth0ProviderWithHistory>
                     <Navbar />
                     <Switch>
-                        <ProtectedRoute path="/" exact component={HomePage} />
-                        <Route path="/login" exact component={LoginPage} />
+                        <Route path="/" exact component={LoginPage} />
+                        <ProtectedRoute path="/home" exact component={HomePage} />
                         <ProtectedRoute path="/planner" component={PlannerPage} />
                         <ProtectedRoute path="/resources" component={ResourcesPage} />
                         <ProtectedRoute path="/team" component={TeamPage} />
