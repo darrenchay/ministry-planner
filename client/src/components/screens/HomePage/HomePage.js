@@ -1,15 +1,43 @@
 import './HomePage.scss'
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid } from "grommet";
 import { Typography, Button, Paper } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
+import * as AuthAPI from "../../utils/Services/AuthAPI";
 
 export default function HomePage() {
     const { user } = useAuth0();
-    console.log(user);
+    const { getAccessTokenSilently } = useAuth0();
+    // console.log(user);
 
     const history = useHistory();
+
+    const setRole = async () => {
+        const accessToken = await getAccessTokenSilently();
+
+        // const metadataResponse = await fetch(`https://ministry-planner-auth.us.auth0.com/api/v2/users/${user.sub}/roles`, {
+        //     headers: {
+        //       Authorization: `Bearer ${accessToken}`,
+        //     },
+        //   });
+    
+        //   const { user_metadata } = await metadataResponse.json();
+        //   history.push("/home", { user_metadata });
+    
+        AuthAPI.getUserPermissions(user, accessToken)
+            .then((data) => {
+                console.log(data);
+                history.push("/home", { data });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    useEffect(() => {
+        setRole();
+    }, [])
 
     let redirectToPlanner = (event) => {
         history.push("planner");
