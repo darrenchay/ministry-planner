@@ -1,6 +1,7 @@
 import "./PlannerPage.scss";
 import React, { useEffect, useState } from "react";
-import EventCard from "./EventCard"
+import EventCard from "./EventCard";
+import TableView from "./TableView";
 import TimeSelect from './TimeSelect';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 import {
@@ -12,8 +13,7 @@ import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRight
 import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
 import convertDate from "./../../utils/ConvertDate";
 import MuiAlert from '@material-ui/lab/Alert';
-import LoadingOverlay from 'react-loading-overlay'
-
+import LoadingOverlay from 'react-loading-overlay';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -96,6 +96,7 @@ export default function PlannerPage() {
     const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
     const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
     const [updateFlag, setUpdateFlag] = useState(true);
+    const [isTable, setIsTable] = useState(true);
 
     const handleCloseSnack = () => {
         setOpenSuccessCreateEvent(false);
@@ -183,9 +184,24 @@ export default function PlannerPage() {
         setCurrTimestamp(prevTimestamp)
     }
 
+    const changeToTable = () => {
+        setIsTable(true);
+    }
+
+    const changeToCard = () => {
+        setIsTable(false);
+    }
+
     return (
         <>
         <div className='planner-page-wrapper'>
+            <div className='top-section'>
+            <div class='view-btn-wrapper'>
+                {/* replace with icon later */}
+                <button onClick={changeToTable}>table</button> 
+                <button onClick={changeToCard}>cards</button> 
+            </div>
+            <div className='time-select-wrapper2'>
             <TimeSelect
                 month={month}
                 setMonth={setMonth}
@@ -196,6 +212,12 @@ export default function PlannerPage() {
                 setUpdateFlag={setUpdateFlag}
                 setIsCreate={setIsCreate}
             />
+            </div>
+            </div>
+            {isTable && 
+            <TableView events={filteredEvents} />
+            }
+            {!isTable && 
             <div className='cards-wrapper'>
                 <div className='previous-button-wrapper'>
                 <IconButton disabled={prevDisabled} onClick={handlePrevious} className="previous-button">
@@ -215,10 +237,11 @@ export default function PlannerPage() {
                         </Typography>
                     </div>
                     }
-                    {filteredEvents?.length > 0 &&
+                    {filteredEvents?.length > 0 && !isTable &&
                     filteredEvents
                         .map((event) => {
-                            return (<EventCard key={event.event._id} event={event} setUpdateFlag={setUpdateFlag} isCreateEvent={false} setEvent={null} />);
+                            return (<EventCard key={event.event._id} event={event} setUpdateFlag={setUpdateFlag} 
+                                isCreateEvent={false} setEvent={null} />);
                         })
                         .slice(0, 4)
                     }
@@ -230,6 +253,7 @@ export default function PlannerPage() {
                 </IconButton>
                 </div>
             </div>
+            }
         </div>
         {/* Status update toast notifications */}
         <Snackbar open={openSuccessCreateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
