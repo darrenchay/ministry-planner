@@ -7,10 +7,13 @@ import {
     Button,
     MenuItem,
     FormControl,
-    makeStyles
+    makeStyles,
+    IconButton
 } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import CreateEventModal from "./CreateEventModal";
+
+import FastForwardOutlinedIcon from '@material-ui/icons/FastForwardOutlined';
 
 const useStyles = makeStyles(() => ({
     modal: {
@@ -21,6 +24,7 @@ const useStyles = makeStyles(() => ({
 export default function TimeSelect({ month, setMonth, year, setYear, 
                                     marks, setShowLoading, setUpdateFlag, setIsCreate }) {
     const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
     const [years, setYears] = useState([]);
     const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
     const [open, setOpen] = React.useState(false);
@@ -54,6 +58,10 @@ export default function TimeSelect({ month, setMonth, year, setYear,
     const handleClose = () => {
         setOpen(false);
     };
+    const currentEvent = () => {
+        setYear(currentYear);
+        setMonth((marks.find(({ value }) => value === currentMonth)).label);
+    };
     return (
         <div className='time-select-wrapper'>
             <div>
@@ -62,6 +70,9 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                 </Typography>
             </div>
             <div className='slider-event-section'>
+                <Button classname='current-event' variant='contained' size='small' onClick={currentEvent} startIcon={<FastForwardOutlinedIcon className="current-event-icon" />}>
+                    NOW
+                </Button>
                 <FormControl variant="outlined" className='select-year' size='small'>
                 <Select
                     MenuProps={{
