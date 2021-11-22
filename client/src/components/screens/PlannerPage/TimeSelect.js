@@ -8,7 +8,6 @@ import {
     MenuItem,
     FormControl,
     makeStyles,
-    IconButton
 } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import CreateEventModal from "./CreateEventModal";
