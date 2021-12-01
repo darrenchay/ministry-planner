@@ -5,7 +5,7 @@ import {
 	AppBar,
 	Button,
 	Toolbar
-  } from "@material-ui/core";
+} from "@material-ui/core";
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
 import SearchIcon from '@material-ui/icons/Search';
@@ -30,17 +30,20 @@ export default function Navbar() {
 	let redirectToAboutUs = (event) => {
         history.push("/aboutus")
     };
+	let redirectToProfile = (event) => {
+		history.push("profile");
+	}
 
 	return (
 		<div>
 			<AppBar position="static">
 				<Toolbar
-				style={{
-					backgroundColor: "white",
-					paddingLeft: 20,
-					paddingTop: 8,
-					paddingBottom: 8,
-				  }}
+					style={{
+						backgroundColor: "white",
+						paddingLeft: 20,
+						paddingTop: 8,
+						paddingBottom: 8,
+					}}
 				>
 					<Link to="/">
 						<img src={logo} className='logo' alt="logo" />
@@ -68,6 +71,7 @@ export default function Navbar() {
 					<Button
 						startIcon={<AccountCircleIcon className='right-area-icon' />}
 						className='right-area-button'
+						onClick={redirectToProfile}
 					>
 					</Button>
 					<Button
@@ -75,7 +79,7 @@ export default function Navbar() {
 						className='right-area-button'
 					>
 					</Button>
-					
+
 				</Toolbar>
 			</AppBar>
 		</div>

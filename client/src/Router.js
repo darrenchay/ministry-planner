@@ -5,6 +5,7 @@ import PlannerPage from "./components/screens/PlannerPage/PlannerPage";
 import ResourcesPage from "./components/screens/ResourcesPage/ResourcesPage";
 import TeamPage from "./components/screens/TeamPage/TeamPage";
 import AboutUsPage from "./components/screens/AboutUsPage/AboutUsPage";
+import ProfilePage from "./components/screens/ProfilePage/ProfilePage";
 import Navbar from "./components/utils/Navbar/Navbar";
 
 export default function Router() {
@@ -19,6 +20,7 @@ export default function Router() {
           <Route path="/resources" component={ResourcesPage} />
           <Route path="/team" component={TeamPage} />
           <Route path="/aboutus" component={AboutUsPage} />
+          <Route path="/profile" component={ProfilePage} />
         </Switch>
       </BrowserRouter>
     </div>
