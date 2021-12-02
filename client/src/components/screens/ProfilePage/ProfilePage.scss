@@ -9,13 +9,13 @@
     // background-color: lightblue;
 }
 .container {
-    display: flex;
-    align-items: center;
+    display: grid;
+    //align-items: center;
     justify-content: center; 
     grid-column: 1;
-    grid-row: 1;
+    grid-row: auto;
     margin: 10px;
-    //background-color: blue;
+    // background-color: blue;
 }
 
 .img-holder {
@@ -26,7 +26,7 @@
     width: 100%;
     height: 150px;
     width: 150px;
-    //background-color: pink;
+    // background-color: pink;
 }
 
 .img {
@@ -39,7 +39,73 @@
 .label {
     width: 100%;
     margin-left: -100%;
-    //background-color: yellow;
+    // background-color: yellow;
+}
+
+.userInfo {
+    border: 1.5px solid #CAC9C9;
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    padding: 40px 75px;
+}
+
+.contactInfo {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 2em;
+    row-gap: 1em;
+    margin-bottom: 30px;
+}
+
+.email, .password, .phone{
+    //background-color: grey;
+    text-align: left;
+}
+.emailValue, .passwordValue, .phoneValue {
+    //background-color: lightblue;
+    text-align: left;
+    margin-left: 1em;
+}
+
+// https://stackoverflow.com/questions/56900389/css-grid-how-to-add-line-between-rows
+.row-border{
+    border-top: 1px solid #CAC9C9;
+    grid-column: 1 / 5; /* this code makes the row stretch to entire width of the container */
+}
+
+.name {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.subheaders {
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.ministryItems {
+    display: grid;
+    margin-bottom: 30px;
+    grid-template-rows: repeat(auto-fill, 1fr);
+    row-gap: 1em;
+}
+
+.roleItems {
+    display: grid;
+    grid-template-rows: repeat(auto-fill, 1fr);
+    row-gap: 1em;
+}
+
+// https://www.w3schools.com/howto/howto_css_circles.asp
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: black;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 3px;
+
 }
 
 #input[type="file"] {
