@@ -3,6 +3,7 @@ import userHandler from './handlers/user-handler';
 import eventHandler from './handlers/event-handler';
 import resourceHandler from './handlers/resource-handler';
 import worshipEventDetailsHandler from './handlers/worship-event-details-handler';
+import worshipTemplateHandler from './handlers/worship-template-handler';
 import plannerHandler from './handlers/planner-handler';
 import roleHandler from './handlers/role-handler';
 
@@ -29,4 +30,5 @@ export function init(server) {
     server.use('/api/worshipEventDetails', worshipEventDetailsHandler);
     server.use('/api/planner', plannerHandler);
     server.use('/api/roles', roleHandler);
+    server.use('/api/worshipTemplates', worshipTemplateHandler);
 }
