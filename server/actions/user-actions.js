@@ -25,7 +25,7 @@ class UserActions {
     }
 
     getOne(req, res) {
-        userSchema.findOne({ _id: req.params.id })
+        userSchema.findOne({ authId: req.params.id })
             .populate('assignedEvents', 'eventId')
             .exec((err, user) => {
                 if (err)
@@ -56,6 +56,19 @@ class UserActions {
         userSchema.find({
             email: req.params.email,
             password: req.params.password
+        }, function (err, user) {
+            if (err)
+                res.status(400).send(err.errmsg);
+            else if (user == '')
+                res.status(404).send("User '" + req.params.email + "' not found");
+            else
+                res.status(200).send(user);
+        });
+    }
+
+    getOneByAuthId(req, res) {
+        userSchema.find({
+            authId: req.params.authId
         }, function (err, user) {
             if (err)
                 res.status(400).send(err.errmsg);

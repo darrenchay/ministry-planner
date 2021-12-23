@@ -5,6 +5,7 @@ import { Typography, Button, Paper } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 import * as AuthAPI from "../../utils/Services/AuthAPI";
+import * as UserAPI from "../../utils/Services/UsersAPI";
 
 export default function HomePage() {
     const { user } = useAuth0();
@@ -24,7 +25,18 @@ export default function HomePage() {
     
         //   const { user_metadata } = await metadataResponse.json();
         //   history.push("/home", { user_metadata });
-    
+        UserAPI.getUser(user.sub.split('|')[1])
+        .then((userData) => {
+            if (userData === '') {
+                console.log("New user");
+            } else {
+                console.log(user)
+                if(userData.role.includes("Worship-Leader")) {
+                    console.log("Admin");
+                }
+            }
+        })
+
         AuthAPI.getUserPermissions(user, accessToken)
             .then((data) => {
                 console.log(data);
