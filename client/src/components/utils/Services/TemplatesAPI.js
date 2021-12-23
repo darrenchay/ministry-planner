@@ -38,3 +38,15 @@ export const addTemplate = (data) => {
             throw err;
         })
 }
+
+export const deleteTemplate = (id) => {
+    return axios({
+        method: "DELETE",
+        url: baseURL + "worshipTemplates/delete/" + id
+    }).then((resp) => {
+        console.log(resp.data);
+    }).catch(err => {
+        console.log(err);
+        throw err;
+    })
+}

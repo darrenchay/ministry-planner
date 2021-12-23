@@ -118,8 +118,14 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
         if (isTemplate) {
             changeSelectedEvent(event);
         }
-        // console.log(event);
     }, [event, isTemplate, setEvent])
+
+    //Update event data for template
+    useEffect(() => {
+        if (isTemplate) {
+            setEvent(selectedEvent); 
+        }
+    }, [selectedEvent])
 
     const handleChangeEvent = (e, type) => {
         var tempEvent = cloneDeep(selectedEvent);

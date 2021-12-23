@@ -90,14 +90,20 @@ export default function PlannerPage() {
     const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";
     const [isTemplate, setIsTemplate] = useState(0)
-    const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
-    const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
+    
+    const [openSuccessCreate, setOpenSuccessCreate] = useState(false);
+    const [openErrorCreate, setOpenErrorCreate] = useState(false);
+    const [openSuccessDelete, setOpenSuccessDelete] = React.useState(false);
+    const [openErrorDelete, setOpenErrorDelete] = React.useState(false);
+
     const [updateFlag, setUpdateFlag] = useState(true);
     const [isTable, setIsTable] = useState(true);
 
     const handleCloseSnack = () => {
-        setOpenSuccessCreateEvent(false);
-        setOpenErrorCreateEvent(false);
+        setOpenSuccessCreate(false);
+        setOpenErrorCreate(false);
+        setOpenSuccessDelete(false);
+        setOpenErrorDelete(false);
     };
 
     // Updates events list when something on the page updates
@@ -117,12 +123,18 @@ export default function PlannerPage() {
 
     useEffect(() => {
         if (isTemplate === 1) {
-            setOpenSuccessCreateEvent(true)
+            setOpenSuccessCreate(true)
         }
         if (isTemplate === 2) {
-            setOpenErrorCreateEvent(true)
+            setOpenErrorCreate(true)
         }
-        setIsTemplate(false);
+        if (isTemplate === 3) {
+            setOpenSuccessDelete(true)
+        }
+        if (isTemplate === 4) {
+            setOpenErrorDelete(true)
+        }
+        setIsTemplate(0);
     }, [isTemplate])
 
 
@@ -253,16 +265,26 @@ export default function PlannerPage() {
             }
         </div>
         {/* Status update toast notifications */}
-        <Snackbar open={openSuccessCreateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+        <Snackbar open={openSuccessCreate} autoHideDuration={5000} onClose={handleCloseSnack}>
             <Alert onClose={handleCloseSnack} severity="success">
-                Event successfully created!
+                Successfully created!
             </Alert>
         </Snackbar>
-        <Snackbar open={openErrorCreateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
+        <Snackbar open={openErrorCreate} autoHideDuration={5000} onClose={handleCloseSnack}>
             <Alert onClose={handleCloseSnack} severity="error">
-                An error occured when creating the event.
+                An error occured when creating.
             </Alert>
         </Snackbar>
+        <Snackbar open={openSuccessDelete} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="success">
+                    Successfully deleted!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openErrorDelete} autoHideDuration={5000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity="error">
+                    An error occured when deleting.
+                </Alert>
+            </Snackbar>
         </>
     );
 }

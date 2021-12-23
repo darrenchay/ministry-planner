@@ -86,12 +86,6 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                 </Select>
                 </FormControl>
                 <Slider
-                    // classes={{
-                    //     thumb: thumb,
-                    //     rail: rail,
-                    //     track: track,
-                    //     valueLabel: valueLabel,
-                    // }}
                     className='slider'
                     defaultValue={0}
                     step={1}
