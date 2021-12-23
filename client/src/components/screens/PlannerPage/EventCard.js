@@ -47,6 +47,7 @@ const useStyles = makeStyles({
     }
 });
 
+// Handles the rehearsal time dropdown items
 const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
     const handleDelete = () => {
         var tempEvent = cloneDeep(event);
@@ -112,13 +113,12 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
             });
     }, []);
 
-
     // updating the event card data based on the selected template 
     useEffect(() => {
         if (isTemplate) {
             changeSelectedEvent(event);
         }
-        console.log(event);
+        // console.log(event);
     }, [event, isTemplate, setEvent])
 
     const handleChangeEvent = (e, type) => {

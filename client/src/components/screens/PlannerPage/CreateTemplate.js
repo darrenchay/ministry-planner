@@ -105,19 +105,6 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
         console.log("change in event: ",event)
     }, [event])
 
-    // useEffect(() => {
-    //     if (event) {
-    //         var tempEvent = event;
-    //         if (selectedTemplate._id !== 0) {
-    //             tempEvent.eventDetails.teamList = selectedTemplate.teamList
-    //             tempEvent.eventDetails.worshipLeader = selectedTemplate.worshipLeader
-    //         }
-    //         setEvent(tempEvent)
-    //         console.log("test")
-    //     }
-    // }, [selectedTemplate])
-
-
     const handleChangeTemplate = (e) => {
         if (e.target.value !== 0) {
             var tempTemplate = cloneDeep(templates.find(template => template._id === e.target.value))

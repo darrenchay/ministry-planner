@@ -82,15 +82,10 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
             var tempEvent = cloneDeep(selectedEvent);
             /* roleIdx commented out due to index mapping of roles always being 0 for createEvent modal,
             might need to investigate later. */
-            console.log(index);
-            console.log(selectedEvent.eventDetails);
-            //    console.log(tempSelectedEventDetails.teamList[index]);
-               console.log(selectedRole);
             // var roleIdx = tempSelectedEventDetails.teamList.findIndex((role) => role._id === selectedRole.roleId);
             // tempSelectedEventDetails.teamList[roleIdx] = selectedRole;
             tempEvent.eventDetails.teamList[index] = selectedRole;
-            // console.log(roleIdx);
-            console.log(tempEvent)
+            // console.log(tempEvent)
             setSelectedEvent(tempEvent);
         } else {
             var tempEvent = cloneDeep(selectedEvent);
