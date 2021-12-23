@@ -10,7 +10,7 @@ import {
     makeStyles
 } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
-import CreateEventModal from "./CreateEventModal";
+import CreateTemplate from "./CreateTemplate";
 
 const useStyles = makeStyles(() => ({
     modal: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function TimeSelect({ month, setMonth, year, setYear, 
-                                    marks, setShowLoading, setUpdateFlag, setIsCreate }) {
+                                    marks, setShowLoading, setUpdateFlag, setIsTemplate }) {
     const currentYear = new Date().getFullYear();
     const [years, setYears] = useState([]);
     const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
@@ -105,7 +105,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     onTouchMove={() => { setShowLoading(true) }}
                 />
                 <Button className='create-event-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
-                    Create Event
+                    Manage Teams
                 </Button>
                 <Modal
                     open={open}
@@ -114,7 +114,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     aria-describedby="simple-modal-description"
                     className={classes.modal}
                 >
-                    <CreateEventModal setUpdateFlag={setUpdateFlag} setIsCreate={setIsCreate} setOpen={setOpen}/>
+                    <CreateTemplate setUpdateFlag={setUpdateFlag} setIsTemplate={setIsTemplate} setOpen={setOpen}/>
                 </Modal>
             </div>
         </div>

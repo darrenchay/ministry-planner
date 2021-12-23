@@ -18,9 +18,6 @@ import MuiAlert from '@material-ui/lab/Alert';
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-/* TODO: 
-    - Add an add event button
- */
 const steps = [
     {
         value: 0,
@@ -92,7 +89,7 @@ export default function PlannerPage() {
     const [showLoading, setShowLoading] = useState(true);
     const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";
-    const [isCreate, setIsCreate] = useState(0)
+    const [isTemplate, setIsTemplate] = useState(0)
     const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
     const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
     const [updateFlag, setUpdateFlag] = useState(true);
@@ -119,14 +116,14 @@ export default function PlannerPage() {
     }, [month, year, updateFlag]);
 
     useEffect(() => {
-        if (isCreate === 1) {
+        if (isTemplate === 1) {
             setOpenSuccessCreateEvent(true)
         }
-        if (isCreate === 2) {
+        if (isTemplate === 2) {
             setOpenErrorCreateEvent(true)
         }
-        setIsCreate(false);
-    }, [isCreate])
+        setIsTemplate(false);
+    }, [isTemplate])
 
 
     const [nextTimestamp, setNextTimestamp] = useState(null);
@@ -210,7 +207,7 @@ export default function PlannerPage() {
                 marks={steps}
                 setShowLoading={setShowLoading}
                 setUpdateFlag={setUpdateFlag}
-                setIsCreate={setIsCreate}
+                setIsTemplate={setIsTemplate}
             />
             </div>
             </div>
@@ -241,7 +238,7 @@ export default function PlannerPage() {
                     filteredEvents
                         .map((event) => {
                             return (<EventCard key={event.event._id} event={event} setUpdateFlag={setUpdateFlag} 
-                                isCreateEvent={false} setEvent={null} />);
+                                isTemplate={false} setEvent={null} />);
                         })
                         .slice(0, 4)
                     }

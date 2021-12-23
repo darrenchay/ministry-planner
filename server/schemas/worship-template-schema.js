@@ -4,6 +4,10 @@ const worshipTemplate = new Schema({
     colorId: {
         type: String
     },
+    teamName: {
+        type: String,
+        required: true
+    },
     worshipLeader: {
         type: String,
     },

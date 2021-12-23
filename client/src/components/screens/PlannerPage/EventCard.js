@@ -90,9 +90,9 @@ const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEdi
 
 }
 
-export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEvent }) {
+export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }) {
     const classes = useStyles();
-    const [isEditable, toggleEdit] = useState(isCreateEvent);
+    const [isEditable, toggleEdit] = useState(isTemplate);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const [selectedEventDetails, setSelectedEventDetails] = useState(event.eventDetails);
@@ -114,10 +114,12 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
 
 
     useEffect(() => {
-        if (isCreateEvent) {
-            setEvent(selectedEvent);
+        if (isTemplate) {
+            console.log("setting template", selectedEvent)
+            changeSelectedEvent(event);
         }
-    }, [selectedEvent, isCreateEvent, setEvent])
+        // console.log(event);
+    }, [event, isTemplate, setEvent])
 
 
     useEffect(() => {
@@ -168,7 +170,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
     return (
         <Card key={event.event._id}
             className={
-                !isCreateEvent && selectedEvent.event.timestamp < Math.round((new Date()).getTime() / 1000) ?
+                !isTemplate && selectedEvent.event.timestamp < Math.round((new Date()).getTime() / 1000) ?
                     'card-past' : 'card'
             }>
             <div>
@@ -188,10 +190,11 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                 disabled={!isEditable}
                                 id="outlined-basic"
                                 variant={isEditable ? "outlined" : "standard"}
-                                placeholder="No event name"
+                                placeholder={isTemplate ? "No Template" : "No event name"}
                                 value={selectedEvent.event.name}
-                                onChange={(e) => handleChangeEvent(e, "name")} />
-                            {!isCreateEvent &&
+                                onChange={(e) => handleChangeEvent(e, "name")}
+                            />
+                            {!isTemplate &&
                                 <ButtonGroup
                                     isEditable={isEditable}
                                     toggleEdit={toggleEdit}
@@ -203,31 +206,34 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                 />
                             }
                         </div>
+                        // TO ADD COLOR PICKER FOR TEMPLATE
                     }
                     subheader={
                         <>
-                            <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <KeyboardDateTimePicker
-                                        variant="inline"
-                                        margin="normal"
-                                        id="pickupDate"
-                                        inputVariant={isEditable ? "outlined" : "standard"}
-                                        format="d MMM yyyy - HH:mm"
-                                        ampm={false}
-                                        disabled={!isEditable}
-                                        value={new Date(selectedEvent.event.timestamp * 1000)}
-                                        onChange={(e) => handleChangeEvent(e, "date")}
-                                        InputProps={{
-                                            disableUnderline: !isEditable
-                                        }}
-                                        KeyboardButtonProps={{
-                                            "aria-label": "change date",
-                                            style: { display: isEditable ? 'inline-flex' : 'none' }
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
-                            </div>
+                            {!isTemplate &&
+                                <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardDateTimePicker
+                                            variant="inline"
+                                            margin="normal"
+                                            id="pickupDate"
+                                            inputVariant={isEditable ? "outlined" : "standard"}
+                                            format="d MMM yyyy - HH:mm"
+                                            ampm={false}
+                                            disabled={!isEditable}
+                                            value={new Date(selectedEvent.event.timestamp * 1000)}
+                                            onChange={(e) => handleChangeEvent(e, "date")}
+                                            InputProps={{
+                                                disableUnderline: !isEditable
+                                            }}
+                                            KeyboardButtonProps={{
+                                                "aria-label": "change date",
+                                                style: { display: isEditable ? 'inline-flex' : 'none' }
+                                            }}
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                </div>
+                            }
                             <div className="event-info-wrapper">
                                 <div className='worship-leader'>
                                     <FormControl variant='outlined' size='small'>
@@ -253,66 +259,68 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                         </Select>
                                     </FormControl>
                                 </div>
-                                <div className="rehearsals">
-                                    {/* <InputLabel id="rehearsal">Rehearsals</InputLabel> */}
-                                    <Button onClick={handleRehearsalClick}>
-                                        Rehearsals <KeyboardArrowDownIcon />
-                                    </Button>
-                                    <Menu
-                                        className='rehearsal-menu'
-                                        anchorEl={anchorEl}
-                                        keepMounted
-                                        open={Boolean(anchorEl)}
-                                        onClose={handleCloseRehearsals}
-                                        inputProps={{ 'aria-label': 'Without label' }}
-                                        PopoverClasses={{
-                                            paper: classes.popover
-                                        }}
-                                    >
-                                        <div className='rehearsal-inner-header'>Rehearsals</div>
-                                        {selectedEventDetails.rehearsals?.length > 0 && selectedEventDetails.rehearsals.map(rehearsal => (
-                                            <RehearsalTime
-                                                eventDetails={selectedEventDetails}
-                                                setSelectedEventDetails={setSelectedEventDetails}
-                                                rehearsal={rehearsal}
-                                                isEditable={isEditable}
-                                            />
-                                        ))}
-                                        {selectedEventDetails.rehearsals?.length === 0 &&
-                                            <div className='no-rehearsal-message'>No Rehearsal Times</div>
-                                        }
-                                        {isEditable &&
-                                            <>
-                                                <div className='rehearsal-date-picker-wrapper'>
-                                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                                        <KeyboardDateTimePicker
-                                                            variant="inline"
-                                                            id="pickupDate"
-                                                            inputVariant={isEditable ? "outlined" : "standard"}
-                                                            format="d MMM yyyy - HH:mm"
-                                                            ampm={false}
-                                                            disabled={!isEditable}
-                                                            value={addDateTime}
-                                                            onChange={setAddDateTime}
-                                                            InputProps={{
-                                                                disableUnderline: !isEditable
-                                                            }}
-                                                            KeyboardButtonProps={{
-                                                                "aria-label": "change date",
-                                                                style: { display: isEditable ? 'inline-flex' : 'none' }
-                                                            }}
-                                                        />
-                                                    </MuiPickersUtilsProvider>
-                                                </div>
-                                                <div className='rehearsal-add-button-wrapper'>
-                                                <Button onClick={handleRehearsals} disabled={!isEditable} aria-label="settings" className='rehearsal-add-button'>
-                                                    <div className='add-text'>Add</div><AddCircleIcon />
-                                                </Button>
-                                                </div>
-                                            </>
-                                        }
-                                    </Menu>
-                                </div>
+                                {!isTemplate &&
+                                    <div className="rehearsals">
+                                        {/* <InputLabel id="rehearsal">Rehearsals</InputLabel> */}
+                                        <Button onClick={handleRehearsalClick}>
+                                            Rehearsals <KeyboardArrowDownIcon />
+                                        </Button>
+                                        <Menu
+                                            className='rehearsal-menu'
+                                            anchorEl={anchorEl}
+                                            keepMounted
+                                            open={Boolean(anchorEl)}
+                                            onClose={handleCloseRehearsals}
+                                            inputProps={{ 'aria-label': 'Without label' }}
+                                            PopoverClasses={{
+                                                paper: classes.popover
+                                            }}
+                                        >
+                                            <div className='rehearsal-inner-header'>Rehearsals</div>
+                                            {selectedEventDetails.rehearsals?.length > 0 && selectedEventDetails.rehearsals.map(rehearsal => (
+                                                <RehearsalTime
+                                                    eventDetails={selectedEventDetails}
+                                                    setSelectedEventDetails={setSelectedEventDetails}
+                                                    rehearsal={rehearsal}
+                                                    isEditable={isEditable}
+                                                />
+                                            ))}
+                                            {selectedEventDetails.rehearsals?.length === 0 &&
+                                                <div className='no-rehearsal-message'>No Rehearsal Times</div>
+                                            }
+                                            {isEditable &&
+                                                <>
+                                                    <div className='rehearsal-date-picker-wrapper'>
+                                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                            <KeyboardDateTimePicker
+                                                                variant="inline"
+                                                                id="pickupDate"
+                                                                inputVariant={isEditable ? "outlined" : "standard"}
+                                                                format="d MMM yyyy - HH:mm"
+                                                                ampm={false}
+                                                                disabled={!isEditable}
+                                                                value={addDateTime}
+                                                                onChange={setAddDateTime}
+                                                                InputProps={{
+                                                                    disableUnderline: !isEditable
+                                                                }}
+                                                                KeyboardButtonProps={{
+                                                                    "aria-label": "change date",
+                                                                    style: { display: isEditable ? 'inline-flex' : 'none' }
+                                                                }}
+                                                            />
+                                                        </MuiPickersUtilsProvider>
+                                                    </div>
+                                                    <div className='rehearsal-add-button-wrapper'>
+                                                        <Button onClick={handleRehearsals} disabled={!isEditable} aria-label="settings" className='rehearsal-add-button'>
+                                                            <div className='add-text'>Add</div><AddCircleIcon />
+                                                        </Button>
+                                                    </div>
+                                                </>
+                                            }
+                                        </Menu>
+                                    </div>
+                                }
                             </div>
                         </>
                     }
@@ -331,18 +339,20 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                 setSelectedEventDetails={setSelectedEventDetails}
                             />
                         ))}
-                        <RoleSection
-                            data={selectedEvent.eventDetails}
-                            index={-1}
-                            type={"addInfo"}
-                            isEditable={isEditable}
-                            selectedEventDetails={selectedEventDetails}
-                            setSelectedEventDetails={setSelectedEventDetails}
-                        />
+                        {!isTemplate &&
+                            <RoleSection
+                                data={selectedEvent.eventDetails}
+                                index={-1}
+                                type={"addInfo"}
+                                isEditable={isEditable}
+                                selectedEventDetails={selectedEventDetails}
+                                setSelectedEventDetails={setSelectedEventDetails}
+                            />
+                        }
                     </CustomScrollbar>
                 </CardContent>
             </div>
-            {!isCreateEvent &&
+            {!isTemplate &&
                 <CardActions className='card-actions'>
                     <Button className='resources-button' variant="contained"
                         color='primary' size="small" onClick={redirectToResources}>
