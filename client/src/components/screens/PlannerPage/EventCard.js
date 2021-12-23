@@ -47,14 +47,14 @@ const useStyles = makeStyles({
     }
 });
 
-const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEditable }) => {
+const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
     const handleDelete = () => {
-        var tempEventDetails = cloneDeep(eventDetails);
-        console.log("delete")
-        var idx = tempEventDetails.rehearsals.indexOf(rehearsal)
+        var tempEvent = cloneDeep(event);
+        console.log("delete");
+        var idx = tempEvent.eventDetails.rehearsals.indexOf(rehearsal)
         if (idx !== -1) {
-            tempEventDetails.rehearsals.splice(idx, 1);
-            setSelectedEventDetails(tempEventDetails);
+            tempEvent.eventDetails.rehearsals.splice(idx, 1);
+            setSelectedEvent(tempEvent);
         }
     }
 
@@ -95,7 +95,6 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
     const [isEditable, toggleEdit] = useState(isTemplate);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
-    const [selectedEventDetails, setSelectedEventDetails] = useState(event.eventDetails);
     const [worshipLeaders, setWorshipLeaders] = useState();
     const [addDateTime, setAddDateTime] = useState(new Date());
     const [anchorEl, setAnchorEl] = useState(false);
@@ -105,6 +104,7 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
         history.push("resources");
     };
 
+    // Getting the list of worship leaders on event card load
     useEffect(() => {
         UsersAPI.getUserByRole('worship', "Worship-Leader")
             .then((users) => {
@@ -113,28 +113,13 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
     }, []);
 
 
+    // updating the event card data based on the selected template 
     useEffect(() => {
         if (isTemplate) {
-            console.log("setting template", selectedEvent)
             changeSelectedEvent(event);
         }
-        // console.log(event);
+        console.log(event);
     }, [event, isTemplate, setEvent])
-
-
-    useEffect(() => {
-        setSelectedEventDetails(selectedEvent.eventDetails);
-        // eslint-disable-next-line
-    }, [isEditable]);
-
-
-    // Updates the event object when the event details section is updated
-    useEffect(() => {
-        var tempEvent = cloneDeep(selectedEvent);
-        tempEvent.eventDetails = selectedEventDetails;
-        changeSelectedEvent(tempEvent);
-        // eslint-disable-next-line
-    }, [selectedEventDetails]);
 
     const handleChangeEvent = (e, type) => {
         var tempEvent = cloneDeep(selectedEvent);
@@ -147,15 +132,15 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
     }
 
     const handleChangeWorshipLeader = (e) => {
-        var tempEventDetails = cloneDeep(selectedEventDetails);
-        tempEventDetails.worshipLeader = e.target.value;
-        setSelectedEventDetails(tempEventDetails);
+        var tempEvent = cloneDeep(selectedEvent);
+        tempEvent.eventDetails.worshipLeader = e.target.value;
+        changeSelectedEvent(tempEvent);
     }
 
     const handleRehearsals = () => {
-        var tempEventDetails = cloneDeep(selectedEventDetails);
-        tempEventDetails.rehearsals.push(addDateTime.getTime() / 1000);
-        setSelectedEventDetails(tempEventDetails);
+        var tempEvent = cloneDeep(selectedEvent);
+        tempEvent.eventDetails.rehearsals.push(addDateTime.getTime() / 1000);
+        changeSelectedEvent(tempEvent);
         setAddDateTime(new Date());
     }
 
@@ -242,7 +227,7 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
                                             className='worship-leader-select'
                                             labelId="teamMemberSelect"
                                             label='Worship Leader'
-                                            value={selectedEventDetails.worshipLeader}
+                                            value={selectedEvent.eventDetails.worshipLeader}
                                             onChange={handleChangeWorshipLeader}
                                             disabled={!isEditable}
                                         >
@@ -277,15 +262,15 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
                                             }}
                                         >
                                             <div className='rehearsal-inner-header'>Rehearsals</div>
-                                            {selectedEventDetails.rehearsals?.length > 0 && selectedEventDetails.rehearsals.map(rehearsal => (
+                                            {selectedEvent.eventDetails.rehearsals?.length > 0 && selectedEvent.eventDetails.rehearsals.map(rehearsal => (
                                                 <RehearsalTime
-                                                    eventDetails={selectedEventDetails}
-                                                    setSelectedEventDetails={setSelectedEventDetails}
+                                                    event={selectedEvent}
+                                                    setSelectedEvent={changeSelectedEvent}
                                                     rehearsal={rehearsal}
                                                     isEditable={isEditable}
                                                 />
                                             ))}
-                                            {selectedEventDetails.rehearsals?.length === 0 &&
+                                            {selectedEvent.eventDetails.rehearsals?.length === 0 &&
                                                 <div className='no-rehearsal-message'>No Rehearsal Times</div>
                                             }
                                             {isEditable &&
@@ -335,18 +320,17 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
                                 type={"role"}
                                 isEditable={isEditable}
                                 key={role._id}
-                                selectedEventDetails={selectedEventDetails}
-                                setSelectedEventDetails={setSelectedEventDetails}
+                                selectedEvent={selectedEvent}
+                                setSelectedEvent={changeSelectedEvent}
                             />
                         ))}
                         {!isTemplate &&
                             <RoleSection
                                 data={selectedEvent.eventDetails}
-                                index={-1}
                                 type={"addInfo"}
                                 isEditable={isEditable}
-                                selectedEventDetails={selectedEventDetails}
-                                setSelectedEventDetails={setSelectedEventDetails}
+                                selectedEvent={selectedEvent}
+                                setSelectedEvent={changeSelectedEvent}
                             />
                         }
                     </CustomScrollbar>

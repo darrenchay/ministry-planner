@@ -50,7 +50,7 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
         TemplatesAPI.getTemplates()
             .then(template => {
                 setTemplates(template)
-                console.log(template)
+                // console.log(template)
             })
     }, [])
 
@@ -92,22 +92,18 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
                     }
                 });
                 eventObj.eventDetails.teamList = rolesArr;
-                console.log("new template", eventObj)
+                if (selectedTemplate._id !== 0) {
+                    var temp = eventObj
+                    temp.eventDetails.teamList = selectedTemplate.teamList
+                    temp.eventDetails.worshipLeader = selectedTemplate.worshipLeader
+                }
                 setEvent(eventObj);
             });
-        if (selectedTemplate._id !== 0) {
-            var temp = eventObj
-            console.log("tsetgse", selectedTemplate)
-            console.log(selectedTemplate.teamList)
-            temp.eventDetails.teamList = selectedTemplate.teamList
-            console.log(temp.eventDetails.teamList)
-            temp.eventDetails.worshipLeader = selectedTemplate.worshipLeader
-            console.log(selectedTemplate.worshipLeader)
-            setEvent(temp)
-            console.log("here", temp)
-        }
-        // setEvent(eventObj);
     }, [selectedTemplate]);
+
+    useEffect(() => {
+        console.log("change in event: ",event)
+    }, [event])
 
     // useEffect(() => {
     //     if (event) {
