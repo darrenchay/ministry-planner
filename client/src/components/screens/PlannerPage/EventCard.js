@@ -125,7 +125,7 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
         if (isTemplate) {
             setEvent(selectedEvent); 
         }
-    }, [selectedEvent])
+    }, [selectedEvent, setEvent, isTemplate])
 
     const handleChangeEvent = (e, type) => {
         var tempEvent = cloneDeep(selectedEvent);

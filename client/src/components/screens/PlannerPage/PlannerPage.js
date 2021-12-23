@@ -86,6 +86,7 @@ export default function PlannerPage() {
     const [month, setMonth] = useState(steps.find(({value}) => value === new Date().getMonth()).label);
     const [year, setYear] = useState(new Date().getFullYear());
     const [filteredEvents, setFilteredEvents] = useState();
+    // eslint-disable-next-line
     const [showLoading, setShowLoading] = useState(true);
     const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
     const ministry = "worship";

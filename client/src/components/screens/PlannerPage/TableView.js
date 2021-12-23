@@ -1,33 +1,33 @@
 import "./TableView.scss";
 import React, { useEffect, useState } from "react";
-import cloneDeep from "lodash/cloneDeep";
-import { useHistory } from "react-router-dom";
-import { CustomScrollbar } from "../../utils/CustomScrollbar/CustomScrollbar";
+// import cloneDeep from "lodash/cloneDeep";
+// import { useHistory } from "react-router-dom";
+// import { CustomScrollbar } from "../../utils/CustomScrollbar/CustomScrollbar";
 import {
-    makeStyles,
-    Card,
-    CardHeader,
-    CardActions,
-    CardContent,
-    Button,
-    TextField,
-    Menu,
-    MenuItem,
-    Select,
-    InputLabel,
-    FormControl
+    // makeStyles,
+    // Card,
+    // CardHeader,
+    // CardActions,
+    // CardContent,
+    // Button,
+    // TextField,
+    // Menu,
+    // MenuItem,
+    // Select,
+    // InputLabel,
+    // FormControl
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from "@material-ui/pickers";
 
 import DateFnsUtils from '@date-io/date-fns';
-import SendIcon from '@material-ui/icons/Send';
+// import SendIcon from '@material-ui/icons/Send';
 
-import ClearIcon from '@material-ui/icons/Clear';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+// import ClearIcon from '@material-ui/icons/Clear';
+// import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+// import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-import ButtonGroup from './EditButtonGroup';
-import RoleSection from './RoleSection';
+// import ButtonGroup from './EditButtonGroup';
+// import RoleSection from './RoleSection';
 
 // import convertDate from "../../utils/ConvertDate";
 import * as UsersAPI from "../../utils/Services/UsersAPI";
@@ -35,63 +35,63 @@ import * as RolesAPI from '../../utils/Services/RolesAPI';
 
 import { DataGrid } from '@material-ui/data-grid';
 
-// TODO: To find a way to use scss instead of makestyles here
-const useStyles = makeStyles({
-    noBorder: {
-        border: "none"
-    },
-    resize: {
-        fontSize: 22
-    },
-    popover: {
-        '& .MuiMenu-list': {
-            padding: '8px 10px 4px !important'
-        }
-    }
-});
+// // TODO: To find a way to use scss instead of makestyles here
+// const useStyles = makeStyles({
+//     noBorder: {
+//         border: "none"
+//     },
+//     resize: {
+//         fontSize: 22
+//     },
+//     popover: {
+//         '& .MuiMenu-list': {
+//             padding: '8px 10px 4px !important'
+//         }
+//     }
+// });
 
-const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEditable }) => {
-    const handleDelete = () => {
-        var tempEventDetails = cloneDeep(eventDetails);
-        console.log("delete")
-        var idx = tempEventDetails.rehearsals.indexOf(rehearsal)
-        if (idx !== -1) {
-            tempEventDetails.rehearsals.splice(idx, 1);
-            setSelectedEventDetails(tempEventDetails);
-        }
-    }
+// const RehearsalTime = ({ eventDetails, setSelectedEventDetails, rehearsal, isEditable }) => {
+//     const handleDelete = () => {
+//         var tempEventDetails = cloneDeep(eventDetails);
+//         console.log("delete")
+//         var idx = tempEventDetails.rehearsals.indexOf(rehearsal)
+//         if (idx !== -1) {
+//             tempEventDetails.rehearsals.splice(idx, 1);
+//             setSelectedEventDetails(tempEventDetails);
+//         }
+//     }
 
-    return (
-        <>
-            <div className='rehearsal-time'>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDateTimePicker
-                        variant="inline"
-                        id="pickupDate"
-                        inputVariant={"standard"}
-                        format="d MMM yyyy - HH:mm"
-                        ampm={false}
-                        disabled={true}
-                        value={new Date(rehearsal * 1000)}
-                        InputProps={{
-                            disableUnderline: true
-                        }}
-                        KeyboardButtonProps={{
-                            "aria-label": "change date",
-                            style: { display: 'none' }
-                        }}
-                    />
-                </MuiPickersUtilsProvider>
-                {isEditable &&
-                    <Button onClick={handleDelete} disabled={!isEditable} aria-label="settings" >
-                        <ClearIcon />
-                    </Button>
-                }
-            </div>
-        </>
-    )
+//     return (
+//         <>
+//             <div className='rehearsal-time'>
+//                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
+//                     <KeyboardDateTimePicker
+//                         variant="inline"
+//                         id="pickupDate"
+//                         inputVariant={"standard"}
+//                         format="d MMM yyyy - HH:mm"
+//                         ampm={false}
+//                         disabled={true}
+//                         value={new Date(rehearsal * 1000)}
+//                         InputProps={{
+//                             disableUnderline: true
+//                         }}
+//                         KeyboardButtonProps={{
+//                             "aria-label": "change date",
+//                             style: { display: 'none' }
+//                         }}
+//                     />
+//                 </MuiPickersUtilsProvider>
+//                 {isEditable &&
+//                     <Button onClick={handleDelete} disabled={!isEditable} aria-label="settings" >
+//                         <ClearIcon />
+//                     </Button>
+//                 }
+//             </div>
+//         </>
+//     )
 
-}
+// }
 
 export default function TableView({ events }) {
     // const classes = useStyles();
@@ -250,7 +250,7 @@ export default function TableView({ events }) {
                     actions: ''
                 }
                 rowsTemp.push(obj);
-                if (index == events.length - 1) {
+                if (index === events.length - 1) {
                     console.log('setEvents');
                     setRows(rowsTemp);
                     setIsTableReady(true);
@@ -265,6 +265,7 @@ export default function TableView({ events }) {
             initColumns();
             initRows();
         }
+        // eslint-disable-next-line
     }, [events]);
 
     return (

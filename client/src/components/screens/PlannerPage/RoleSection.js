@@ -77,9 +77,9 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
     }, [isEditable]);
 
     useEffect(() => {
+        var tempEvent = cloneDeep(selectedEvent);
         if (type === "role") {
             //Update that role in the teamList array in event details with the selected role object
-            var tempEvent = cloneDeep(selectedEvent);
             /* roleIdx commented out due to index mapping of roles always being 0 for createEvent modal,
             might need to investigate later. */
             // var roleIdx = tempSelectedEventDetails.teamList.findIndex((role) => role._id === selectedRole.roleId);
@@ -88,7 +88,6 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
             // console.log(tempEvent)
             setSelectedEvent(tempEvent);
         } else {
-            var tempEvent = cloneDeep(selectedEvent);
             tempEvent.eventDetails.additionalInfo = selectedRole.additionalInfo;
             setSelectedEvent(tempEvent);
         }
