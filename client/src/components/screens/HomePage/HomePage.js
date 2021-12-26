@@ -3,8 +3,11 @@ import React from "react";
 import { Box, Grid } from "grommet";
 import { Typography, Button, Paper } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function HomePage() {
+    const { user } = useAuth0();
+    console.log(user);
 
     const history = useHistory();
 

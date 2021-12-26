@@ -69,14 +69,10 @@ export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) 
                     eventDetails: {
                         eventId: "",
                         teamList: rolesArr,
-                        rehearsals: [
-                            {
-                                timestamp: "",
-                                location: ""
-                            }
-                        ],
+                        rehearsals: [],
                         resourceId: "",
-                        additionalInfo: ""
+                        additionalInfo: "",
+                        worshipLeader: ""
                     }
                 };
                 setEvent(eventObj);
