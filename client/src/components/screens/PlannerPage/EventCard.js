@@ -102,7 +102,9 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
     const history = useHistory();
 
     let redirectToResources = () => {
-        history.push("resources");
+        history.push({
+            pathname: "resources", 
+            event: event});
     };
 
     useEffect(() => {
@@ -164,6 +166,8 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
     const handleCloseRehearsals = () => {
         setAnchorEl(null);
     }
+
+    console.log(selectedEventDetails.eventDetails)
 
     return (
         <Card key={event.event._id}
