@@ -10,7 +10,7 @@ import {
     makeStyles,
 } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
-import CreateEventModal from "./CreateEventModal";
+import CreateTemplate from "./CreateTemplate";
 
 import FastForwardOutlinedIcon from '@material-ui/icons/FastForwardOutlined';
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function TimeSelect({ month, setMonth, year, setYear, 
-                                    marks, setShowLoading, setUpdateFlag, setIsCreate }) {
+                                    marks, setShowLoading, setUpdateFlag, setIsTemplate }) {
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const [years, setYears] = useState([]);
@@ -96,12 +96,6 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                 </Select>
                 </FormControl>
                 <Slider
-                    // classes={{
-                    //     thumb: thumb,
-                    //     rail: rail,
-                    //     track: track,
-                    //     valueLabel: valueLabel,
-                    // }}
                     className='slider'
                     defaultValue={0}
                     step={1}
@@ -115,7 +109,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     onTouchMove={() => { setShowLoading(true) }}
                 />
                 <Button className='create-event-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
-                    Create Event
+                    Manage Teams
                 </Button>
                 <Modal
                     open={open}
@@ -124,7 +118,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     aria-describedby="simple-modal-description"
                     className={classes.modal}
                 >
-                    <CreateEventModal setUpdateFlag={setUpdateFlag} setIsCreate={setIsCreate} setOpen={setOpen}/>
+                    <CreateTemplate setUpdateFlag={setUpdateFlag} setIsTemplate={setIsTemplate} setOpen={setOpen}/>
                 </Modal>
             </div>
         </div>

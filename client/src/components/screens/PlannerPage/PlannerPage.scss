@@ -1,6 +1,21 @@
 @import "./../../../globals.scss";
 
 .planner-page-wrapper {
+    .top-section {
+        padding: 0 15% 0 10%;
+        display: flex;
+        align-items: center;
+
+        .view-btn-wrapper {
+            width: 10%;
+            padding-top: 14px;
+        }
+
+        .time-select-wrapper2 {
+            width: 90%;
+        }
+    }
+
     .cards-wrapper {
         display: flex;
         text-align: left;
