@@ -13,7 +13,6 @@ import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRight
 import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
 import convertDate from "./../../utils/ConvertDate";
 import MuiAlert from '@material-ui/lab/Alert';
-// import LoadingOverlay from 'react-loading-overlay';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -234,11 +233,6 @@ export default function PlannerPage() {
                     <KeyboardArrowLeftRoundedIcon className='pagination-button-icon' />
                 </IconButton>
                 </div>
-                {/* <LoadingOverlay
-                active={showLoading}
-                spinner={true}
-                fadeSpeed={0}
-                > */}
                 <div className='cards-content-wrapper'>
                     {(filteredEvents?.length === 0 || events?.length === 0) &&
                     <div>
@@ -256,7 +250,6 @@ export default function PlannerPage() {
                         .slice(0, 4)
                     }
                 </div>
-                {/* </LoadingOverlay> */}
                 <div className='next-button-wrapper'>
                 <IconButton disabled={nextDisabled} onClick={handleNext} className="next-button">
                     <KeyboardArrowRightRoundedIcon className='pagination-button-icon' />
