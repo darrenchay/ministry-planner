@@ -160,8 +160,6 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
         setAnchorEl(null);
     }
 
-    console.log(selectedEventDetails.eventDetails)
-
     return (
         <Card key={event.event._id}
             className={
