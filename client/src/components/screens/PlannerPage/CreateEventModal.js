@@ -3,40 +3,12 @@ import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard";
 import * as EventsAPI from '../../utils/Services/EventsAPI';
 import {
-    makeStyles,
     Button
 } from '@material-ui/core';
 import * as RolesAPI from './../../utils/Services/RolesAPI';
 import * as ResourcesAPI from './../../utils/Services/ResourcesAPI';
 
-function getModalStyle() {
-    const top = 50;
-    const left = 50;
-    
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
-    
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: 'absolute',
-        width: 400,
-        height: 450,
-        overflow: 'auto',
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-}));
-
 export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) {
-    const classes = useStyles();
-    // getModalStyle is not a pure function, we roll the style only on the first render
-    const [modalStyle] = React.useState(getModalStyle);
     const [event, setEvent] = useState();
 
     useEffect(() => {
@@ -122,18 +94,28 @@ export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) 
             });
     }
 
+    const handleCancel = () => {
+        setOpen(false);
+        setUpdateFlag(false);
+        setUpdateFlag(true);
+    }
+
     return (
-        <div style={modalStyle} className={classes.paper}>
-            {event &&
-                <div className='create-event-modal'>
-                    <div className='header'>Create New Event</div>
-                    <EventCard event={event} setUpdateFlag={null} isCreateEvent={true} setEvent={setEvent} />
-                    <div className='create-button-wrapper'>
-                    <Button className='create-button' variant="contained" color='primary' size="small"
-                        onClick={handleSave}>Create event</Button>
-                    </div>
+        <>
+        {event &&
+            <div className='create-event-modal'>
+                <div className='header'>Create New Event</div>
+                <EventCard event={event} setUpdateFlag={null} isCreateEvent={true} setEvent={setEvent} />
+                <div className='create-button-wrapper'>
+                <div>
+                <Button className='create-button' variant="contained" color='primary' size="small"
+                    onClick={handleSave}>Create event</Button>
+                <Button className='cancel-button' variant="contained" color='primary' size="small"
+                    onClick={handleCancel}>Cancel</Button>
                 </div>
-            }
-        </div>
+                </div>
+            </div>
+        }
+        </>
     )
 }

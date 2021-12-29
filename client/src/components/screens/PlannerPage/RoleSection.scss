@@ -42,7 +42,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
-            width: 70%;
+            width: 100%;
 
             &:last-child {
                 margin-bottom: 2px;
@@ -58,7 +58,6 @@
                     margin-left: 6px;
 
                     .tag-text {
-                        width: 100px;
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;

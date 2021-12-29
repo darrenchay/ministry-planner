@@ -24,8 +24,12 @@
         display: flex;
         justify-content: space-around;
 
-        .create-button {
+        .create-button, .cancel-button {
             background-color: $primary-color;
+        }
+
+        .create-button {
+            margin-right: 6px;
         }
     }
 }

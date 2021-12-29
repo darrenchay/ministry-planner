@@ -12,19 +12,43 @@ import {
 import Modal from '@material-ui/core/Modal';
 import CreateEventModal from "./CreateEventModal";
 
-const useStyles = makeStyles(() => ({
+function getModalStyle() {
+    const top = 50;
+    const left = 50;
+    
+    return {
+        top: `${top}%`,
+        left: `${left}%`,
+        transform: `translate(-${top}%, -${left}%)`,
+    };
+}
+
+const useStyles = makeStyles((theme) => ({
     modal: {
         padding: '0 !important'
+    },
+    paper: {
+        position: 'absolute',
+        width: 400,
+        height: 450,
+        overflow: 'auto',
+        backgroundColor: theme.palette.background.paper,
+        border: '2px solid #000',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
     }
 }));
 
 export default function TimeSelect({ month, setMonth, year, setYear, 
-                                    marks, setShowLoading, setUpdateFlag, setIsCreate }) {
+                                    marks, setShowLoading, setUpdateFlag, setIsCreate,
+                                    isTableView, setCreateEventFlag }) {
     const currentYear = new Date().getFullYear();
     const [years, setYears] = useState([]);
     const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
     const [open, setOpen] = React.useState(false);
     const classes = useStyles();
+    // getModalStyle is not a pure function, we roll the style only on the first render
+    const [modalStyle] = React.useState(getModalStyle);
 
     useEffect(() => {
         var tempYears = [];
@@ -48,7 +72,11 @@ export default function TimeSelect({ month, setMonth, year, setYear,
         setMonth((marks.find(({ value }) => value === data)).label);
     }
     const handleOpen = () => {
-        setOpen(true);
+        if (isTableView) {
+            setCreateEventFlag(true);
+        } else {
+            setOpen(true);
+        }
     };
     
     const handleClose = () => {
@@ -114,7 +142,9 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     aria-describedby="simple-modal-description"
                     className={classes.modal}
                 >
+                <div style={modalStyle} className={classes.paper}>
                     <CreateEventModal setUpdateFlag={setUpdateFlag} setIsCreate={setIsCreate} setOpen={setOpen}/>
+                </div>
                 </Modal>
             </div>
         </div>

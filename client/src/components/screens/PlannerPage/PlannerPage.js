@@ -14,6 +14,10 @@ import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRo
 import convertDate from "./../../utils/ConvertDate";
 import MuiAlert from '@material-ui/lab/Alert';
 import LoadingOverlay from 'react-loading-overlay';
+import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
+import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -96,7 +100,8 @@ export default function PlannerPage() {
     const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
     const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
     const [updateFlag, setUpdateFlag] = useState(true);
-    const [isTable, setIsTable] = useState(true);
+    const [isTableView, setIsTableView] = useState(false);
+    const [createEventFlag, setCreateEventFlag] = useState(false);
 
     const handleCloseSnack = () => {
         setOpenSuccessCreateEvent(false);
@@ -184,12 +189,10 @@ export default function PlannerPage() {
         setCurrTimestamp(prevTimestamp)
     }
 
-    const changeToTable = () => {
-        setIsTable(true);
-    }
-
-    const changeToCard = () => {
-        setIsTable(false);
+    const changeView = (event, newView) => {
+        if (newView !== null) {
+            setIsTableView(newView);
+        }
     }
 
     return (
@@ -197,9 +200,19 @@ export default function PlannerPage() {
         <div className='planner-page-wrapper'>
             <div className='top-section'>
             <div class='view-btn-wrapper'>
-                {/* replace with icon later */}
-                <button onClick={changeToTable}>table</button> 
-                <button onClick={changeToCard}>cards</button> 
+                <ToggleButtonGroup
+                value={isTableView}
+                exclusive
+                onChange={changeView}
+                aria-label="text alignment"
+                >
+                <ToggleButton value={true}>
+                    <CalendarViewMonthIcon/>
+                </ToggleButton>
+                <ToggleButton value={false}>
+                    <CalendarViewWeekIcon/>
+                </ToggleButton>
+                </ToggleButtonGroup>
             </div>
             <div className='time-select-wrapper2'>
             <TimeSelect
@@ -211,13 +224,21 @@ export default function PlannerPage() {
                 setShowLoading={setShowLoading}
                 setUpdateFlag={setUpdateFlag}
                 setIsCreate={setIsCreate}
+                isTableView={isTableView}
+                setCreateEventFlag={setCreateEventFlag}
             />
             </div>
             </div>
-            {isTable && 
-            <TableView events={filteredEvents} />
+            {isTableView && 
+            <TableView
+                events={filteredEvents} 
+                setUpdateFlag={setUpdateFlag}
+                setIsCreate={setIsCreate}
+                createEventFlag={createEventFlag}
+                setCreateEventFlag={setCreateEventFlag}
+            />
             }
-            {!isTable && 
+            {!isTableView && 
             <div className='cards-wrapper'>
                 <div className='previous-button-wrapper'>
                 <IconButton disabled={prevDisabled} onClick={handlePrevious} className="previous-button">
@@ -237,7 +258,7 @@ export default function PlannerPage() {
                         </Typography>
                     </div>
                     }
-                    {filteredEvents?.length > 0 && !isTable &&
+                    {filteredEvents?.length > 0 && !isTableView &&
                     filteredEvents
                         .map((event) => {
                             return (<EventCard key={event.event._id} event={event} setUpdateFlag={setUpdateFlag} 
