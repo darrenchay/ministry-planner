@@ -1,10 +1,9 @@
-import "./CreateTemplate.scss";
+import "./CreateEvent.scss";
 import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard";
 import cloneDeep from "lodash/cloneDeep";
 import * as TemplatesAPI from '../../utils/Services/TemplatesAPI';
 import {
-    makeStyles,
     Select,
     MenuItem,
     Button
@@ -12,37 +11,10 @@ import {
 import * as RolesAPI from '../../utils/Services/RolesAPI';
 import ConfirmDelete from '../../utils/ConfirmDelete'
 
-function getModalStyle() {
-    const top = 50;
-    const left = 50;
-
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        position: 'absolute',
-        width: 400,
-        height: 600,
-        overflow: 'auto',
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-}));
-
 export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate }) {
     const empTemplate = {
         _id: 0
     }
-    const classes = useStyles();
-    // getModalStyle is not a pure function, we roll the style only on the first render
-    const [modalStyle] = React.useState(getModalStyle);
     const [event, setEvent] = useState();
     const [selectedTemplate, setSelectedTemplate] = useState(empTemplate);
     const [templates, setTemplates] = useState();
@@ -149,47 +121,6 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
                     setIsTemplate(2);
                 });
         }
-
-        // DO NOT DELETE UNTIL NEW CREATE EVENT IS DONE
-        // EventsAPI.addEvent(event.event)
-        //     .then(eventResp => {
-        //         console.log('eventResp', eventResp);
-        //         event.eventDetails.eventId = eventResp._id;
-        //         var resourceObj = {
-        //             eventDetailsId: "000"
-        //         };
-        //         ResourcesAPI.addResource(resourceObj)
-        //             .then(resourceResp => {
-        //                 console.log('resourceResp', resourceResp)
-        //                 event.eventDetails.resourceId = resourceResp._id;
-        //                 console.log(event.eventDetails);
-        //                 EventsAPI.addEventDetails(event.eventDetails)
-        //                     .then(eventDetailsResp => {
-        //                         console.log('eventDetailsResp', eventDetailsResp)
-        //                         eventResp.eventDetails.find(item => item.eventType === "worship")
-        //                             .eventDetailsId = eventDetailsResp._id;
-        //                         EventsAPI.updateEvent(eventResp, eventResp._id);
-        //                         resourceResp.eventDetailsId = eventDetailsResp._id;
-        //                         ResourcesAPI.updateResource(resourceResp, resourceResp._id).then((resp) => {
-        //                             console.log('updateResource', resp);
-        //                             setOpen(false);
-        //                             setUpdateFlag(false);
-        //                             setUpdateFlag(true);
-        //                             setIsCreate(1);
-        //                         });
-        //                     }).catch(err => {
-        //                         console.log("eventDetails err", err);
-        //                         setIsCreate(2);
-        //                     });
-        //             }).catch(err => {
-        //                 console.log("resource err", err);
-        //                 setIsCreate(2);
-        //             });
-        //         })
-        // .catch(err => {
-        //     console.log("event err", err);
-        //     setIsCreate(2);
-        // });
     }
 
     const handleDelete = () => {
@@ -213,7 +144,7 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
         setOpenDelete(true);
     }
     return (
-        <div style={modalStyle} className={classes.paper}>
+        <>
             {event &&
                 <div className='create-event-modal'>
                     <div className='header'>Team:
@@ -232,21 +163,22 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
                             }
                         </Select>
                     </div>
-                    <EventCard event={event} setUpdateFlag={null} isTemplate={true} setEvent={setEvent} />
+                    <EventCard event={event} setUpdateFlag={null} isCreate={true} isTemplate={true} setEvent={setEvent} />
                     <div className='create-button-wrapper'>
                         {selectedTemplate._id !== 0 &&
-                            <>
+                            <div>
                                 <Button className='create-button' variant="contained" color='primary' size="small"
                                     onClick={handleSave}>Update Team</Button>
                                 <Button className='delete-button' variant="contained" color='primary' size="small"
                                     onClick={handleOpen}>Delete Team</Button>
-                            </>
+                            </div>
                         }
                         {selectedTemplate._id === 0 &&
-                            <>
+                            <div>
                                 <Button className='create-button' variant="contained" color='primary' size="small"
                                     onClick={handleSave}>Create Team</Button>
-                            </>
+                                    
+                            </div>
                         }
                     </div>
                 </div>
@@ -257,6 +189,6 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
                 onClose={handleClose}
                 handleDelete={handleDelete}
             />
-        </div>
+        </>
     )
 }

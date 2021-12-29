@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400&display=swap');
-$fontsize-base: 16px;
-$fontsize-header1: $fontsize-base + 6;
-$fontsize-header2: $fontsize-base + 3;
+$fontsize-base: 14px;
+$fontsize-header1: $fontsize-base + 4;
+$fontsize-header2: $fontsize-base + 2;
 $primary-color: #d15038;
 
 p, div {
     font-family: 'Nunito Sans', sans-serif !important;
+    font-size: $fontsize-base;
 }
 
 .MuiIconButton-root {
