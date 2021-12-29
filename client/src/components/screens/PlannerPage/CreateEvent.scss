@@ -6,6 +6,13 @@
         font-weight: bold;
         margin-bottom: 6px;
         text-align: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .template-select-wrapper {
+            width: 35%;
+        }
     }
 
     .card {
@@ -29,7 +36,11 @@
         }
 
         .delete-button {
-            background-color: red;
+            background-color: rgb(218, 1, 1);
+        }
+
+        .create-button {
+            margin-right: 6px;
         }
     }
 }

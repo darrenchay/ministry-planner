@@ -35,14 +35,12 @@
     }
 
     .team-members-wrapper {
-        padding: 6px;
-        padding-left: 12px;
+        padding: 6px 12px 6px 12px;
 
         .team-member-wrapper {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
-            width: 100%;
 
             &:last-child {
                 margin-bottom: 2px;
@@ -56,12 +54,6 @@
                 .tag {
                     color: lightslategrey;
                     margin-left: 6px;
-
-                    .tag-text {
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                    }
                 }
             }
 
@@ -98,7 +90,6 @@
         .before {
             padding: 2px 0;
             margin-bottom: 2px;
-            width: 70%;
             color: grey;
 
             &:hover {

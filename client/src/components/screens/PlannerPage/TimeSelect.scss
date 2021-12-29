@@ -1,22 +1,31 @@
 @import "./../../../globals.scss";
 
 .time-select-wrapper {
+    width: 100%;
     margin: 15px 0 25px;
     text-align: center;
 
     .time-header {
-        font-size: $fontsize-header1;
+        font-size: $fontsize-header1 !important;
         color: $primary-color;
     }
 
     .slider-event-section {
         display: flex;
         align-items: center;
+
+        .current-event {
+            width: 9%;
+            height: 30px;
+            margin-left: 1%;
+            margin-bottom: 8px;
+            box-shadow: none;
+        }
         
         .select-year {
-            width: 8%;
-            margin-right: 3%;
-            margin-left: 2%;
+            width: 10%;
+            height: 30px;
+            margin-left: 1%;
             margin-bottom: 8px;
 
             .MuiOutlinedInput-root {
@@ -29,28 +38,18 @@
         }
 
         .slider {
-            width: 71%;
-            margin-right: 3%;
+            width: 60%;
+            margin-left: 2%;
+            margin-right: 1%;
             color: $primary-color;
         }
 
-        .create-event-button {
-            width: 13%;
+        .create-event-button, .manage-teams-button {
+            width: 16%;
+            height: 30px;
+            margin-left: 1%;
             margin-bottom: 8px;
             background-color: $primary-color;
-        }
-        
-        .current-event {
-            width: 8%;
-            margin-right: 3%;
-            margin-left: 2%;
-            margin-bottom: 8px;
-            background-color: #FFFF;
-
-            .current-event-icon {
-                margin-bottom: 5px;
-                //transform: rotate(-45deg);
-            }
         }
     }
 }

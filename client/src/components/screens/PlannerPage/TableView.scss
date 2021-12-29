@@ -24,14 +24,18 @@
             td, th {
                 border: 1px solid #dddddd;
                 padding: 8px;
-                min-width: 200px;
+                min-width: 150px;
 
-                // &.role-col {
-                //     min-width: 250px;
+                // &.role-col-edit {
+                //     min-width: 200px;
                 // }
 
+                &.larger-col {
+                    min-width: 220px;
+                }
+
                 &.worshipLeader-col {
-                    min-width: 150px;
+                    min-width: 120px;
                 }
 
                 &.edit-col {
@@ -79,6 +83,8 @@
                 .card-role-section {
                     text-align: left;
                     box-shadow: none;
+                    border-radius: 0;
+                    padding: 0;
 
                     .rolename {
                         display: none;
@@ -88,8 +94,8 @@
                         display: none;
                     }
 
-                    .team-members-wrapper .team-member-wrapper-edit {
-                        width: 90%;
+                    .team-members-wrapper {
+                        padding: 0;
                     }
                 }
 
@@ -97,6 +103,14 @@
                     .MuiButton-text {
                         padding: 6px 0 6px 8px;
                     }
+                }
+
+                .resources-button {
+                    background-color: $primary-color;
+                }
+        
+                .notify-button {
+                    background-color: rgba(42, 118, 233, 0.9);
                 }
             }
         }
