@@ -39,5 +39,18 @@
             margin-bottom: 8px;
             background-color: $primary-color;
         }
+        
+        .current-event {
+            width: 8%;
+            margin-right: 3%;
+            margin-left: 2%;
+            margin-bottom: 8px;
+            background-color: #FFFF;
+
+            .current-event-icon {
+                margin-bottom: 5px;
+                //transform: rotate(-45deg);
+            }
+        }
     }
 }

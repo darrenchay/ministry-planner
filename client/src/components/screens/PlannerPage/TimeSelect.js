@@ -7,10 +7,12 @@ import {
     Button,
     MenuItem,
     FormControl,
-    makeStyles
+    makeStyles,
 } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
-import CreateEventModal from "./CreateEventModal";
+import CreateTemplate from "./CreateTemplate";
+
+import FastForwardOutlinedIcon from '@material-ui/icons/FastForwardOutlined';
 
 function getModalStyle() {
     const top = 50;
@@ -41,8 +43,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TimeSelect({ month, setMonth, year, setYear, 
                                     marks, setShowLoading, setUpdateFlag, setIsCreate,
-                                    isTableView, setCreateEventFlag }) {
+                                    isTableView, setCreateEventFlag, setIsTemplate }) {
     const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth();
     const [years, setYears] = useState([]);
     const [valueSlider, setValueSlider] = useState((marks.find(({ label }) => label === month)).value);
     const [open, setOpen] = React.useState(false);
@@ -82,6 +85,10 @@ export default function TimeSelect({ month, setMonth, year, setYear,
     const handleClose = () => {
         setOpen(false);
     };
+    const currentEvent = () => {
+        setYear(currentYear);
+        setMonth((marks.find(({ value }) => value === currentMonth)).label);
+    };
     return (
         <div className='time-select-wrapper'>
             <div>
@@ -90,6 +97,9 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                 </Typography>
             </div>
             <div className='slider-event-section'>
+                <Button classname='current-event' variant='contained' size='small' onClick={currentEvent} startIcon={<FastForwardOutlinedIcon className="current-event-icon" />}>
+                    NOW
+                </Button>
                 <FormControl variant="outlined" className='select-year' size='small'>
                 <Select
                     MenuProps={{
@@ -114,12 +124,6 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                 </Select>
                 </FormControl>
                 <Slider
-                    // classes={{
-                    //     thumb: thumb,
-                    //     rail: rail,
-                    //     track: track,
-                    //     valueLabel: valueLabel,
-                    // }}
                     className='slider'
                     defaultValue={0}
                     step={1}
@@ -133,7 +137,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                     onTouchMove={() => { setShowLoading(true) }}
                 />
                 <Button className='create-event-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
-                    Create Event
+                    Manage Teams
                 </Button>
                 <Modal
                     open={open}
@@ -145,6 +149,7 @@ export default function TimeSelect({ month, setMonth, year, setYear,
                 <div style={modalStyle} className={classes.paper}>
                     <CreateEventModal setUpdateFlag={setUpdateFlag} setIsCreate={setIsCreate} setOpen={setOpen}/>
                 </div>
+                    <CreateTemplate setUpdateFlag={setUpdateFlag} setIsTemplate={setIsTemplate} setOpen={setOpen}/>
                 </Modal>
             </div>
         </div>

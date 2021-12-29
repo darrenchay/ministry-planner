@@ -21,3 +21,4 @@ export const getUserByRole = (ministry, role) => {
             throw err;
         });
 }
+

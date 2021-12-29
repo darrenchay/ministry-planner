@@ -5,8 +5,8 @@ import * as EventsAPI from '../../utils/Services/EventsAPI';
 import {
     Button
 } from '@material-ui/core';
-import * as RolesAPI from './../../utils/Services/RolesAPI';
-import * as ResourcesAPI from './../../utils/Services/ResourcesAPI';
+import * as RolesAPI from '../../utils/Services/RolesAPI';
+import * as ResourcesAPI from '../../utils/Services/ResourcesAPI';
 
 export default function CreateEventModal({setUpdateFlag, setOpen, setIsCreate}) {
     const [event, setEvent] = useState();

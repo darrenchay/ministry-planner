@@ -3,11 +3,6 @@ import React, { useState } from "react";
 import {
     Snackbar,
     IconButton,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Button
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
@@ -16,37 +11,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 import MuiAlert from '@material-ui/lab/Alert';
 
+import ConfirmDelete from '../../utils/ConfirmDelete'
+
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const ConfirmDelete = ({ onClose, open, handleDelete }) => {
-    const handleCancel = () => {
-        onClose();
-    };
-
-    const handleOk = () => {
-        handleDelete();
-    };
-
-    return (
-        <Dialog
-            sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
-            maxWidth="xs"
-            open={open}
-        >
-            <DialogTitle>Delete Confirmation</DialogTitle>
-            <DialogContent dividers>
-                <p>Are you sure you want to delete this event?</p>
-            </DialogContent>
-            <DialogActions>
-                <Button autoFocus onClick={handleCancel}>
-                    Cancel
-                </Button>
-                <Button onClick={handleOk}>Yes</Button>
-            </DialogActions>
-        </Dialog>
-    );
 }
 
 // Handles the toggling of the edit/save/cancel buttons
