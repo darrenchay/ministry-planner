@@ -1,6 +1,18 @@
 @import "./../../../globals.scss";
 
 .planner-page-wrapper {
+    .top-section {
+        padding: 0 8% 0 8%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .view-btn-wrapper {
+            margin-top: 10px;
+            height: 30px;
+        }
+    }
+
     .cards-wrapper {
         display: flex;
         text-align: left;
@@ -32,11 +44,6 @@
 
         .pagination-button-icon {
             transform: scale(3);
-        }
-
-        .cards-content-wrapper{
-            display: flex;
-            width: 94%;
         }
     }
 }
