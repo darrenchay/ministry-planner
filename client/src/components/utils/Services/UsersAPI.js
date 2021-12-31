@@ -22,3 +22,13 @@ export const getUserByRole = (ministry, role) => {
         });
 }
 
+export const getUserByAuthId = (id) => {
+    return axios
+        .get(baseURL + "users/auth/" + id)
+        .then(resp => resp.data)
+        .catch((err) => {
+            console.log(err);
+            throw err;
+        });
+}
+

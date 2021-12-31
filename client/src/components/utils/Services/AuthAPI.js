@@ -1,5 +1,4 @@
 import axios from "axios";
-const qs = require('qs');
 const baseURL = process.env.REACT_APP_AUTH0_API + "users/";
 
 export default function getAccessToken() {
