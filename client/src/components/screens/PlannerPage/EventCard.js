@@ -91,9 +91,9 @@ const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
 
 }
 
-export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }) {
+export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent }) {
     const classes = useStyles();
-    const [isEditable, toggleEdit] = useState(isTemplate);
+    const [isEditable, toggleEdit] = useState(isCreate);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
     const [worshipLeaders, setWorshipLeaders] = useState();
@@ -117,17 +117,17 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
 
     // updating the event card data based on the selected template 
     useEffect(() => {
-        if (isTemplate) {
+        if (isCreate) {
             changeSelectedEvent(event);
         }
-    }, [event, isTemplate, setEvent])
+    }, [event, isCreate, setEvent])
 
     //Update event data for template
     useEffect(() => {
-        if (isTemplate) {
+        if (isCreate) {
             setEvent(selectedEvent); 
         }
-    }, [selectedEvent, setEvent, isTemplate])
+    }, [selectedEvent, setEvent, isCreate])
 
     const handleChangeEvent = (e, type) => {
         var tempEvent = cloneDeep(selectedEvent);
@@ -163,7 +163,7 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
     return (
         <Card key={event.event._id}
             className={
-                !isTemplate && selectedEvent.event.timestamp < Math.round((new Date()).getTime() / 1000) ?
+                !isCreate && selectedEvent.event.timestamp < Math.round((new Date()).getTime() / 1000) ?
                     'card-past' : 'card'
             }>
             <div>
@@ -187,7 +187,7 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
                                 value={selectedEvent.event.name}
                                 onChange={(e) => handleChangeEvent(e, "name")}
                             />
-                            {!isTemplate &&
+                            {!isCreate &&
                                 <ButtonGroup
                                     isEditable={isEditable}
                                     toggleEdit={toggleEdit}
@@ -344,7 +344,7 @@ export default function EventCard({ event, setUpdateFlag, isTemplate, setEvent }
                     </CustomScrollbar>
                 </CardContent>
             </div>
-            {!isTemplate &&
+            {!isCreate &&
                 <CardActions className='card-actions'>
                     <Button className='resources-button' variant="contained"
                         color='primary' size="small" onClick={redirectToResources}>
