@@ -6,14 +6,26 @@ import * as EventsAPI from './../../utils/Services/EventsAPI'
 import {
     Typography,
     IconButton,
-    Snackbar
+    Snackbar,
+    List,
+    ListItemButton,
+    Checkbox,
+    Button,
+    FormControl,
+    FormLabel,
+    FormControlLabel,
+    FormGroup,
+    ListItemText,
+    Collapse
 } from '@material-ui/core';
 import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded';
 import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import convertDate from "./../../utils/ConvertDate";
 import MuiAlert from '@material-ui/lab/Alert';
 import LoadingOverlay from 'react-loading-overlay'
-
+//test
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -183,6 +195,50 @@ export default function PlannerPage() {
         setCurrTimestamp(prevTimestamp)
     }
 
+    const [state, setState] = useState({
+        sevenAM: true,
+        nineAM: true,
+        youth: true,
+        other: true
+    })
+
+    const [open, setOpen] = useState(true);
+    const handleOpen = () => {
+        setOpen(!open);
+    }
+
+    const handleChangeOptions = (event) => {
+        setState({
+            ...state,
+            [event.target.name]: event.target.checked,
+        });
+    }
+    const { sevenAM, nineAM, youth, other } = state;
+    const error = [sevenAM, nineAM, youth, other ].filter((v) => v).length === 0;
+
+    /*
+    const handleChangeOptions = (
+        <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+          <FormControlLabel
+            label="Main - 7:30 AM"
+            control={<Checkbox checked={checked[0]} onChange={handleOptionSevenAM} />}
+          />
+          <FormControlLabel
+            label="Main - 9:30 AM"
+            control={<Checkbox checked={checked[1]} onChange={handleOptionNineAM} />}
+          />
+          <FormControlLabel
+            label="Youth"
+            control={<Checkbox checked={checked[2]} onChange={handleOptionYouth} />}
+          />
+          <FormControlLabel
+            label="Other"
+            control={<Checkbox checked={checked[3]} onChange={handleOptionOther} />}
+          />
+        </Box>
+    )
+    */
+
     return (
         <>
         <div className='planner-page-wrapper'>
@@ -196,6 +252,55 @@ export default function PlannerPage() {
                 setUpdateFlag={setUpdateFlag}
                 setIsCreate={setIsCreate}
             />
+            <List>
+                <ListItemButton onClick={handleOpen}>
+                    <ListItemText primary='Filter'/>
+                    {open ? <ExpandLess /> : <ExpandMore />}
+                </ListItemButton>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                    <FormControl
+                        required
+                        error={error}
+                        component="fieldset"
+                        sx={{ m: 3 }}
+                        variant="standard"
+                    >
+                        <FormLabel>Pick at least one</FormLabel>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={sevenAM} onChange={handleChangeOptions} name="sevenAM" />
+                                }
+                                label="Main - 7:30 AM"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={nineAM} onChange={handleChangeOptions} name="nineAM" />
+                                }
+                                label="Main - 9:30 AM"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={youth} onChange={handleChangeOptions} name="youth" />
+                                }
+                                label="Youth"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox checked={other} onChange={handleChangeOptions} name="other" />
+                                }
+                                label="Other"
+                            />
+                        </FormGroup>
+                    </FormControl>
+                </Collapse>
+            </List>
+            {showLoading && (
+                <CircularProgress
+                    style={{ color: "#FE646F" }}
+                />
+            )}
+
             <div className='cards-wrapper'>
                 <div className='previous-button-wrapper'>
                 <IconButton disabled={prevDisabled} onClick={handlePrevious} className="previous-button">

@@ -111,6 +111,23 @@
                     padding: 6px 0 6px 8px;
                 }
             }
+
+            .service-type {
+                //min-width: 120px;
+                .MuiSelect-outlined.MuiSelect-outlined {
+                    min-width: 120px;
+                    color: black;
+                }
+
+                .MuiSelect-icon.Mui-disabled {
+                    display: none;
+                }
+
+                .MuiInputLabel-outlined.MuiInputLabel-shrink {
+                    color: black;
+                }
+            }
+
         }
     }
 

@@ -15,7 +15,7 @@ import {
     MenuItem,
     Select,
     InputLabel,
-    FormControl
+    FormControl,
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from "@material-ui/pickers";
 
@@ -100,6 +100,7 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
     const [addDateTime, setAddDateTime] = useState(new Date());
     const [anchorEl, setAnchorEl] = useState(false);
     const history = useHistory();
+    const serviceTypes = ["-", "sevenAM", "nineAM", "youth", "other"];
 
     let redirectToResources = () => {
         history.push("resources");
@@ -140,6 +141,8 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
             tempEvent.event.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {
             tempEvent.event.timestamp = (e.getTime() / 1000);
+        } else if (type.toLowerCase() === 'type') {
+            tempEvent.event.serviceType = e.target.value;
         }
         changeSelectedEvent(tempEvent);
     }
@@ -312,6 +315,23 @@ export default function EventCard({ event, setUpdateFlag, isCreateEvent, setEven
                                             </>
                                         }
                                     </Menu>
+                                </div>
+                                <div classname='service-type'>
+                                    <FormControl variant='outlined' size='small'>
+                                        <InputLabel id="serviceTypeSelect">Service Type</InputLabel>
+                                        <Select
+                                            labelId="serviceTypeSelect"
+                                            label="Service Type"
+                                            value={selectedEvent.event.serviceType}
+                                            onChange={(e) => handleChangeEvent(e, 'type')}
+                                            disabled={!isEditable}
+                                        >
+                                            <MenuItem value={serviceTypes[1]}> Main - 7:30 AM </MenuItem>
+                                            <MenuItem value={serviceTypes[2]}> Main - 9:30 AM </MenuItem>
+                                            <MenuItem value={serviceTypes[3]}> Youth </MenuItem>
+                                            <MenuItem value={serviceTypes[4]}> Other </MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </div>
                             </div>
                         </>
