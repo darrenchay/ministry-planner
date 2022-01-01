@@ -14,6 +14,7 @@ export default function TableView({
   setIsTemplate,
   createTemplateFlag,
   setCreateTemplateFlag,
+  leaders
 }) {
   const [rolesHeaders, setRolesHeaders] = useState([]);
 
@@ -59,6 +60,7 @@ export default function TableView({
                   setUpdateFlag={setUpdateFlag}
                   isCreateEvent={false}
                   setEvent={null}
+                  leaders={leaders}
                 />
               );
             })}

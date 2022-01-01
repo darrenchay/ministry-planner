@@ -8,7 +8,7 @@ import * as RolesAPI from "../../utils/Services/RolesAPI";
 import * as ResourcesAPI from "../../utils/Services/ResourcesAPI";
 import cloneDeep from "lodash/cloneDeep";
 
-export default function CreateEvent({ setUpdateFlag, setOpen, setIsCreate }) {
+export default function CreateEvent({ setUpdateFlag, setOpen, setIsCreate, leaders }) {
   const [empTemplate, setEmpTemplate] = useState({
     _id: 0,
     name: "",
@@ -177,6 +177,7 @@ export default function CreateEvent({ setUpdateFlag, setOpen, setIsCreate }) {
             setUpdateFlag={null}
             isCreate={true}
             setEvent={setEvent}
+            leaders={leaders}
           />
           <div className="create-button-wrapper">
             <div>

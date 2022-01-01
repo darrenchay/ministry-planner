@@ -56,6 +56,7 @@ export default function TimeSelect({
     setCreateEventFlag,
     setCreateTemplateFlag,
     setIsTemplate,
+    leaders
 }) {
     const isAdmin = useSelector((state) => state.isAdmin);
     const currentYear = new Date().getFullYear();
@@ -212,6 +213,8 @@ export default function TimeSelect({
                                 setUpdateFlag={setUpdateFlag}
                                 setIsCreate={setIsCreate}
                                 setOpen={setOpenEvent}
+                                leaders={leaders}
+
                             />
                         </div>
                     </Modal>
@@ -227,11 +230,12 @@ export default function TimeSelect({
                                 setUpdateFlag={setUpdateFlag}
                                 setIsTemplate={setIsTemplate}
                                 setOpen={setOpenTemplate}
+                                leaders={leaders}
                             />
                         </div>
                     </Modal>
                 </>
-            }
+                }
             </div>
         </div>
     );

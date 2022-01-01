@@ -91,13 +91,14 @@ export default function TableViewRow({
     setUpdateFlag,
     isCreateEvent,
     setEvent,
+    leaders
 }) {
     const isAdmin = useSelector((state) => state.isAdmin);
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreateEvent);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
-    const [worshipLeaders, setWorshipLeaders] = useState();
+    const [worshipLeaders, setWorshipLeaders] = useState(leaders);
     const [addDateTime, setAddDateTime] = useState(new Date());
     const history = useHistory();
     
@@ -111,12 +112,6 @@ export default function TableViewRow({
             toggleEdit(false);
         }
     }, [isAdmin])
-
-    useEffect(() => {
-        UsersAPI.getUserByRole("worship", "Worship-Leader").then((users) => {
-            setWorshipLeaders(users);
-        });
-    }, []);
 
     useEffect(() => {
         if (isCreateEvent) {

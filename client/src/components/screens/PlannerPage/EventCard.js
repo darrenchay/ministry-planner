@@ -92,13 +92,13 @@ const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
 
 }
 
-export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent }) {
+export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent, leaders }) {
     const isAdmin = useSelector((state) => state.isAdmin);
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreate);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
-    const [worshipLeaders, setWorshipLeaders] = useState();
+    const [worshipLeaders, setWorshipLeaders] = useState(leaders);
     const [addDateTime, setAddDateTime] = useState(new Date());
     const [anchorEl, setAnchorEl] = useState(false);
     const history = useHistory();
@@ -109,19 +109,11 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
             event: event});
     };
 
-    useEffect(() => {
-        if(isAdmin === true) {
-            toggleEdit(false);
-        }
-    }, [isAdmin])
-
-    // Getting the list of worship leaders on event card load
-    useEffect(() => {
-        UsersAPI.getUserByRole('worship', "Worship-Leader")
-            .then((users) => {
-                setWorshipLeaders(users);
-            });
-    }, []);
+    // useEffect(() => {
+    //     if(isAdmin === true) {
+    //         toggleEdit(false);
+    //     }
+    // }, [isAdmin])
 
     // updating the event card data based on the selected template 
     useEffect(() => {
