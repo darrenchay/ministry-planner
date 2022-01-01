@@ -1,5 +1,6 @@
 import "./EventCard.scss";
 import React, { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
 import { CustomScrollbar } from "../../utils/CustomScrollbar/CustomScrollbar";
@@ -92,6 +93,7 @@ const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
 }
 
 export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent }) {
+    const isAdmin = useSelector((state) => state.isAdmin);
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreate);
     const [originalEvent, changeOriginalEvent] = useState(event);
@@ -187,7 +189,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                 value={selectedEvent.event.name}
                                 onChange={(e) => handleChangeEvent(e, "name")}
                             />
-                            {!isCreate &&
+                            {isAdmin && !isCreate &&
                                 <ButtonGroup
                                     isEditable={isEditable}
                                     toggleEdit={toggleEdit}
