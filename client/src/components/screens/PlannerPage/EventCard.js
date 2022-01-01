@@ -109,12 +109,6 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
             event: event});
     };
 
-    useEffect(() => {
-        if(isAdmin === true) {
-            toggleEdit(false);
-        }
-    }, [isAdmin])
-
     // Getting the list of worship leaders on event card load
     useEffect(() => {
         UsersAPI.getUserByRole('worship', "Worship-Leader")
