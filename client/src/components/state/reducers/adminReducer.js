@@ -1,9 +1,9 @@
 const adminReducer = (state = false, action) => {
     switch(action.type) {
         case 'ADMIN':
-            return !state;
+            return true;
         default:
-            return state;
+            return false;
     }
 }
 
