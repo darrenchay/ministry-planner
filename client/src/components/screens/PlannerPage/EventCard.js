@@ -109,11 +109,13 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
             event: event});
     };
 
-    // useEffect(() => {
-    //     if(isAdmin === true) {
-    //         toggleEdit(false);
-    //     }
-    // }, [isAdmin])
+    // Getting the list of worship leaders on event card load
+    useEffect(() => {
+        UsersAPI.getUserByRole('worship', "Worship-Leader")
+            .then((users) => {
+                setWorshipLeaders(users);
+            });
+    }, []);
 
     // updating the event card data based on the selected template 
     useEffect(() => {
