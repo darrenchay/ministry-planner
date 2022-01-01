@@ -32,6 +32,7 @@ import RoleSection from './RoleSection';
 
 // import convertDate from "../../utils/ConvertDate";
 import * as UsersAPI from "../../utils/Services/UsersAPI";
+import sendEmail from "../../utils/Email/Email";
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles({
@@ -160,6 +161,15 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
 
     const handleCloseRehearsals = () => {
         setAnchorEl(null);
+    }
+
+    const notifyEmail = () => {
+        var users = {
+            email: 'darrenchay@gmail.com',
+            firstname: 'Darren'
+        }
+        var service_details = event.event.name + ' - ' + event.event.timestamp;
+        sendEmail(users, service_details, event.event.name);
     }
 
     return (
@@ -354,7 +364,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                     </Button>
 
                     <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon" />}
-                        color='primary' size="small" onClick={() => { console.log("Notified") }}>
+                        color='primary' size="small" onClick={notifyEmail}>
                         Notify
                     </Button>
                 </CardActions>

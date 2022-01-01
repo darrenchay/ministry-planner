@@ -26,7 +26,6 @@ import ButtonGroup from "./EditButtonGroup";
 import RoleSection from "./RoleSection";
 
 // import convertDate from "../../utils/ConvertDate";
-import * as UsersAPI from "../../utils/Services/UsersAPI";
 
 const useStyles = makeStyles({
     noBorder: {
