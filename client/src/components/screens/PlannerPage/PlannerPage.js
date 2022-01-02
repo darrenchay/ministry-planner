@@ -7,7 +7,7 @@ import * as EventsAPI from "./../../utils/Services/EventsAPI";
 import { Typography, IconButton, Snackbar } from "@material-ui/core";
 import KeyboardArrowRightRoundedIcon from "@material-ui/icons/KeyboardArrowRightRounded";
 import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRounded";
-import convertDate from "./../../utils/ConvertDate";
+import * as dateFormatter from "./../../utils/ConvertDate";
 import MuiAlert from "@material-ui/lab/Alert";
 import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
 import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
@@ -190,7 +190,7 @@ export default function PlannerPage() {
           break;
         }
       }
-      var currDate = convertDate(currTimestamp);
+      var currDate = dateFormatter.convertDate(currTimestamp);
       if (currDate.month !== month) {
         setMonth(currDate.month);
       }
