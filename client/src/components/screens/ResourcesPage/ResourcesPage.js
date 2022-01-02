@@ -1,7 +1,7 @@
 import './ResourcesPage.scss'
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Box, Grid } from "grommet";
+import { Grid } from "grommet";
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
@@ -13,73 +13,6 @@ import { TextField } from '@material-ui/core';
 import * as dateFormatter from '../../utils/ConvertDate';
 import * as ResourceAPI from '../../utils/Services/ResourcesAPI';
 
-const mockSonglist = [
-	{
-		title: 'Praise and Worship',
-		songs: [
-			{
-				title: 'This Is Amazing Grace',
-				artist: 'Phil Whickam',
-				key: 'G',
-				bpm: 85,
-				timesig: '3/4',
-				link: 'https://www.youtube.com/watch?v=XFRjr_x-yxU',
-				lyrics: '',
-				notes: 'test123111111111111111111111111111111111111111111111111111111'
-			},
-			{
-				title: 'Mo Loue Bondie',
-				artist: '',
-				key: 'G',
-				bpm: 85,
-				timesig: '3/4',
-				link: 'https://www.youtube.com/watch?v=o6yF8OQqXXw',
-				lyrics: '',
-				notes: ''
-			},
-			{
-				title: 'At The Cross',
-				artist: 'Chris Tomlin',
-				key: 'G',
-				bpm: 85,
-				timesig: '',
-				link: 'https://www.youtube.com/watch?v=o6yF8OQqXXw',
-				lyrics: '',
-				notes: 'Evan to Lead'
-			}
-		]
-	},
-	{
-		title: 'Offertory',
-		songs: [
-			{
-				title: 'Hosanna',
-				artist: 'Hillsong Worship',
-				key: 'G',
-				bpm: 85,
-				timesig: '3/4',
-				link: 'https://www.youtube.com/watch?v=o6yF8OQqXXw',
-				lyrics: '',
-				notes: ''
-			}
-		]
-	},
-	{
-		title: 'Communion',
-		songs: [
-			{
-				title: 'Song',
-				artist: '',
-				key: 'G',
-				bpm: null,
-				timesig: '',
-				link: 'https://www.youtube.com/watch?v=o6yF8OQqXXw',
-				lyrics: '',
-				notes: ''
-			}
-		]
-	}
-];
 
 const Accordion = styled((props) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -135,7 +68,7 @@ export default function ResourcesPage() {
 			setOriginalSonglist(resource[0].sections);
 			setSelectedSonglist(resource[0].sections);
 		})
-  }, [location]);
+  }, [event]);
 
   return (
     <div className="resources-page-wrapper">
@@ -239,6 +172,9 @@ export default function ResourcesPage() {
 							</div>
 						)
 					})
+				}
+				{selectedSonglist?.length === 0 &&
+					<Typography>No Songs</Typography>
 				}
       </div>
       <div className='comments-wrapper'>
