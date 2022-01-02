@@ -102,7 +102,9 @@ export default function TableViewRow({
     const history = useHistory();
     
     let redirectToResources = () => {
-        history.push("resources");
+        history.push({
+            pathname: "resources", 
+            event: event});
     };
     
     useEffect(() => {

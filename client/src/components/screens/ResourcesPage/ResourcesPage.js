@@ -1,41 +1,78 @@
 import './ResourcesPage.scss'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { Box, Grid } from "grommet";
-import { Typography } from '@material-ui/core';
-import convertDate from "./../../utils/ConvertDate";
+import { Grid } from "grommet";
+import MuiAccordion from '@mui/material/Accordion';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import { TextField } from '@material-ui/core';
+import * as dateFormatter from '../../utils/ConvertDate';
+import * as ResourceAPI from '../../utils/Services/ResourcesAPI';
 
 
-function timeConverter(timestamp){
-  // Convert unix timestamp to "d MMM yyyy - HH:mm" format
-  var a = new Date(timestamp * 1000);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var year = a.getFullYear();
-  var month = months[a.getMonth()];
-  var date = a.getDate();
-  var hour = a.getHours()
-  hour = hour % 12;
-  hour = hour ? hour : 12; // the hour '0' should be '12'
-  var ampm = hour >= 12 ? 'PM' : 'AM';
-  var min = a.getMinutes();
-  min = min < 10 ? '0'+min : min;
-  var time = date + ' ' + month + ' ' + year + ' - ' + hour + ':' + min + ' ' + ampm;
-  return time;
-}
+const Accordion = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+	// '&:first-child': {
+	// 	borderRadius: '10px 10px 0 0'
+  // },
+	'&:not(:last-child)': {
+    borderBottom: 0,
+  },
+	// '&:last-child': {
+	// 	borderRadius: '0 0 10px 10px'
+  // },
+  '&:before': {
+    display: 'none',
+  },
+}));
+
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .05)'
+      : 'rgba(0, 0, 0, 0.05)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
+
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
 
 export default function ResourcesPage() {
-  const location = useLocation()
+  const location = useLocation();
+	const event = location.event;
+	const [originalSonglist, setOriginalSonglist] = useState();
+	const [selectedSonglist, setSelectedSonglist] = useState(originalSonglist);
 
   useEffect(() => {
-    console.log(location.event); // result: 'some_value'
-    console.log(location.event.event.name);
-    console.log(convertDate(location.event.event.timestamp));
-    console.log(timeConverter(location.event.event.timestamp))
-  }, [location]);
+		ResourceAPI.getResource(event.eventDetails.resourceId)
+		.then((resource) => {
+			setOriginalSonglist(resource[0].sections);
+			setSelectedSonglist(resource[0].sections);
+		})
+  }, [event]);
 
   return (
     <div className="resources-page-wrapper">
-      <Box className="title-wrapper">
+      {/* <Box className="title-wrapper">
         <Typography className='resources-title'>
           Resources
         </Typography>
@@ -75,7 +112,84 @@ export default function ResourcesPage() {
             Comments
           </Typography>
         </Grid>
-      </Grid>
+      </Grid> */}
+
+			<div className='header-section'>
+        <div className='resources-title'>
+          Resources
+        </div>
+        <div className='event-name'>
+          {event.event.name}
+        </div>
+        <div className='event-time'>
+          {dateFormatter.formatDate(event.event.timestamp)}
+        </div>
+			</div>
+      <div className='main-section'>
+      <div className='songlist-wrapper'>
+				{selectedSonglist?.length > 0 &&
+					selectedSonglist.map((section) => {
+						return (
+							<div className='section'>
+								<div className='title'>
+									<b>{section.title}</b>
+								</div>
+								{section.songs?.length > 0 &&
+									section.songs.map((song) => {
+										return (
+											<Accordion>
+												<AccordionSummary
+													expandIcon={<ExpandMoreIcon />}
+													aria-controls="panel1a-content"
+													id="panel1a-header"
+												>
+													<div className='title-artist'><b>{song.title}</b> {song.artist.length > 0 && <>- {song.artist} </>}</div>
+												</AccordionSummary>
+												<AccordionDetails className='song-wrapper'>
+													<div class='song-info'>
+														<div className='key'><b>Key: </b>{song.key}</div>
+														<div className='bpm'><b>BPM: </b>{song.bpm}</div>
+														<div className='timesig'><b>Time signature: </b>{song.timesig}</div>
+													</div>
+													<div className='link'><b>Link: </b><a href={song.link}>{song.link}</a>
+														<div className='video-wrapper'>
+														<iframe src={`https://www.youtube.com/embed/${song.link.split('v=')[1]}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+														</div>
+													</div>
+													<div className='notes'><b>Notes: </b>
+													<TextField 
+														className='text-section'
+														variant="outlined"
+                            multiline={true}
+														value={song.notes}
+														disabled={true} />
+													</div>
+												</AccordionDetails>
+											</Accordion>
+										)
+									})
+								}
+							</div>
+						)
+					})
+				}
+				{selectedSonglist?.length === 0 &&
+					<Typography>No Songs</Typography>
+				}
+      </div>
+      <div className='comments-wrapper'>
+        {/* yoann's part */}
+        <Grid
+          gridArea="comments-wrapper"
+          className="songlist-comments-wrapper"
+          border={{ color: '#BBB9B9' }}
+        >
+          <Typography className='comments-title'>
+            Comments
+          </Typography>
+        </Grid>
+      </div>
+      </div>
     </div>
   );
 }
