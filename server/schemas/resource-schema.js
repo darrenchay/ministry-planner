@@ -25,7 +25,13 @@ const resourceSchema = new Schema({
 	],
 	comments: [
 		{
-			user: String
+			commentId: String,
+			user: String,
+			comment: String,
+			timestamp : {
+				type : String,
+				required : true
+			},
 		}
 	]
 });
