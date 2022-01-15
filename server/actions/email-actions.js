@@ -10,6 +10,7 @@ class EmailActions {
             var data = users[i];
             const msg = {
                 template_id: process.env.SENDGRID_TEMPLATE_ID,
+                from: "ministryplannerteam@gmail.com",
                 personalizations: [{
                     to: { email: data.recipient.email },
                     dynamic_template_data: {

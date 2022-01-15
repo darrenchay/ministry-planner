@@ -30,9 +30,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
 
-// import convertDate from "../../utils/ConvertDate";
+import * as dateFormatter from "../../utils/ConvertDate";
 import * as UsersAPI from "../../utils/Services/UsersAPI";
-import sendEmail from "../../utils/Services/EmailAPI";
+import * as EmailAPI from "../../utils/Services/EmailAPI";
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles({
@@ -164,12 +164,46 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
     }
 
     const notifyEmail = () => {
-        var users = {
-            email: 'darrenchay@gmail.com',
-            firstname: 'Darren'
+        var userList = [
+            {
+                firstname: "Darren",
+                email: "dchayloong@gmail.com"
+            },
+            {
+                firstname: "Yoann",
+                email: "liyoann@yahoo.com"
+            },
+            {
+                firstname: "Emile",
+                email: "emile.ltc@gmail.com"
+            },
+            {
+                firstname: "Not Darren",
+                email: "darrenchay@gmail.com"
+            }
+        ]
+
+        var data = {
+            users: []
         }
-        var service_details = event.event.name + ' - ' + event.event.timestamp;
-        sendEmail(users, service_details, event.event.name);
+
+        userList.forEach(user => {
+            data.users.push({
+                eventName: event.event.name,
+                eventDate: dateFormatter.getDay(event.event.timestamp),
+                recipient: {
+                    name: user.firstname,
+                    email: user.email
+                },
+                sender: {
+                    name: "Jason - Worship Coordinator",
+                    email: "teast"
+                }
+            })
+        })
+        EmailAPI.notifyAllUsers(data).then(() => {
+            console.log("Notified Users");
+        });
     }
 
     return (
