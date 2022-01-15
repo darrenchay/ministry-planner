@@ -32,7 +32,7 @@ import RoleSection from './RoleSection';
 
 // import convertDate from "../../utils/ConvertDate";
 import * as UsersAPI from "../../utils/Services/UsersAPI";
-import sendEmail from "../../utils/Email/Email";
+import sendEmail from "../../utils/Services/EmailAPI";
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles({
