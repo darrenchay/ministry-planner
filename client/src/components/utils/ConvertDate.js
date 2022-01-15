@@ -1,4 +1,4 @@
-export default function convertDate(unix_timestamp) {
+export const convertDate = (unix_timestamp) => {
     var a = new Date(unix_timestamp * 1000);
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();
@@ -15,3 +15,20 @@ export default function convertDate(unix_timestamp) {
     }
     return time;
 }
+
+export const formatDate = (timestamp) => {
+    // Convert unix timestamp to "d MMM yyyy - HH:mm" format
+    var a = new Date(timestamp * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours()
+    hour = hour % 12;
+    hour = hour ? hour : 12; // the hour '0' should be '12'
+    var ampm = hour >= 12 ? 'PM' : 'AM';
+    var min = a.getMinutes();
+    min = min < 10 ? '0'+min : min;
+    var time = date + ' ' + month + ' ' + year + ' - ' + hour + ':' + min + ' ' + ampm;
+    return time;
+  }

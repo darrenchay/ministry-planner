@@ -6,6 +6,7 @@ import worshipEventDetailsHandler from './handlers/worship-event-details-handler
 import worshipTemplateHandler from './handlers/worship-template-handler';
 import plannerHandler from './handlers/planner-handler';
 import roleHandler from './handlers/role-handler';
+import emailHandler from './handlers/email-handler';
 
 export function init(server) {
 	const uri = "mongodb+srv://User:FUVhRX0yKFfIKgsi@cluster0.zltub.mongodb.net/users?retryWrites=true&w=majority";
@@ -31,4 +32,5 @@ export function init(server) {
     server.use('/api/planner', plannerHandler);
     server.use('/api/roles', roleHandler);
     server.use('/api/worshipTemplates', worshipTemplateHandler);
+    server.use('/api/email', emailHandler);
 }

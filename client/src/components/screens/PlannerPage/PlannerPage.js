@@ -15,7 +15,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import EventCard from "./EventCard";
 import TableView from "./TableView";
 import TimeSelect from "./TimeSelect";
-import convertDate from "./../../utils/ConvertDate";
+import * as dateFormatter from "./../../utils/ConvertDate";
 
 import steps from "../../utils/Components/MonthSteps";
 function Alert(props) {
@@ -133,7 +133,7 @@ export default function PlannerPage() {
                     break;
                 }
             }
-            var currDate = convertDate(currTimestamp);
+            var currDate = dateFormatter.convertDate(currTimestamp);
             if (currDate.month !== month) {
                 setMonth(currDate.month);
             }
