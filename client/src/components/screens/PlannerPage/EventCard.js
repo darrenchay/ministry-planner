@@ -106,8 +106,9 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
 
     let redirectToResources = () => {
         history.push({
-            pathname: "resources", 
-            event: event});
+            pathname: "resources",
+            event: event
+        });
     };
 
     // Getting the list of worship leaders on event card load
@@ -128,7 +129,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
     //Update event data for template
     useEffect(() => {
         if (isCreate) {
-            setEvent(selectedEvent); 
+            setEvent(selectedEvent);
         }
     }, [selectedEvent, setEvent, isCreate])
 
@@ -164,29 +165,27 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
     }
 
     const notifyEmail = () => {
-        var userList = [
-            {
-                firstname: "Darren",
-                email: "dchayloong@gmail.com"
-            },
-            {
-                firstname: "Yoann",
-                email: "liyoann@yahoo.com"
-            },
-            {
-                firstname: "Emile",
-                email: "emile.ltc@gmail.com"
-            },
-            {
-                firstname: "Not Darren",
-                email: "darrenchay@gmail.com"
-            }
-        ]
-
+        // Creating list of users
+        var userList = []
+        event.eventDetails.teamList.forEach(role => {
+            role.teamMember.forEach(user => {
+                var found = false;
+                for (var i = 0; i < userList.length; i++) {
+                    if (userList[i].email === user.email) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found === false) {
+                    userList.push(user);
+                }
+            })
+        })
         var data = {
             users: []
         }
 
+        // Populating data to send emails
         userList.forEach(user => {
             data.users.push({
                 eventName: event.event.name,
