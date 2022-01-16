@@ -317,6 +317,26 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                         </Menu>
                                     </div>
                                 }
+                                {!isTemplate &&
+                                    <div classname='service-type'>
+                                        <FormControl variant='outlined' size='small'>
+                                            <InputLabel id="serviceTypeSelect">Service Type</InputLabel>
+                                            <Select
+                                                className='service-type-select'
+                                                labelId="serviceTypeSelect"
+                                                label='Service Type'
+                                                value={selectedEvent.event.serviceType}
+                                                onChange={(e) => handleChangeEvent(e, "type")}
+                                                disabled={!isEditable}
+                                            >
+                                                <MenuItem value={serviceTypes[1]}> Main - 7:30 AM </MenuItem>
+                                                <MenuItem value={serviceTypes[2]}> Main - 9:30 AM </MenuItem>
+                                                <MenuItem value={serviceTypes[3]}> Youth </MenuItem>
+                                                <MenuItem value={serviceTypes[4]}> Other </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+                                }
                             </div>
                         </>
                     }

@@ -4,7 +4,20 @@ import EventCard from "./EventCard";
 import TableView from "./TableView";
 import TimeSelect from "./TimeSelect";
 import * as EventsAPI from "./../../utils/Services/EventsAPI";
-import { Typography, IconButton, Snackbar, } from "@material-ui/core";
+import cloneDeep from "lodash/cloneDeep";
+import { Typography, 
+  IconButton,
+  Snackbar, 
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  Select,
+  OutlinedInput,
+  MenuItem,
+  ListItemText,
+  Box,
+  Chip,
+  Checkbox } from "@material-ui/core";
 import KeyboardArrowRightRoundedIcon from "@material-ui/icons/KeyboardArrowRightRounded";
 import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRounded";
 import convertDate from "./../../utils/ConvertDate";
@@ -13,7 +26,7 @@ import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
 import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-
+   
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -80,6 +93,17 @@ const steps = [
   },
 ];
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 export default function PlannerPage() {
   const [events, setEvents] = useState(null);
   const [month, setMonth] = useState(
@@ -87,6 +111,30 @@ export default function PlannerPage() {
   );
   const [year, setYear] = useState(new Date().getFullYear());
   const [filteredEvents, setFilteredEvents] = useState();
+  const [filterTypes, setFilterTypes] = useState(
+    [
+      {
+        value: 'sevenAM',
+        full: 'Main - 7:30 AM',
+        checked: true
+      },
+      {
+        value: 'nineAM',
+        full: 'Main - 9:30 AM',
+        checked: true
+      }, 
+      {
+        value: 'youth',
+        full: 'Youth',
+        checked: true
+      },
+      {
+        value: 'other',
+        full: 'Other',
+        checked: true
+      }
+    ]
+  );
   // eslint-disable-next-line
   const [showLoading, setShowLoading] = useState(true);
   const [currTimestamp, setCurrTimestamp] = useState(
@@ -164,7 +212,18 @@ export default function PlannerPage() {
       //Filters all events that are after the current set timestamp
       setFilteredEvents(
         events.filter((event) => {
-          return parseInt(event.event.timestamp) >= currTimestamp;
+          const tempIndex = filterTypes.map(values => values.value).findIndex((type) => {return type === event.event.serviceType});
+          //var tempFilterTypesIndex = tempIndex;
+
+          /* console.log("service type: ", event.event.serviceType);
+		  console.log("mapped array of values: ", filterTypes.map(values => values.value));
+          console.log("passed test: ", filterTypes.map(values => values.value).findIndex((type) => {return type === event.event.serviceType}));
+          console.log("index: ", filterTypesIndex);
+           */
+          return ( 
+            (parseInt(event.event.timestamp) >= currTimestamp) 
+            && (filterTypes[tempIndex].checked)
+          );
         })
       );
       setShowLoading(false);
@@ -199,7 +258,7 @@ export default function PlannerPage() {
       }
     }
     // eslint-disable-next-line
-  }, [events, currTimestamp]);
+  }, [events, currTimestamp, filterTypes]);
 
   const handleNext = () => {
     setCurrTimestamp(nextTimestamp);
@@ -215,26 +274,28 @@ export default function PlannerPage() {
     }
   };
 
-const [state, setState] = useState({
-        sevenAM: true,
-        nineAM: true,
-        youth: true,
-        other: true
-    })
-
-    const [open, setOpen] = useState(true);
-    const handleOpen = () => {
-        setOpen(!open);
+  var numChecked = filterTypes.filter((type) => type.checked === true).map((type) => type.checked);
+  const handleSelectAll = (event) => {
+    const tempFilterTypes = cloneDeep(filterTypes);
+    for (let i = 0; i < tempFilterTypes.length; i++) {
+      tempFilterTypes[i].checked = event.target.checked;
     }
+    setFilterTypes(tempFilterTypes);
+  };
+  
+  const handleChangeSelectedFilterType = (event) => {
+    const {
+      target: { value },
+    } = event;
+    const tempFilterTypes = cloneDeep(filterTypes);
+    var tempFilterTypesIndex = (tempFilterTypes.map(values => values.value).findIndex((values) => {return values === value[4]}));
+	if (typeof value[4] !== 'undefined') {
+	  tempFilterTypes[tempFilterTypesIndex].checked = !tempFilterTypes[tempFilterTypesIndex].checked;
+	  setFilterTypes(tempFilterTypes);
+	}
+	numChecked = filterTypes.filter((type) => type.checked === true).map((type) => type.checked);
+  };
 
-    const handleChangeOptions = (event) => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.checked,
-        });
-    }
-    const { sevenAM, nineAM, youth, other } = state;
-    const error = [sevenAM, nineAM, youth, other ].filter((v) => v).length === 0;
   return (
     <>
       <div className="planner-page-wrapper">
@@ -269,49 +330,46 @@ const [state, setState] = useState({
             setCreateTemplateFlag={setCreateTemplateFlag}
             setIsTemplate={setIsTemplate}
           />
-          <List>
-                <ListItemButton onClick={handleOpen}>
-                    <ListItemText primary='Filter'/>
-                    {open ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                    <FormControl
-                        required
-                        error={error}
-                        component="fieldset"
-                        sx={{ m: 3 }}
-                        variant="standard"
-                    >
-                        <FormLabel>Pick at least one</FormLabel>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={sevenAM} onChange={handleChangeOptions} name="sevenAM" />
-                                }
-                                label="Main - 7:30 AM"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={nineAM} onChange={handleChangeOptions} name="nineAM" />
-                                }
-                                label="Main - 9:30 AM"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={youth} onChange={handleChangeOptions} name="youth" />
-                                }
-                                label="Youth"
-                            />
-                            <FormControlLabel
-                                control={
-                                    <Checkbox checked={other} onChange={handleChangeOptions} name="other" />
-                                }
-                                label="Other"
-                            />
-                        </FormGroup>
-                    </FormControl>
-                </Collapse>
-            </List>
+          <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="filter-label">Filter</InputLabel>
+            <Select
+              labelId="filter-label"
+              id="filter"
+              multiple
+              value={filterTypes}
+			  onChange={handleChangeSelectedFilterType}
+              input={<OutlinedInput label="Filter"/>}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.filter((type => type.checked === true)).map((type) => {
+                    return <Chip key={type.value} label={type.full} />
+                  })}
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
+              <FormControlLabel
+                label="All"
+                control={
+                  <Checkbox
+                    checked={numChecked.length === 4}
+                    indeterminate={( numChecked.length < 4) && (numChecked.length > 0) }
+                    onChange={handleSelectAll}
+                  />
+                }
+              />
+              {filterTypes.map((type) => {
+                return(
+                  <MenuItem key={type.value} value={type.value}>
+                    <FormControlLabel
+                      control={ <Checkbox checked = { type.checked } /> }
+                    />
+                    <ListItemText primary={type.full} />
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
         </div>
         {isTableView && (
           <TableView
