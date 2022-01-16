@@ -97,6 +97,7 @@ export default function TableViewRow({
     const [isEditable, toggleEdit] = useState(isCreateEvent);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
+    // eslint-disable-next-line
     const [worshipLeaders, setWorshipLeaders] = useState(leaders);
     const [addDateTime, setAddDateTime] = useState(new Date());
     const history = useHistory();

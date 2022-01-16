@@ -7,7 +7,7 @@
 ### Running a local instance of the code
 - Create a branch from main when starting a new part of development
 - npm install after branching to new branch (or when cloning for the first time)
-- copy the env file from the channel and paste it in the server folder
+- copy the 2 env files from the channel and paste it in the appropriate folders (client and server)
 - To start the app cd to the appropriate folder (client/server) 
   - Type 'npm run dev' in the command line to start running the server side
   - Type 'npm start' in the command line to start running the client side
