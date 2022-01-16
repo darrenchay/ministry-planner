@@ -26,7 +26,6 @@ import ButtonGroup from "./EditButtonGroup";
 import RoleSection from "./RoleSection";
 
 // import convertDate from "../../utils/ConvertDate";
-import * as UsersAPI from "../../utils/Services/UsersAPI";
 
 const useStyles = makeStyles({
     noBorder: {
@@ -91,13 +90,15 @@ export default function TableViewRow({
     setUpdateFlag,
     isCreateEvent,
     setEvent,
+    leaders
 }) {
     const isAdmin = useSelector((state) => state.isAdmin);
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreateEvent);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
-    const [worshipLeaders, setWorshipLeaders] = useState();
+    // eslint-disable-next-line
+    const [worshipLeaders, setWorshipLeaders] = useState(leaders);
     const [addDateTime, setAddDateTime] = useState(new Date());
     const history = useHistory();
     
@@ -113,12 +114,6 @@ export default function TableViewRow({
             toggleEdit(false);
         }
     }, [isAdmin])
-
-    useEffect(() => {
-        UsersAPI.getUserByRole("worship", "Worship-Leader").then((users) => {
-            setWorshipLeaders(users);
-        });
-    }, []);
 
     useEffect(() => {
         if (isCreateEvent) {

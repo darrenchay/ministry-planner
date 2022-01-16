@@ -11,7 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 import MuiAlert from '@material-ui/lab/Alert';
 
-import ConfirmDelete from '../../utils/ConfirmDelete'
+import ConfirmDelete from '../../utils/Components/ConfirmDelete'
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;

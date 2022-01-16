@@ -15,6 +15,7 @@ export default function TableView({
     setIsTemplate,
     createTemplateFlag,
     setCreateTemplateFlag,
+    leaders
 }) {
     const isAdmin = useSelector((state) => state.isAdmin);
     const [rolesHeaders, setRolesHeaders] = useState([]);
@@ -36,41 +37,45 @@ export default function TableView({
     return (
         <div className="view-wrapper">
             <div className="table-wrapper">
-                <table>
-                    <tr className="headers-row">
-                        {isAdmin && <th className="edit-col"></th>}
-                        <th>Title</th>
-                        <th>Date / Time</th>
-                        <th className="worshipLeader-col">Worship Leader</th>
-                        <th>Rehearsals</th>
-                        {rolesHeaders?.length > 0 &&
-                            rolesHeaders.map((role, index) => {
+                {rolesHeaders?.length > 0 &&
+                    <table>
+                        <tr className="headers-row">
+                            {isAdmin && <th className="edit-col"></th>}
+                            <th>Title</th>
+                            <th>Date / Time</th>
+                            <th className="worshipLeader-col">Worship Leader</th>
+                            <th>Rehearsals</th>
+                            {rolesHeaders?.length > 0 &&
+                                rolesHeaders.map((role, index) => {
+                                    return (
+                                        <th className="role-col">{role}</th>
+                                    );
+                                })}
+                            <th>Additional Info</th>
+                            <th>Actions</th>
+                        </tr>
+                        {events?.length > 0 &&
+                            events.map((event, index) => {
                                 return (
-                                    <th className="role-col">{role}</th>
+                                    <TableViewRow
+                                        key={event.event._id}
+                                        event={event}
+                                        setUpdateFlag={setUpdateFlag}
+                                        isCreateEvent={false}
+                                        setEvent={null}
+                                        leaders={leaders}
+                                    />
                                 );
                             })}
-                        <th>Additional Info</th>
-                        <th>Actions</th>
-                    </tr>
-                    {events?.length > 0 &&
-                        events.map((event, index) => {
-                            return (
-                                <TableViewRow
-                                    key={event.event._id}
-                                    event={event}
-                                    setUpdateFlag={setUpdateFlag}
-                                    isCreateEvent={false}
-                                    setEvent={null}
-                                />
-                            );
-                        })}
-                </table>
+                    </table>
+                }
             </div>
             {createEventFlag && (
                 <CreateEvent
                     setUpdateFlag={setUpdateFlag}
                     setIsCreate={setIsCreate}
                     setOpen={setCreateEventFlag}
+                    leaders={leaders}
                 />
             )}
             {createTemplateFlag && (
@@ -78,6 +83,7 @@ export default function TableView({
                     setUpdateFlag={setUpdateFlag}
                     setIsTemplate={setIsTemplate}
                     setOpen={setCreateTemplateFlag}
+                    leaders={leaders}
                 />
             )}
         </div>
