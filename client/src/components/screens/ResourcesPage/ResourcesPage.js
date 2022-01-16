@@ -91,7 +91,7 @@ export default function ResourcesPage() {
     }
 
     const addComment = () => {
-        var commentsObj = resources.comments
+        var commentsObj = resource.comments
         commentsObj.unshift({
             commentId: "comment4",
             user: "test user",
@@ -101,7 +101,7 @@ export default function ResourcesPage() {
         var addedResource = {
             comments: commentsObj
         }
-        ResourceAPI.updateResource(addedResource, resources._id)
+        ResourceAPI.updateResource(addedResource, resource._id)
             .then(resp => {
                 console.log('Successfully retrieved', resp);
             })
@@ -233,7 +233,7 @@ export default function ResourcesPage() {
                     {event.event.name}
                 </div>
                 <div className='event-time'>
-                    {dateFormatter.formatDate(event.event.timestamp)}
+                    {dateFormatter.formatDateTitle(event.event.timestamp)}
                 </div>
             </div>
             <div className='main-section'>
