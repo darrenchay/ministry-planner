@@ -21,3 +21,16 @@ export const getUserByRole = (ministry, role) => {
             throw err;
         });
 }
+
+export const updateUser = (data, id) => {
+    return axios({
+        method: "post",
+        url: baseURL + "users/update/" + id,
+        data: data
+    })
+        .then(resp => resp.data)
+        .catch(err => {
+            console.log(err);
+            throw err;
+        })
+}
