@@ -1,5 +1,6 @@
 import "./EventCard.scss";
 import React, { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
 import { CustomScrollbar } from "../../utils/CustomScrollbar/CustomScrollbar";
@@ -29,8 +30,9 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ButtonGroup from './EditButtonGroup';
 import RoleSection from './RoleSection';
 
-// import convertDate from "../../utils/ConvertDate";
+import * as dateFormatter from "../../utils/ConvertDate";
 import * as UsersAPI from "../../utils/Services/UsersAPI";
+import * as EmailAPI from "../../utils/Services/EmailAPI";
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles({
@@ -91,12 +93,13 @@ const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
 
 }
 
-export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent }) {
+export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent, leaders }) {
+    const isAdmin = useSelector((state) => state.isAdmin);
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreate);
     const [originalEvent, changeOriginalEvent] = useState(event);
     const [selectedEvent, changeSelectedEvent] = useState(event);
-    const [worshipLeaders, setWorshipLeaders] = useState();
+    const [worshipLeaders, setWorshipLeaders] = useState(leaders);
     const [addDateTime, setAddDateTime] = useState(new Date());
     const [anchorEl, setAnchorEl] = useState(false);
     const history = useHistory();
@@ -164,6 +167,47 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
         setAnchorEl(null);
     }
 
+    const notifyEmail = () => {
+        // Creating list of users
+        var userList = []
+        event.eventDetails.teamList.forEach(role => {
+            role.teamMember.forEach(user => {
+                var found = false;
+                for (var i = 0; i < userList.length; i++) {
+                    if (userList[i].email === user.email) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (found === false) {
+                    userList.push(user);
+                }
+            })
+        })
+        var data = {
+            users: []
+        }
+
+        // Populating data to send emails
+        userList.forEach(user => {
+            data.users.push({
+                eventName: event.event.name,
+                eventDate: dateFormatter.getDay(event.event.timestamp),
+                recipient: {
+                    name: user.firstname,
+                    email: user.email
+                },
+                sender: {
+                    name: "Jason - Worship Coordinator",
+                    email: "teast"
+                }
+            })
+        })
+        EmailAPI.notifyAllUsers(data).then(() => {
+            console.log("Notified Users");
+        });
+    }
+
     return (
         <Card key={event.event._id}
             className={
@@ -191,7 +235,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                 value={selectedEvent.event.name}
                                 onChange={(e) => handleChangeEvent(e, "name")}
                             />
-                            {!isCreate &&
+                            {isAdmin && !isCreate &&
                                 <ButtonGroup
                                     isEditable={isEditable}
                                     toggleEdit={toggleEdit}
@@ -377,7 +421,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                     </Button>
 
                     <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon" />}
-                        color='primary' size="small" onClick={() => { console.log("Notified") }}>
+                        color='primary' size="small" onClick={notifyEmail}>
                         Notify
                     </Button>
                 </CardActions>

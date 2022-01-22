@@ -1,0 +1,148 @@
+@import "./../../../globals.scss";
+*{
+    margin: 0;
+    padding:0;
+}
+.profile-page-wrapper {
+    display: grid;
+    align-items: center;
+    justify-content: center; 
+    // background-color: lightblue;
+}
+.profile-pic-container {
+    display: grid;
+    //align-items: center;
+    justify-content: center; 
+    grid-template-columns: 1fr;
+    margin: 10px;
+    //background-color: blue;
+}
+
+.img-holder {
+    margin-top: 10px;
+    margin-bottom: -1em;
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    align-items: center;
+    width: 100%;
+    height: 150px;
+    width: 150px;
+    //background-color: pink;
+}
+
+.img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50px;
+}
+
+.label {
+    color: rgb(105, 105, 105);
+    //width: 100%;
+    //margin-left: -100%;
+    //justify-self: center;
+    //background-color: yellow;
+}
+
+
+.userInfo {
+    border: 1.5px solid #CAC9C9;
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+    padding: 40px 90px;
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+}
+
+.contactInfo {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 2em;
+    row-gap: 1em;
+    margin-bottom: 30px;
+}
+
+.email, .password, .phone, .firstname, .lastname{
+    display: flex;
+    text-align: left;
+    align-items: center;
+}
+.firstnameValue, .lastnameValue, .emailValue, .emailValueEdit, .passwordValue, .phoneValue {
+    //background-color: lightblue;
+    text-align: left;
+    margin-left: 1em;
+}
+
+// https://stackoverflow.com/questions/56900389/css-grid-how-to-add-line-between-rows
+.row-border{
+    border-top: 1px solid #CAC9C9;
+    grid-column: 1 / 5; /* this code makes the row stretch to entire width of the container */
+}
+
+.titleName {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-top: 30px;
+}
+
+.subheaders {
+    font-weight: 500;
+    margin-bottom: 25px;
+}
+
+.ministryItems {
+    display: grid;
+    margin-bottom: 30px;
+    grid-template-rows: repeat(auto-fill, 1fr);
+    row-gap: 1em;
+}
+
+.roleItems {
+    display: grid;
+    grid-template-rows: repeat(auto-fill, 1fr);
+    row-gap: 1em;
+}
+
+.contact-header {
+    grid-column-start: 2;
+}
+
+.edit-wrapper {
+    text-align: right;
+    margin-bottom: 25px; 
+    margin-left: auto;
+}
+
+.edit-icon, .save-icon, .cancel-icon {
+    transform: scale(1.1);   
+}
+
+.save-icon {
+    color: #00B61F;
+}
+
+.cancel-icon{
+    color: #C7351A;
+    margin-left: 0.5em;
+}
+
+.emailValueEdit {
+    padding: 0.6em 0.8em;
+}
+
+.MuiInputBase-root.Mui-disabled {
+    color: black;
+}
+
+#input[type="file"] {
+    display: none;
+}
+

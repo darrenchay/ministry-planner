@@ -1,15 +1,31 @@
 import './HomePage.scss'
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid } from "grommet";
 import { Typography, Button, Paper } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
+import { useDispatch } from 'react-redux';
+import isAdmin from '../../state/actions/adminAction.js';
+import * as UserAPI from "../../utils/Services/UsersAPI";
 
 export default function HomePage() {
     const { user } = useAuth0();
-    console.log(user);
-
+    const dispatch = useDispatch();
     const history = useHistory();
+
+    useEffect(() => {
+        UserAPI.getUserByAuthId(user.sub.split('|')[1])
+        .then((userData) => {
+            if (userData === '') {
+                console.log("New user");
+            } else {
+                if(userData[0].role.includes("Worship-Leader")) {
+                    dispatch(isAdmin());
+                    console.log("Admin");
+                }
+            }
+        })
+    }, [user, dispatch])
 
     let redirectToPlanner = (event) => {
         history.push("planner");

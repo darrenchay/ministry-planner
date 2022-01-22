@@ -9,9 +9,9 @@ import {
     Button
 } from '@material-ui/core';
 import * as RolesAPI from '../../utils/Services/RolesAPI';
-import ConfirmDelete from '../../utils/ConfirmDelete'
+import ConfirmDelete from '../../utils/Components/ConfirmDelete'
 
-export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate }) {
+export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate, leaders }) {
     const empTemplate = {
         _id: 0
     }
@@ -163,7 +163,7 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate })
                             }
                         </Select>
                     </div>
-                    <EventCard event={event} setUpdateFlag={null} isCreate={true} isTemplate={true} setEvent={setEvent} />
+                    <EventCard event={event} setUpdateFlag={null} isCreate={true} isTemplate={true} setEvent={setEvent} leaders={leaders} />
                     <div className='create-button-wrapper'>
                         {selectedTemplate._id !== 0 &&
                             <div>

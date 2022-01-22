@@ -31,7 +31,7 @@ class UserActions {
                 if (err)
                     res.status(400).send(err.errmsg);
                 else if (user == '')
-                    res.status(404).send("User '" + req.params.id + "' not found");
+                    res.status(404).send("User with id '" + req.params.id + "' not found");
                 else
                     res.status(200).send(user);
             });
@@ -60,7 +60,20 @@ class UserActions {
             if (err)
                 res.status(400).send(err.errmsg);
             else if (user == '')
-                res.status(404).send("User '" + req.params.email + "' not found");
+                res.status(404).send("User with email:'" + req.params.email + "' not found");
+            else
+                res.status(200).send(user);
+        });
+    }
+
+    getOneByAuthId(req, res) {
+        userSchema.find({
+            authId: req.params.authId
+        }, function (err, user) {
+            if (err)
+                res.status(400).send(err.errmsg);
+            else if (user == '')
+                res.status(404).send("User  with auth id '" + req.params.email + "' not found");
             else
                 res.status(200).send(user);
         });

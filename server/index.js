@@ -12,8 +12,8 @@ const corsOptions ={
 
 app.use(cors(corsOptions));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: false }));
 
 // Create link to Angular build directory
 app.use(express.static(path.join(__dirname, "/dist/ministry-planner/")));

@@ -5,11 +5,35 @@ const resourceSchema = new Schema({
 		type : String,
 		required : true
 	},
-	songList : [
-        {
-            songId: String
-        }
-    ]
+	sections: [
+		{
+			title: String,
+			songs: [
+				{
+					title: String,
+					artist: String,
+					key: String,
+					bpm: Number,
+					timeSig: String,
+					link: String,
+					notes: String,
+					lyrics: String,
+					songRef: String
+				}
+			]
+		}
+	],
+	comments: [
+		{
+			commentId: String,
+			user: String,
+			comment: String,
+			timestamp : {
+				type : String,
+				required : true
+			},
+		}
+	]
 });
 
 export default model('Resource', resourceSchema);

@@ -5,6 +5,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    authId: {
+        type: String,
+        required: true
+    },
     lastname: {
         type: String,
         required: true
@@ -39,7 +43,8 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'WorshipEventDetails'
         }
-    ]
+    ],
+    profileImage: Buffer,
 });
 
 export default model('User', userSchema);
