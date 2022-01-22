@@ -44,6 +44,9 @@ export default function Navbar() {
     let redirectToAboutUs = (event) => {
         history.push("/aboutus")
     };
+    let redirectToProfile = (event) => {
+        history.push("profile");
+    }
 
     return (
         <>
@@ -80,8 +83,11 @@ export default function Navbar() {
                             <Button className='right-area-button'>
                                 <SearchIcon className='right-area-icon' />
                             </Button>
-                            <Button className='right-area-button'>
-                                <AccountCircleIcon className='right-area-icon' />
+                            <Button
+                                startIcon={<AccountCircleIcon className='right-area-icon' />}
+                                className='right-area-button'
+                                onClick={redirectToProfile}
+                            >
                             </Button>
                             <Button
                                 id="settings-button"

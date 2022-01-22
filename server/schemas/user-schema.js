@@ -43,7 +43,8 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'WorshipEventDetails'
         }
-    ]
+    ],
+    profileImage: Buffer,
 });
 
 export default model('User', userSchema);

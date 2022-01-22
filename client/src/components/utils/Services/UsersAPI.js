@@ -22,6 +22,18 @@ export const getUserByRole = (ministry, role) => {
         });
 }
 
+export const updateUser = (data, id) => {
+    return axios({
+        method: "post",
+        url: baseURL + "users/update/" + id,
+        data: data
+    })
+        .then(resp => resp.data)
+        .catch(err => {
+            console.log(err);
+            throw err;
+        })
+}
 export const getUserByAuthId = (id) => {
     return axios
         .get(baseURL + "users/auth/" + id)
