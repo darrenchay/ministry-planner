@@ -1,112 +1,76 @@
 import "./PlannerPage.scss";
-
 import React, { useEffect, useState } from "react";
-import EventCard from "./EventCard"
-import TimeSelect from './TimeSelect';
-import * as EventsAPI from './../../utils/Services/EventsAPI'
-import {
-    CircularProgress,
-    Typography,
-    IconButton,
-    Snackbar
-} from '@material-ui/core';
-import KeyboardArrowRightRoundedIcon from '@material-ui/icons/KeyboardArrowRightRounded';
-import KeyboardArrowLeftRoundedIcon from '@material-ui/icons/KeyboardArrowLeftRounded';
-import convertDate from "./../../utils/ConvertDate";
-import MuiAlert from '@material-ui/lab/Alert';
+import * as EventsAPI from "./../../utils/Services/EventsAPI";
+import * as UsersAPI from "./../../utils/Services/UsersAPI";
 
+import { Typography, IconButton, Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRounded";
+import KeyboardArrowRightRoundedIcon from "@material-ui/icons/KeyboardArrowRightRounded";
+import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
+import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+
+import EventCard from "./EventCard";
+import TableView from "./TableView";
+import TimeSelect from "./TimeSelect";
+import * as dateFormatter from "./../../utils/ConvertDate";
+
+import steps from "../../utils/Components/MonthSteps";
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-/* TODO: 
-    - Add an add event button
- */
-const steps = [
-    {
-        value: 0,
-        label: 'Jan',
-        full: 'January',
-    },
-    {
-        value: 1,
-        label: 'Feb',
-        full: 'February',
-    },
-    {
-        value: 2,
-        label: 'Mar',
-        full: 'March',
-    },
-    {
-        value: 3,
-        label: 'Apr',
-        full: 'April',
-    },
-    {
-        value: 4,
-        label: 'May',
-        full: 'May',
-    },
-    {
-        value: 5,
-        label: 'Jun',
-        full: 'June',
-    },
-    {
-        value: 6,
-        label: 'Jul',
-        full: 'July',
-    },
-    {
-        value: 7,
-        label: 'Aug',
-        full: 'August',
-    },
-    {
-        value: 8,
-        label: 'Sep',
-        full: 'September',
-    },
-    {
-        value: 9,
-        label: 'Oct',
-        full: 'October',
-    },
-    {
-        value: 10,
-        label: 'Nov',
-        full: 'November',
-    },
-    {
-        value: 11,
-        label: 'Dec',
-        full: 'December',
-    },
-];
+
 
 export default function PlannerPage() {
     const [events, setEvents] = useState(null);
-    const [month, setMonth] = useState('Jan');
+    const [month, setMonth] = useState(
+        steps.find(({ value }) => value === new Date().getMonth()).label
+    );
     const [year, setYear] = useState(new Date().getFullYear());
     const [filteredEvents, setFilteredEvents] = useState();
+    // eslint-disable-next-line
     const [showLoading, setShowLoading] = useState(true);
-    const [currTimestamp, setCurrTimestamp] = useState(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
+    const [currTimestamp, setCurrTimestamp] = useState(
+        new Date(
+            year,
+            steps.find(({ label }) => label === month).value,
+            1
+        ).getTime() / 1000
+    );
     const ministry = "worship";
-    const [isCreate, setIsCreate] = useState(0)
-    const [openSuccessCreateEvent, setOpenSuccessCreateEvent] = useState(false);
-    const [openErrorCreateEvent, setOpenErrorCreateEvent] = useState(false);
-    // const [open, setOpen] = React.useState(false);
+    const [isTemplate, setIsTemplate] = useState(0);
+    // eslint-disable-next-line
+    const [isCreate, setIsCreate] = useState(0);
+
+    const [openSuccessCreate, setOpenSuccessCreate] = useState(false);
+    const [openErrorCreate, setOpenErrorCreate] = useState(false);
+    const [openSuccessDelete, setOpenSuccessDelete] = React.useState(false);
+    const [openErrorDelete, setOpenErrorDelete] = React.useState(false);
+
     const [updateFlag, setUpdateFlag] = useState(true);
+    const [isTableView, setIsTableView] = useState(false);
+    const [createEventFlag, setCreateEventFlag] = useState(false);
+    const [createTemplateFlag, setCreateTemplateFlag] = useState(false);
 
     const handleCloseSnack = () => {
-        setOpenSuccessCreateEvent(false);
-        setOpenErrorCreateEvent(false);
+        setOpenSuccessCreate(false);
+        setOpenErrorCreate(false);
+        setOpenSuccessDelete(false);
+        setOpenErrorDelete(false);
     };
 
     // Updates events list when something on the page updates
     useEffect(() => {
         //Setting the timestamp that will be used for filtering purposes
-        setCurrTimestamp(new Date(year, (steps.find(({ label }) => label === month)).value, 1).getTime() / 1000);
+        setCurrTimestamp(
+            new Date(
+                year,
+                steps.find(({ label }) => label === month).value,
+                1
+            ).getTime() / 1000
+        );
         EventsAPI.getFullEventsList(ministry)
             .then((data) => {
                 setEvents(data);
@@ -115,19 +79,23 @@ export default function PlannerPage() {
             .catch((err) => {
                 console.log(err);
             });
-
     }, [month, year, updateFlag]);
 
     useEffect(() => {
-        if (isCreate === 1) {
-            setOpenSuccessCreateEvent(true)
+        if (isTemplate === 1) {
+            setOpenSuccessCreate(true);
         }
-        if (isCreate === 2) {
-            setOpenErrorCreateEvent(true)
+        if (isTemplate === 2) {
+            setOpenErrorCreate(true);
         }
-        setIsCreate(false);
-    }, [isCreate])
-
+        if (isTemplate === 3) {
+            setOpenSuccessDelete(true);
+        }
+        if (isTemplate === 4) {
+            setOpenErrorDelete(true);
+        }
+        setIsTemplate(0);
+    }, [isTemplate]);
 
     const [nextTimestamp, setNextTimestamp] = useState(null);
     const [prevTimestamp, setPrevTimestamp] = useState(null);
@@ -137,11 +105,11 @@ export default function PlannerPage() {
     useEffect(() => {
         if (events?.length > 0) {
             //Filters all events that are after the current set timestamp
-            setFilteredEvents(events.filter((event) => {
-                return (
-                    parseInt(event.event.timestamp) >= currTimestamp
-                )
-            }))
+            setFilteredEvents(
+                events.filter((event) => {
+                    return parseInt(event.event.timestamp) >= currTimestamp;
+                })
+            );
             setShowLoading(false);
 
             // Setting up the pagination logic (finds the timestamp values of the next and previous events)
@@ -165,7 +133,7 @@ export default function PlannerPage() {
                     break;
                 }
             }
-            var currDate = convertDate(currTimestamp)
+            var currDate = dateFormatter.convertDate(currTimestamp);
             if (currDate.month !== month) {
                 setMonth(currDate.month);
             }
@@ -174,82 +142,158 @@ export default function PlannerPage() {
             }
         }
         // eslint-disable-next-line
-    }, [events, currTimestamp])
+    }, [events, currTimestamp]);
+
+    const [leaders, setLeaders] = useState();
+    // Getting the list of worship leaders on event card load
+    useEffect(() => {
+        UsersAPI.getUserByRole('worship', "Worship-Leader")
+            .then((users) => {
+                setLeaders(users);
+            });
+    }, []);
 
     const handleNext = () => {
-        setCurrTimestamp(nextTimestamp)
-    }
+        setCurrTimestamp(nextTimestamp);
+    };
 
     const handlePrevious = () => {
-        setCurrTimestamp(prevTimestamp)
-    }
+        setCurrTimestamp(prevTimestamp);
+    };
+
+    const changeView = (event, newView) => {
+        if (newView !== null) {
+            setIsTableView(newView);
+        }
+    };
 
     return (
         <>
-        <div className='planner-page-wrapper'>
-            <TimeSelect
-                month={month}
-                setMonth={setMonth}
-                year={year}
-                setYear={setYear}
-                marks={steps}
-                setShowLoading={setShowLoading}
-                setUpdateFlag={setUpdateFlag}
-                setIsCreate={setIsCreate}
-            />
-            {/* <Button className='resources-button' variant="contained" color='primary' size="small" onClick={handleOpen}>
-                Create Event
-            </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            >
-                <CreateEventModal />
-            </Modal> */}
-
-            {showLoading && (
-                <CircularProgress
-                    style={{ color: "#FE646F" }}
-                />
-            )}
-
-            <div className='cards-wrapper'>
-                <IconButton disabled={prevDisabled} onClick={handlePrevious} className="pagination-button-previous">
-                    <KeyboardArrowLeftRoundedIcon className='pagination-button-icon' />
-                </IconButton>
-
-                {(filteredEvents?.length === 0 || events?.length === 0) &&
-                    <div>
-                        <Typography variant="h4">
-                            There are no events
-                        </Typography>
+            <div className="planner-page-wrapper">
+                <div className="top-section">
+                    <ToggleButtonGroup
+                        className="view-btn-wrapper"
+                        value={isTableView}
+                        exclusive
+                        onChange={changeView}
+                        aria-label="text alignment"
+                    >
+                        <ToggleButton value={true}>
+                            <CalendarViewMonthIcon />
+                        </ToggleButton>
+                        <ToggleButton value={false}>
+                            <CalendarViewWeekIcon />
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                    <TimeSelect
+                        month={month}
+                        setMonth={setMonth}
+                        year={year}
+                        setYear={setYear}
+                        marks={steps}
+                        setShowLoading={setShowLoading}
+                        setUpdateFlag={setUpdateFlag}
+                        setIsCreate={setIsCreate}
+                        isTableView={isTableView}
+                        setCreateEventFlag={setCreateEventFlag}
+                        setCreateTemplateFlag={setCreateTemplateFlag}
+                        setIsTemplate={setIsTemplate}
+                        leaders={leaders}
+                    />
+                </div>
+                {isTableView && (
+                    <TableView
+                        events={filteredEvents}
+                        setUpdateFlag={setUpdateFlag}
+                        setIsCreate={setIsCreate}
+                        createEventFlag={createEventFlag}
+                        setCreateEventFlag={setCreateEventFlag}
+                        setIsTemplate={setIsTemplate}
+                        createTemplateFlag={createTemplateFlag}
+                        setCreateTemplateFlag={setCreateTemplateFlag}
+                        leaders={leaders}
+                    />
+                )}
+                {!isTableView && (
+                    <div className="cards-wrapper">
+                        <div className="previous-button-wrapper">
+                            <IconButton
+                                disabled={prevDisabled}
+                                onClick={handlePrevious}
+                                className="previous-button"
+                            >
+                                <KeyboardArrowLeftRoundedIcon className="pagination-button-icon" />
+                            </IconButton>
+                        </div>
+                        {(filteredEvents?.length === 0 || events?.length === 0) && (
+                            <div>
+                                <Typography variant="h4">There are no events</Typography>
+                            </div>
+                        )}
+                        {filteredEvents?.length > 0 && !isTableView &&
+                            filteredEvents
+                                .map((event) => {
+                                    return (
+                                        <EventCard
+                                            key={event.event._id}
+                                            event={event}
+                                            setUpdateFlag={setUpdateFlag}
+                                            isCreate={false}
+                                            setEvent={null}
+                                            leaders={leaders}
+                                        />
+                                    );
+                                })
+                                .slice(0, 4)}
+                        <div className="next-button-wrapper">
+                            <IconButton
+                                disabled={nextDisabled}
+                                onClick={handleNext}
+                                className="next-button"
+                            >
+                                <KeyboardArrowRightRoundedIcon className="pagination-button-icon" />
+                            </IconButton>
+                        </div>
                     </div>
-                }
-                {filteredEvents?.length > 0 &&
-                    filteredEvents
-                        .map((event) => {
-                            return (<EventCard key={event.event._id} event={event} setUpdateFlag={setUpdateFlag} isCreateEvent={false} setEvent={null} />);
-                        })
-                        .slice(0, 4)
-                }
-                <IconButton disabled={nextDisabled} onClick={handleNext} className="pagination-button-next">
-                    <KeyboardArrowRightRoundedIcon className='pagination-button-icon' />
-                </IconButton>
+                )}
             </div>
-        </div>
-        {/* Status update toast notifications */}
-        <Snackbar open={openSuccessCreateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
-            <Alert onClose={handleCloseSnack} severity="success">
-                Event successfully created!
-            </Alert>
-        </Snackbar>
-        <Snackbar open={openErrorCreateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
-            <Alert onClose={handleCloseSnack} severity="error">
-                An error occured when creating the event.
-            </Alert>
-        </Snackbar>
+            {/* Status update toast notifications */}
+            <Snackbar
+                open={openSuccessCreate}
+                autoHideDuration={5000}
+                onClose={handleCloseSnack}
+            >
+                <Alert onClose={handleCloseSnack} severity="success">
+                    Successfully created!
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={openErrorCreate}
+                autoHideDuration={5000}
+                onClose={handleCloseSnack}
+            >
+                <Alert onClose={handleCloseSnack} severity="error">
+                    An error occured when creating.
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={openSuccessDelete}
+                autoHideDuration={5000}
+                onClose={handleCloseSnack}
+            >
+                <Alert onClose={handleCloseSnack} severity="success">
+                    Successfully deleted!
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={openErrorDelete}
+                autoHideDuration={5000}
+                onClose={handleCloseSnack}
+            >
+                <Alert onClose={handleCloseSnack} severity="error">
+                    An error occured when deleting.
+                </Alert>
+            </Snackbar>
         </>
     );
 }

@@ -34,3 +34,13 @@ export const updateUser = (data, id) => {
             throw err;
         })
 }
+export const getUserByAuthId = (id) => {
+    return axios
+        .get(baseURL + "users/auth/" + id)
+        .then(resp => resp.data)
+        .catch((err) => {
+            console.log(err);
+            throw err;
+        });
+}
+

@@ -1,0 +1,46 @@
+@import "./../../../globals.scss";
+
+.create-event-modal {
+    .header {
+        font-size: $fontsize-header1;
+        font-weight: bold;
+        margin-bottom: 6px;
+        text-align: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .template-select-wrapper {
+            width: 35%;
+        }
+    }
+
+    .card {
+        width: 100%;
+        border-radius: 10px;
+        margin-bottom: 10px;
+
+        .worship-leader {
+            .MuiSelect-outlined.MuiSelect-outlined {
+                min-width: 118px !important;
+            }
+        }
+    }
+
+    .create-button-wrapper {
+        display: flex;
+        justify-content: space-around;
+
+        .create-button, .cancel-button {
+            background-color: $primary-color;
+        }
+
+        .delete-button {
+            background-color: rgb(218, 1, 1);
+        }
+
+        .create-button {
+            margin-right: 6px;
+        }
+    }
+}

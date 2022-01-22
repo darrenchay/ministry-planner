@@ -1,0 +1,31 @@
+@import './../../../globals.scss';
+
+  
+.comment {
+    display: flex;
+    margin-bottom: 28px;
+
+    .comment-image-container {
+        margin-right: 12px;
+    }
+  
+    .comment-right-part {
+        width: 100%;
+        text-align: left;
+
+        .comment-content {
+            display: flex;
+
+            .comment-author-date {
+                margin-right: 8px;
+                font-size: 13px;
+            }
+        }
+
+        .comment-text {
+            font-size: 14px;
+            font-weight: bold;
+        }
+    }
+}
+  

@@ -1,0 +1,137 @@
+@import "./../../../globals.scss";
+
+.card-role-section {
+    border-radius: 10px;
+    margin-bottom: 12px;
+    padding: 8px 10px;
+    box-shadow: rgba(50, 50, 105, 0.15) 0px 1px 5px 0px, rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
+
+    &:last-child { // additional info section
+        margin-bottom: 0;
+
+        .rolename {
+            color: #d49517;
+        }
+
+        .team-members-wrapper {
+            margin-bottom: 2px;
+            
+            .text-section {       
+                .MuiOutlinedInput-multiline, .MuiInput-multiline {
+                    padding: 0;
+    
+                    textarea {
+                        color: black;
+                    }
+                }
+            }
+        }
+    }
+
+    .rolename {
+        padding: 0 6px;
+        font-size: $fontsize-header2;
+        color: #C7351A;
+    }
+
+    .team-members-wrapper {
+        padding: 6px 12px 6px 12px;
+
+        .team-member-wrapper {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+
+            &:last-child {
+                margin-bottom: 2px;
+            }
+
+            .team-member {
+                display: flex;
+                margin-right: 5px;
+                color: black;
+
+                .tag {
+                    color: lightslategrey;
+                    margin-left: 6px;
+                }
+            }
+
+            &-edit {
+                @extend .team-member-wrapper;
+                margin-bottom: 4px;
+                background: #e0e0e0;
+                padding: 3px 5px 3px 8px;
+                border-radius: 8px;
+            }
+
+            .MuiIconButton-root {
+                padding: 0;
+            }                        
+        }
+
+        .no-members-text {
+            padding: 0;
+            padding-bottom: 2px;
+
+            .MuiOutlinedInput-multiline {
+                padding: 0;
+
+                textarea {
+                    color: black;
+                }
+            }
+        }
+    }
+    .add-team-member-section {
+        margin-bottom: 4px;
+        padding-left: 12px;
+
+        .before {
+            padding: 2px 0;
+            margin-bottom: 2px;
+            color: grey;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .after {
+            display: none;
+            align-items: center;
+
+            &-show {
+                @extend .after;
+                display: flex;
+            }
+
+            .add-team-member {
+                width: 55%;
+                margin-right: 2.5%;
+
+                .MuiSelect-iconOutlined {
+                    right: 3px;
+                }
+            }
+
+            .add-tag {
+                width: 27.5%;
+
+                .MuiOutlinedInput-multiline {
+                    padding: 0;
+                    padding-bottom: 3px;
+
+                    textarea {
+                        height: 27px !important;
+                        padding: 10px 8px 0 8px;
+                    }
+                }
+            }
+
+            .add-button {
+                width: 15%;
+            }
+        }
+    }
+}

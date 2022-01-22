@@ -1,3 +1,4 @@
+import "./RoleSection.scss";
 import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import {
@@ -14,8 +15,6 @@ import {
 } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-
-import "./PlannerPage.scss";
 import * as UsersAPI from './../../utils/Services/UsersAPI';
 
 // TODO: To find a way to use scss instead of makestyles here
@@ -48,13 +47,13 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable }) 
     }, [role, teamMember, teamMapping]);
 
     return (
-        <div key={teamMember._id} className={isEditable ? 'team-member-wrapper-no-margin' : 'team-member-wrapper'}>
+        <div key={teamMember._id} className={isEditable ? 'team-member-wrapper-edit' : 'team-member-wrapper'}>
             <Typography className="team-member">
                 {teamMember.firstname}
+                {tag?.length > 0 && <Typography className="tag" color="textSecondary">
+                    <div className='tag-text' title={tag}>- {tag}</div>
+                </Typography>}
             </Typography>
-            {tag?.length > 0 && <Typography className="tag" color="textSecondary">
-                - {tag}
-            </Typography>}
             {isEditable &&
                 <IconButton className='clearIcon' onClick={handleDeleteMember}>
                     <CancelIcon />
@@ -65,11 +64,12 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable }) 
 }
 
 // The cards for each of the roles (includes handling for additional info as well)
-export default function RoleSection({ data, index, type, isEditable, selectedEventDetails, setSelectedEventDetails }) {
+export default function RoleSection({ data, index, type, isEditable, selectedEvent, setSelectedEvent }) {
     const classes = useStyles();
     const [selectedRole, changeSelectedRole] = useState(data);
     const [newRoleTag, changeNewRoleTag] = useState({ memberId: "", tag: "" });
     const [availableMembers, changeAvailableMembers] = useState([]);
+    const [isShow, changeIsShow] = useState(false);
 
     useEffect(() => {
         changeSelectedRole(data);
@@ -77,16 +77,19 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
     }, [isEditable]);
 
     useEffect(() => {
-        if (index >= 0) {
+        var tempEvent = cloneDeep(selectedEvent);
+        if (type === "role") {
             //Update that role in the teamList array in event details with the selected role object
-            var tempSelectedEventDetails = cloneDeep(selectedEventDetails);
-            var roleIdx = tempSelectedEventDetails.teamList.findIndex((role) => role._id === selectedRole._id);
-            tempSelectedEventDetails.teamList[roleIdx] = selectedRole;
-            setSelectedEventDetails(tempSelectedEventDetails);
+            /* roleIdx commented out due to index mapping of roles always being 0 for createEvent modal,
+            might need to investigate later. */
+            // var roleIdx = tempSelectedEventDetails.teamList.findIndex((role) => role._id === selectedRole.roleId);
+            // tempSelectedEventDetails.teamList[roleIdx] = selectedRole;
+            tempEvent.eventDetails.teamList[index] = selectedRole;
+            // console.log(tempEvent)
+            setSelectedEvent(tempEvent);
         } else {
-            var tempEventDetails = cloneDeep(selectedEventDetails);
-            tempEventDetails.additionalInfo = selectedRole.additionalInfo;
-            setSelectedEventDetails(tempEventDetails);
+            tempEvent.eventDetails.additionalInfo = selectedRole.additionalInfo;
+            setSelectedEvent(tempEvent);
         }
         // eslint-disable-next-line
     }, [selectedRole]);
@@ -121,6 +124,7 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
                     tempRole.teamMember.push(resp);
                     changeNewRoleTag({ memberId: "", tag: "" }); //reset add member section
                     changeSelectedRole(tempRole);
+                    changeIsShow(false);
                 })
                 .catch(err => {
                     console.log(err);
@@ -141,16 +145,19 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
         changeNewRoleTag(tempData);
     }
 
+    const showAddTM = () => {
+        changeIsShow(!isShow);
+    }
+
     return (
         <>
             {
                 type === "role" &&
                 <Card key={index} className='card-role-section'>
-                    <CardContent className='rolename-button-wrapper'>
-                        <Typography className='rolename'>
-                            {data.roleName}
-                        </Typography>
+                    <CardContent className='rolename'>
+                        {data.roleName}
                     </CardContent>
+                    <hr className="thin"></hr>
                     <CardContent className='team-members-wrapper'>
                         {selectedRole.teamMember.length > 0 && selectedRole.teamMember.map(user => (
                             <TeamMember
@@ -180,83 +187,86 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
                                 </CardContent>
                             </div>
                         }
-
-                        {isEditable &&
-                            <div className='add-team-member-section'>
-                                <FormControl variant="outlined" className='add-team-member' size='small'>
-                                    <InputLabel id="teamMemberSelect">Team Member</InputLabel>
-                                    <Select
-                                        className='team-member-select'
-                                        labelId="teamMemberSelect"
-                                        label='Team Member'
-                                        id="teamMemberSelect"
-                                        placeholder="Select a member"
-                                        value={newRoleTag.memberId}
-                                        onChange={(e) => handleAddRole(e, "id")}
-                                    >
-                                        {availableMembers?.length > 0 &&
-                                            availableMembers
-                                                .filter(member => {
-                                                    //Check if member was already assigned, if yes, remove that member
-                                                    var found = true;
-                                                    selectedRole.teamMember.forEach(selectedMember => {
-                                                        if (selectedMember._id === member._id) {
-                                                            found = false;
-                                                        }
-                                                    })
-                                                    return found;
-                                                })
-                                                .map((member, index) => {
-                                                    return <MenuItem value={member._id}>{member.firstname}</MenuItem>
-                                                })
-                                        }
-
-                                        {/* To refactor */}
-                                        {availableMembers.filter(member => {
-                                            var found = true;
-                                            selectedRole.teamMember.forEach(selectedMember => {
-                                                if (selectedMember._id === member._id) {
-                                                    found = false;
-                                                }
-                                            })
-                                            return found;
-                                        }).length === 0 &&
-                                            <MenuItem value={0} disabled={true}>No Members</MenuItem>
-                                        }
-                                    </Select>
-                                </FormControl>
-                                <FormControl className="add-tag">
-                                    <TextField
-                                        multiline={true}
-                                        size='small'
-                                        id="add-role"
-                                        label="Tag"
-                                        variant="outlined"
-                                        value={newRoleTag.tag}
-                                        onChange={(e) => handleAddRole(e, "tag")} />
-                                </FormControl>
-                                <IconButton onClick={addRole} aria-label="settings" className='add-button'>
-                                    <AddCircleIcon />
-                                </IconButton>
-                            </div>
-                        }
                     </CardContent>
+                    {isEditable &&
+                        <div className='add-team-member-section'>
+                            <div className='before' onClick={showAddTM}>
+                                <span className='plus-sign'>+</span> Add a team member
+                            </div>
+                            <div className={isShow ? 'after-show' : 'after'}>
+                            <FormControl variant="outlined" className='add-team-member' size='small'>
+                                <InputLabel className="input-label">Team Member</InputLabel>
+                                <Select
+                                    className='team-member-select'
+                                    labelId="teamMemberSelect"
+                                    id="teamMemberSelect"
+                                    label='Team Member'
+                                    value={newRoleTag.memberId}
+                                    onChange={(e) => handleAddRole(e, "id")}
+                                >
+                                    {availableMembers?.length > 0 &&
+                                        availableMembers
+                                            .filter(member => {
+                                                //Check if member was already assigned, if yes, remove that member
+                                                var found = true;
+                                                selectedRole.teamMember.forEach(selectedMember => {
+                                                    if (selectedMember._id === member._id) {
+                                                        found = false;
+                                                    }
+                                                })
+                                                return found;
+                                            })
+                                            .map((member, index) => {
+                                                return <MenuItem value={member._id}>{member.firstname}</MenuItem>
+                                            })
+                                    }
+
+                                    {/* To refactor */}
+                                    {availableMembers.filter(member => {
+                                        var found = true;
+                                        selectedRole.teamMember.forEach(selectedMember => {
+                                            if (selectedMember._id === member._id) {
+                                                found = false;
+                                            }
+                                        })
+                                        return found;
+                                    }).length === 0 &&
+                                        <MenuItem value={0} disabled={true}>No Members</MenuItem>
+                                    }
+                                </Select>
+                            </FormControl>
+                            <FormControl className="add-tag">
+                                <TextField
+                                    multiline={true}
+                                    size='small'
+                                    id="add-role"
+                                    label="Tag"
+                                    variant="outlined"
+                                    value={newRoleTag.tag}
+                                    onChange={(e) => handleAddRole(e, "tag")} />
+                            </FormControl>
+                            <IconButton onClick={addRole} aria-label="settings" className='add-button'>
+                                <AddCircleIcon />
+                            </IconButton>
+                            </div>
+                        </div>
+                    }
                 </Card>
             }
             {
                 type === "addInfo" &&
-                <Card className='add-info-section'>
-                    <CardContent className='rolename-button-wrapper'>
-                        <Typography className='rolename'>
-                            Additional Info
-                        </Typography>
+                <Card className='card-role-section'>
+                    <CardContent className='rolename'>
+                        Additional Info
                     </CardContent>
-                    <CardContent className='text-section'>
+                    <hr className="thin"></hr>
+                    <CardContent className='team-members-wrapper'>
                         <TextField InputProps={{
                             classes: {
                                 notchedOutline: classes.noBorder
                             },
                         }}
+                            className='text-section'
                             multiline={true}
                             disabled={!isEditable}
                             id="outlined-basic"

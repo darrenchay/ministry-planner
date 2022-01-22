@@ -1,0 +1,319 @@
+@import './../../../globals.scss';
+
+.resources-page-wrapper {
+    padding: 2% 15%;
+
+    .header-section {
+        margin-bottom: 2%;
+
+        .resources-title {
+            font-size: $fontsize-header1 + 6;
+            font-weight: bold;
+        }
+
+        .event-name, .event-time {
+            font-size: $fontsize-header2 + 2;
+        }
+    }
+
+    .main-section {
+        display: flex;
+
+        .songlist-wrapper {
+            width: 63%;
+            margin-right: 2%;
+            border: 1px solid #bbbbbb;
+            border-radius: 10px;
+            padding: 14px 16px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+            
+            .non-edit-mode {
+                .songlist-header {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 8px;
+
+                    .left {
+                        width: 43%;
+                    }
+
+                    .right {
+                        width: 57%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        .text {
+                            font-size: $fontsize-header1 + 2;
+                            line-height: 1.5em;
+                            height: 1.5em;
+                        }
+
+                        .edit-btn {
+                            height: 1.8em;
+                            display: inline-flex;
+                            justify-content: center; /* center the content horizontally */
+                            align-items: center; /* center the content vertically */
+                            margin-right: 2%;
+                            background: $primary-color;
+                            border: 1px solid $primary-color;
+                            border-radius: 4px;
+                            color: white;
+
+                            &:hover {
+                                cursor: pointer;
+                                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                            }
+                        }
+                    }
+                }
+
+                .section {
+                    margin-bottom: 2%;
+
+                    div {
+                        font-size: $fontsize-header2;
+                    }
+
+                    .title {
+                        text-align: left;
+                        padding-left: 2%;
+                        padding-bottom: 5px;
+                        font-size: $fontsize-header1 + 2;
+                    }
+
+                    .song-wrapper {
+                        text-align: left;
+                        padding: 2% 2% 2% 10%;
+                        
+                        .song-info {
+                            width: 50%;
+                            margin-bottom: 4%;
+
+                            .separator {
+                                height: 0.5px;
+                                border: none;
+                                background: #bbbbbb;
+                            }
+
+                            .key, .bpm, .timesig {
+                                display: flex;
+
+                                .left {
+                                    width: 60%;
+                                }
+
+                                .right {
+                                    width: 40%;
+                                }
+                            }
+                        }
+        
+                        
+                        .link {
+                            margin-bottom: 2%;
+
+                            a {
+                                color:  rgb(17, 85, 204);
+                            }
+                        }
+
+                        .video-section {
+                            height: 80%;
+                            width: 80%;
+                            margin-bottom: 4%;
+
+                            .video-wrapper {
+                                overflow: hidden;
+                                padding-bottom: 56.25%;
+                                position: relative;
+                                height: 0;
+
+                                iframe {
+                                    left: 0;
+                                    top: 0;
+                                    height: 100%;
+                                    width: 100%;
+                                    position: absolute;
+                                }
+                            }
+                        }
+        
+                        .notes .text-section {
+                            width: 80%;
+
+                            .MuiOutlinedInput-multiline, .MuiInput-multiline {
+                                padding-top: 12px;
+                                padding-bottom: 12px;
+                
+                                textarea {
+                                    color: black;
+                                }
+                            }
+                        }
+
+                        .left, .link, .notes {
+                            color: rgba(0, 0, 0, 0.7);
+                        }
+                    }
+                }
+            }
+
+            .edit-mode {
+                .songlist-header {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .center .text {
+                        font-size: $fontsize-header1 + 2;
+                        line-height: 1.5em;
+                        height: 1.5em;
+                    }
+
+                    .left, .right {
+                        .edit-btn, .cancel-btn {
+                            height: 1.8em;
+                            display: inline-flex;
+                            justify-content: center; /* center the content horizontally */
+                            align-items: center; /* center the content vertically */
+                            margin-right: 2%;
+                            background: $primary-color;
+                            border: 1px solid $primary-color;
+                            border-radius: 4px;
+                            color: white;
+
+                            &:hover {
+                                cursor: pointer;
+                                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                            }
+                        }
+                    }
+                }
+
+                .section {
+                    padding: 2% 15%;
+
+                    &-title {
+                        width: 50%;
+                        margin-left: 7.5%;
+
+                        .MuiOutlinedInput-input {
+                            text-align: center;
+                            padding: 10px 12px;
+                        }
+                    }
+
+                    .song-wrapper {
+                        text-align: left;
+                        margin-bottom: 5%;
+
+                        .song-number {
+                            margin-bottom: 2%;
+                            color: rgba(0, 0, 0, 0.5);
+                        }
+
+                        .rows-wrapper {
+                            padding: 0 2%;
+
+                            .common-row {
+                                display: flex;
+                                align-items: center;
+
+                                .left {
+                                    width: 35%;
+                                }
+
+                                .right {
+                                    width: 65%;
+
+                                    .MuiFormControl-root {
+                                        width: 100%;
+
+                                        .MuiOutlinedInput-input {
+                                            width: 100%;
+                                            padding: 10px 12px;
+                                            border: none;
+                                        }
+                        
+                                        .MuiOutlinedInput-notchedOutline {
+                                            border: none;
+                                        }
+                        
+                                        input:focus {
+                                            border-radius: 4px;
+                                            background: rgba(0, 0, 0, 0.07);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .add-song-btn {
+                        height: 1.8em;
+                        display: inline-flex;
+                        justify-content: center; /* center the content horizontally */
+                        align-items: center; /* center the content vertically */
+                        margin-right: 2%;
+                        background: #a7a7a7;
+                        border: none;
+                        border-radius: 4px;
+                        color: white;
+
+                        &:hover {
+                            cursor: pointer;
+                            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                        }
+                    }
+                }
+
+                .add-section-btn {
+                    border: none;
+                    background: none;
+                    font-size: $fontsize-header2;
+                    
+                    &:hover {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    
+        .comments-wrapper {
+            width: 35%;
+            border: 1px solid #bbbbbb;
+            border-radius: 10px;
+            padding: 14px 16px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 1px 5px;
+
+            .title {
+                text-align: left;
+                padding-left: 2%;
+                padding-bottom: 5px;
+                font-size: $fontsize-header1 + 2;
+                font-weight: bold;
+            }
+
+            .form-container {
+                display: flex;
+                width: 100%;
+                margin-bottom: 28px;
+                
+                .image-container {
+                    margin-right: 12px;
+                }
+
+                .comment-text {
+                    width: 80%;
+                }
+
+                .post-button {
+                    width: 20%
+                }
+
+            }
+        }
+    }
+
+}
+

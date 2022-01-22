@@ -1,12 +1,8 @@
+import './EditButtonGroup.scss';
 import React, { useState } from "react";
 import {
     Snackbar,
     IconButton,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Button
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
@@ -15,37 +11,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
 import MuiAlert from '@material-ui/lab/Alert';
 
+import ConfirmDelete from '../../utils/Components/ConfirmDelete'
+
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const ConfirmDelete = ({ onClose, open, handleDelete }) => {
-    const handleCancel = () => {
-        onClose();
-    };
-
-    const handleOk = () => {
-        handleDelete();
-    };
-
-    return (
-        <Dialog
-            sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
-            maxWidth="xs"
-            open={open}
-        >
-            <DialogTitle>Delete Confirmation</DialogTitle>
-            <DialogContent dividers>
-                <p>Are you sure you want to delete this event?</p>
-            </DialogContent>
-            <DialogActions>
-                <Button autoFocus onClick={handleCancel}>
-                    Cancel
-                </Button>
-                <Button onClick={handleOk}>Yes</Button>
-            </DialogActions>
-        </Dialog>
-    );
 }
 
 // Handles the toggling of the edit/save/cancel buttons
@@ -144,7 +113,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
     }
 
     return (
-        <div className='edit-button'>
+        <div className='edit-button-section'>
             {!isEditable &&
                 <>
                     <IconButton onClick={handleEdit} aria-label="settings" >
@@ -155,14 +124,16 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                     </IconButton>
                 </>
             }
-            {isEditable && <>
-                <IconButton onClick={handleSave} aria-label="settings">
-                    <DoneIcon />
-                </IconButton>
-                <IconButton onClick={handleCancel} aria-label="settings">
-                    <ClearIcon />
-                </IconButton>
-            </>}
+            {isEditable && 
+                <>
+                    <IconButton className='save-button' onClick={handleSave} aria-label="settings">
+                        <DoneIcon />
+                    </IconButton>
+                    <IconButton className='cancel-button' onClick={handleCancel} aria-label="settings">
+                        <ClearIcon />
+                    </IconButton>
+                </>
+            }
 
             {/* Status update toast notifications */}
             <Snackbar open={openSuccessUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>

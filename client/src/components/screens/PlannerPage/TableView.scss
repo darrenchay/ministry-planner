@@ -1,0 +1,176 @@
+@import "./../../../globals.scss";
+
+.view-wrapper {
+    margin: 0 5%;
+    display: flex;
+
+    .table-wrapper {
+        max-height: 700px;
+        overflow: auto;
+        border: 0.5px solid #dddddd;
+        border-radius: 8px;
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+
+            .headers-row {
+                position: sticky;
+                top: 0;
+                z-index: 1; // any positive value, layer order is global
+                background: #f0f0f0; // any bg-color to overlap
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                padding: 8px;
+                min-width: 150px;
+
+                // &.role-col-edit {
+                //     min-width: 200px;
+                // }
+
+                &.larger-col {
+                    min-width: 220px;
+                }
+
+                &.worshipLeader-col {
+                    min-width: 120px;
+                }
+
+                &.edit-col {
+                    min-width: 80px;
+                }
+
+                .MuiFormControl-root {
+                    width: 100%;
+                }
+
+                .MuiFormControl-marginNormal {
+                    margin: 0;
+
+                    .MuiInputBase-input.Mui-disabled {
+                        color: black;
+                    }
+                }
+
+                .worship-leader {
+                    .MuiSelect-outlined.MuiSelect-outlined {
+                        min-width: 90px;
+                        color: black;
+                    }
+
+                    .MuiSelect-icon.Mui-disabled {
+                        display: none;
+                    }
+
+                    .MuiInputLabel-outlined.MuiInputLabel-shrink {
+                        color: black;
+                    }
+                }
+
+                .title {
+                    .MuiInputBase-multiline {
+                        padding: 8px;
+
+                        textarea {
+                            color: black;
+                            font-size: $fontsize-header2;
+                        }
+                    }
+                }
+
+                .card-role-section {
+                    text-align: left;
+                    box-shadow: none;
+                    border-radius: 0;
+                    padding: 0;
+
+                    .rolename {
+                        display: none;
+                    }
+
+                    hr {
+                        display: none;
+                    }
+
+                    .team-members-wrapper {
+                        padding: 0;
+                    }
+                }
+
+                .rehearsals {
+                    .MuiButton-text {
+                        padding: 6px 0 6px 8px;
+                    }
+                }
+
+                .resources-button {
+                    background-color: $primary-color;
+                }
+        
+                .notify-button {
+                    background-color: rgba(42, 118, 233, 0.9);
+                }
+            }
+        }
+    }
+
+    .create-event-modal {
+        margin-left: 20px;
+
+        .card {
+            .role-section-wrapper {
+                height: 420px !important;
+            }
+        }
+    }
+}
+
+.rehearsal-time {
+    display: flex;
+    align-items: center;
+    padding: 0;
+
+    .MuiInputBase-input.Mui-disabled {
+        color: black;
+    }
+}
+
+.rehearsal-date-picker-wrapper {
+    padding: 8px 0 0;
+
+    .MuiInputBase-adornedEnd {
+        .MuiInputBase-input {
+            padding: 0;
+        }
+    }
+
+    .MuiOutlinedInput-adornedEnd {
+        padding: 0;
+
+        .MuiOutlinedInput-input {
+            padding: 10px;
+        }
+    }
+}
+
+.no-rehearsal-message {
+    padding: 10px 0;
+    color: rgba(0, 0, 0, .38)
+}
+
+.rehearsal-add-button-wrapper {
+    display: flex;
+    justify-content: space-around;
+
+    .rehearsal-add-button {
+        display: flex;
+        align-items: center;
+
+        .add-text {
+            margin-right: 2px;
+            padding-top: 2px;
+        }
+    }
+}
