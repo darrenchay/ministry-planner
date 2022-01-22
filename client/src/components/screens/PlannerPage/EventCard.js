@@ -104,8 +104,9 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
 
     let redirectToResources = () => {
         history.push({
-            pathname: "resources", 
-            event: event});
+            pathname: "resources",
+            event: event
+        });
     };
 
     // Getting the list of worship leaders on event card load
@@ -126,7 +127,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
     //Update event data for template
     useEffect(() => {
         if (isCreate) {
-            setEvent(selectedEvent); 
+            setEvent(selectedEvent);
         }
     }, [selectedEvent, setEvent, isCreate])
 
@@ -207,30 +208,50 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                     subheader={
                         <>
                             {!isTemplate &&
-                                <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardDateTimePicker
-                                            variant="inline"
-                                            margin="normal"
-                                            id="pickupDate"
-                                            inputVariant={isEditable ? "outlined" : "standard"}
-                                            format="d MMM yyyy - HH:mm"
-                                            ampm={false}
-                                            disabled={!isEditable}
-                                            value={new Date(selectedEvent.event.timestamp * 1000)}
-                                            onChange={(e) => handleChangeEvent(e, "date")}
-                                            InputProps={{
-                                                disableUnderline: !isEditable
-                                            }}
-                                            KeyboardButtonProps={{
-                                                "aria-label": "change date",
-                                                style: { display: isEditable ? 'inline-flex' : 'none' }
-                                            }}
-                                        />
-                                    </MuiPickersUtilsProvider>
+                                <div className="event-info-wrapper">
+                                    <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <KeyboardDateTimePicker
+                                                variant="inline"
+                                                margin="normal"
+                                                id="pickupDate"
+                                                inputVariant={isEditable ? "outlined" : "standard"}
+                                                format="d MMM yyyy - HH:mm"
+                                                ampm={false}
+                                                disabled={!isEditable}
+                                                value={new Date(selectedEvent.event.timestamp * 1000)}
+                                                onChange={(e) => handleChangeEvent(e, "date")}
+                                                InputProps={{
+                                                    disableUnderline: !isEditable
+                                                }}
+                                                KeyboardButtonProps={{
+                                                    "aria-label": "change date",
+                                                    style: { display: isEditable ? 'inline-flex' : 'none' }
+                                                }}
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    </div>
+                                    <div classname='service-type'>
+                                        <FormControl variant='outlined' size='small'>
+                                            <InputLabel id="serviceTypeSelect">Service</InputLabel>
+                                            <Select
+                                                className='service-type-select'
+                                                labelId="serviceTypeSelect"
+                                                label='Service'
+                                                value={selectedEvent.event.serviceType}
+                                                onChange={(e) => handleChangeEvent(e, "type")}
+                                                disabled={!isEditable}
+                                            >
+                                                <MenuItem value={serviceTypes[1]}> Main - 7:30 AM </MenuItem>
+                                                <MenuItem value={serviceTypes[2]}> Main - 9:30 AM </MenuItem>
+                                                <MenuItem value={serviceTypes[3]}> Youth </MenuItem>
+                                                <MenuItem value={serviceTypes[4]}> Other </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
                                 </div>
                             }
-                            <div className="event-info-wrapper">
+                            <div className="event-info-wrapper2">
                                 <div className='worship-leader'>
                                     <FormControl variant='outlined' size='small'>
                                         <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
@@ -316,26 +337,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                             }
                                         </Menu>
                                     </div>
-                                }
-                                {!isTemplate &&
-                                    <div classname='service-type'>
-                                        <FormControl variant='outlined' size='small'>
-                                            <InputLabel id="serviceTypeSelect">Service Type</InputLabel>
-                                            <Select
-                                                className='service-type-select'
-                                                labelId="serviceTypeSelect"
-                                                label='Service Type'
-                                                value={selectedEvent.event.serviceType}
-                                                onChange={(e) => handleChangeEvent(e, "type")}
-                                                disabled={!isEditable}
-                                            >
-                                                <MenuItem value={serviceTypes[1]}> Main - 7:30 AM </MenuItem>
-                                                <MenuItem value={serviceTypes[2]}> Main - 9:30 AM </MenuItem>
-                                                <MenuItem value={serviceTypes[3]}> Youth </MenuItem>
-                                                <MenuItem value={serviceTypes[4]}> Other </MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </div>
+
                                 }
                             </div>
                         </>
