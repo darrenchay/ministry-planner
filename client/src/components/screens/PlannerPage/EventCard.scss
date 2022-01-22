@@ -51,42 +51,62 @@
             }
         }
 
-        .date-picker-wrapper {
-            margin-bottom: 9px;
+        .event-info-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .date-picker-wrapper {
+                margin-bottom: 9px;
 
-            .MuiFormControl-marginNormal {
-                margin: 0;
-                width: 100%;
-
-                .MuiInputBase-adornedEnd {
-                    .MuiInputBase-input {
-                        padding: 0;
-                    }
-                }
-
-                .MuiOutlinedInput-adornedEnd {
-                    padding: 0;
-                    width: 70%;
-
-                    .MuiOutlinedInput-input {
-                        padding: 10px;
-                    }
-                }
-            }
-
-            &-no-margin {
-                @extend .date-picker-wrapper;
                 .MuiFormControl-marginNormal {
                     margin: 0;
+                    width: 100%;
 
-                    .MuiInputBase-input.Mui-disabled {
-                        color: black;
+                    .MuiInputBase-adornedEnd {
+                        .MuiInputBase-input {
+                            padding: 0;
+                        }
+                    }
+
+                    .MuiOutlinedInput-adornedEnd {
+                        padding: 0;
+                        width: 70%;
+
+                        .MuiOutlinedInput-input {
+                            padding: 10px;
+                        }
+                    }
+                }
+
+                &-no-margin {
+                    @extend .date-picker-wrapper;
+                    .MuiFormControl-marginNormal {
+                        margin: 0;
+
+                        .MuiInputBase-input.Mui-disabled {
+                            color: black;
+                        }
                     }
                 }
             }
+            .service-type {
+                .MuiSelect-outlined.MuiSelect-outlined {
+                    min-width: 120px;
+                    color: black;
+                }
+
+                .MuiSelect-icon.Mui-disabled {
+                    display: none;
+                }
+
+                .MuiInputLabel-outlined.MuiInputLabel-shrink {
+                    color: black;
+                }
+            }
+
         }
 
-        .event-info-wrapper {
+        .event-info-wrapper2 {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -175,7 +195,7 @@
 
 .no-rehearsal-message {
     padding: 10px 0;
-    color: rgba(0, 0, 0, .38)
+    color: rgba(0, 0, 0, 0.38);
 }
 
 .rehearsal-add-button-wrapper {

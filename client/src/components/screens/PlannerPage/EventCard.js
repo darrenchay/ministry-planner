@@ -16,7 +16,7 @@ import {
     MenuItem,
     Select,
     InputLabel,
-    FormControl
+    FormControl,
 } from '@material-ui/core';
 import { MuiPickersUtilsProvider, KeyboardDateTimePicker } from "@material-ui/pickers";
 
@@ -103,6 +103,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
     const [addDateTime, setAddDateTime] = useState(new Date());
     const [anchorEl, setAnchorEl] = useState(false);
     const history = useHistory();
+    const serviceTypes = ["-", "sevenAM", "nineAM", "youth", "other"];
 
     let redirectToResources = () => {
         history.push({
@@ -139,6 +140,8 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
             tempEvent.event.name = e.target.value;
         } else if (type.toLowerCase() === 'date') {
             tempEvent.event.timestamp = (e.getTime() / 1000);
+        } else if (type.toLowerCase() === 'type') {
+            tempEvent.event.serviceType = e.target.value;
         }
         changeSelectedEvent(tempEvent);
     }
@@ -249,30 +252,50 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                     subheader={
                         <>
                             {!isTemplate &&
-                                <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardDateTimePicker
-                                            variant="inline"
-                                            margin="normal"
-                                            id="pickupDate"
-                                            inputVariant={isEditable ? "outlined" : "standard"}
-                                            format="d MMM yyyy - HH:mm"
-                                            ampm={false}
-                                            disabled={!isEditable}
-                                            value={new Date(selectedEvent.event.timestamp * 1000)}
-                                            onChange={(e) => handleChangeEvent(e, "date")}
-                                            InputProps={{
-                                                disableUnderline: !isEditable
-                                            }}
-                                            KeyboardButtonProps={{
-                                                "aria-label": "change date",
-                                                style: { display: isEditable ? 'inline-flex' : 'none' }
-                                            }}
-                                        />
-                                    </MuiPickersUtilsProvider>
+                                <div className="event-info-wrapper">
+                                    <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <KeyboardDateTimePicker
+                                                variant="inline"
+                                                margin="normal"
+                                                id="pickupDate"
+                                                inputVariant={isEditable ? "outlined" : "standard"}
+                                                format="d MMM yyyy - HH:mm"
+                                                ampm={false}
+                                                disabled={!isEditable}
+                                                value={new Date(selectedEvent.event.timestamp * 1000)}
+                                                onChange={(e) => handleChangeEvent(e, "date")}
+                                                InputProps={{
+                                                    disableUnderline: !isEditable
+                                                }}
+                                                KeyboardButtonProps={{
+                                                    "aria-label": "change date",
+                                                    style: { display: isEditable ? 'inline-flex' : 'none' }
+                                                }}
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    </div>
+                                    <div classname='service-type'>
+                                        <FormControl variant='outlined' size='small'>
+                                            <InputLabel id="serviceTypeSelect">Service</InputLabel>
+                                            <Select
+                                                className='service-type-select'
+                                                labelId="serviceTypeSelect"
+                                                label='Service'
+                                                value={selectedEvent.event.serviceType}
+                                                onChange={(e) => handleChangeEvent(e, "type")}
+                                                disabled={!isEditable}
+                                            >
+                                                <MenuItem value={serviceTypes[1]}> Main - 7:30 AM </MenuItem>
+                                                <MenuItem value={serviceTypes[2]}> Main - 9:30 AM </MenuItem>
+                                                <MenuItem value={serviceTypes[3]}> Youth </MenuItem>
+                                                <MenuItem value={serviceTypes[4]}> Other </MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </div>
                                 </div>
                             }
-                            <div className="event-info-wrapper">
+                            <div className="event-info-wrapper2">
                                 <div className='worship-leader'>
                                     <FormControl variant='outlined' size='small'>
                                         <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
@@ -358,6 +381,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                             }
                                         </Menu>
                                     </div>
+
                                 }
                             </div>
                         </>
