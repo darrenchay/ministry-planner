@@ -29,7 +29,7 @@ export default function CreateEvent({ setUpdateFlag, setOpen, setIsCreate, leade
           teamMember: [],
           teamMapping: [],
         };
-        if (obj.roleName !== "Worship-Leader") {
+        if (obj.roleName !== "Worship-Leader" || obj.roleName !== "Admin-Worship") {
           rolesArr.push(obj);
         }
       });
