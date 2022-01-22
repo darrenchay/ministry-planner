@@ -2,14 +2,14 @@ import './ProfilePage.scss';
 import React, { useState, useEffect } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import logo from './blank-profile-img.png';
-import {fs} from 'fs';
+// import {fs} from 'fs';
 import {
     makeStyles,
     TextField,
     IconButton,
     InputAdornment,
 } from '@material-ui/core';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
@@ -74,18 +74,6 @@ const CustomTooltip = styled(({ className, ...props }) => (
       font-size: 14px;
 `);
 
-/*
-const CustomTooltip = styled(({ className, ...props }) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-      fontSize: 11,
-    
-    },
-  }));
-*/
-  
-
 export default function ProfilePage() {
     const classes = useStyles();
     const [profileImg, setProfileImg] = useState(logo)
@@ -94,30 +82,24 @@ export default function ProfilePage() {
     const [selectedUserInfo, setSelectedUserInfo] = useState({});
     const [showPassword, setShowPassword] = useState(false);
 
-    const [openSuccessUpdateUserInfo, setOpenSuccessUpdateUserInfo] = React.useState(false);
-    const [openErrorUpdateUserInfo, setOpenErrorUpdateUserInfo] = React.useState(false);
+    // eslint-disable-next-line
+    const [openSuccessUpdateUserInfo, setOpenSuccessUpdateUserInfo] = useState(false);
+    // eslint-disable-next-line
+    const [openErrorUpdateUserInfo, setOpenErrorUpdateUserInfo] = useState(false);
    
-    // const [passwordShown, setPasswordShown] = useState(false);
-
     useEffect(() => {
         UsersAPI.getUser("61d67a800c5e2a4accf528ea")
             .then((user) => {
+                console.log(user);
                 setOriginalUserInfo(user);
-                setSelectedUserInfo(user);
                 // setProfileImg('data:image/png;base64,' + (btoa(String.fromCharCode(...new Uint8Array(user.profileImage.data)))))
             });
     }, [])
-    /*
-    var originalUserInfo = {
-        firstName: "Evan",
-        lastName: "Li",
-        email: "youv.van@hotmail.com",
-        phone: "+230 59494445",
-        ministry: ["Music", "Dance"],
-        roles: ["Vocals", "Worship Leader"]
-        // etc
-    }
-    */
+
+    useEffect(() => {
+        setSelectedUserInfo(originalUserInfo);
+    }, [originalUserInfo])
+
     function imageHandler(e) {
         const reader = new FileReader();
         var tempUserInfo = cloneDeep(selectedUserInfo);
@@ -181,12 +163,13 @@ export default function ProfilePage() {
 
     const handleSave = () => {
         // saving the event
-        console.log(selectedUserInfo)
+        // console.log(selectedUserInfo)
         UsersAPI.updateUser(selectedUserInfo, "61d67a800c5e2a4accf528ea")
             .then(resp => {
                 console.log("successfully updated " + resp.nModified + "user");
                 handleCloseSnack();
                 setOpenSuccessUpdateUserInfo(true);
+                setOriginalUserInfo(selectedUserInfo);
             })
             .catch(err => {
                 setOpenErrorUpdateUserInfo(true)
@@ -194,7 +177,6 @@ export default function ProfilePage() {
                 // Add error handler and do not make editable false, instead show an alert which says an error occured
             });
      
-        setOriginalUserInfo(selectedUserInfo);
         toggleEdit(false);
         setShowPassword(false);
     }
@@ -209,6 +191,8 @@ export default function ProfilePage() {
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     
     return (
+        <>
+        {Object.keys(selectedUserInfo).length > 0 && 
         <div className="profile-page-wrapper">
             {/* TO DO: Stack "Change photo" over Profile Picture, and appear on hover */}
             <div className="profile-pic-container">
@@ -347,12 +331,7 @@ export default function ProfilePage() {
                         type={isEditable && showPassword?"text":"password"}
                         value={selectedUserInfo.password}
                         onChange={handleChangePassword} />
-                   
-                    {/* <div className="password">Password</div> 
-                    <div className="passwordValue">
-                    <input type={passwordShown ? "text" : "password"} />
-                    <button onClick={togglePassword}>Show Password</button>
-                    </div> */}
+
                     <div class="row-border"></div>
                     <div className="phone">Phone</div>
                     <TextField InputProps={{
@@ -393,7 +372,8 @@ export default function ProfilePage() {
             }
             </script>
             */}
-        </div>
+        </div>}
+        </>
         
     );
 }
