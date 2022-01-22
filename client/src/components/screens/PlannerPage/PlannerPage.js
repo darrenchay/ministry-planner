@@ -17,7 +17,6 @@ import {
     Chip,
     Checkbox
 } from "@material-ui/core";
-import convertDate from "./../../utils/ConvertDate";
 import * as UsersAPI from "./../../utils/Services/UsersAPI";
 import MuiAlert from "@material-ui/lab/Alert";
 import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRounded";
@@ -129,7 +128,7 @@ export default function PlannerPage() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [month, year, updateFlag]);
+    }, [month, year, updateFlag, filterTypes]);
 
     useEffect(() => {
         if (isTemplate === 1) {
@@ -158,6 +157,7 @@ export default function PlannerPage() {
             setFilteredEvents(
                 events.filter((event) => {
                     const tempIndex = filterTypes.map(values => values.value).findIndex((type) => { return type === event.event.serviceType });
+
                     return (
                         (parseInt(event.event.timestamp) >= currTimestamp)
                         && (filterTypes[tempIndex].checked)
@@ -317,46 +317,6 @@ export default function PlannerPage() {
                             })}
                         </Select>
                     </FormControl>
-                </div>
-                {isTableView && (
-                    <TableView
-                        events={filteredEvents}
-                        setUpdateFlag={setUpdateFlag}
-                        setIsCreate={setIsCreate}
-                        createEventFlag={createEventFlag}
-                        setCreateEventFlag={setCreateEventFlag}
-                        setIsTemplate={setIsTemplate}
-                        createTemplateFlag={createTemplateFlag}
-                        setCreateTemplateFlag={setCreateTemplateFlag}
-                    />
-                )}
-                {!isTableView && (
-                    <div className="cards-wrapper">
-                        <div className="previous-button-wrapper">
-                            <IconButton
-                                disabled={prevDisabled}
-                                onClick={handlePrevious}
-                                className="previous-button"
-                            >
-                                <KeyboardArrowLeftRoundedIcon className="pagination-button-icon" />
-                            </IconButton>
-                        </div>
-                        {(filteredEvents?.length === 0 || events?.length === 0) && (
-                            <div>
-                                <Typography variant="h4">There are no events</Typography>
-                            </div>
-                        )}
-                        {filteredEvents?.length > 0 && !isTableView &&
-                            filteredEvents
-                                .map((event) => {
-                                    return (
-                                        <EventCard
-                                            key={event.event._id}
-                                            event={event}
-                                            setUpdateFlag={setUpdateFlag}
-                                            isCreate={false}
-                                            setEvent={null}
-                                        />
                 </div>
                 {isTableView && (
                     <TableView
