@@ -281,11 +281,13 @@ export default function ResourcesPage() {
                                                                     <hr className='separator' />
                                                                 </div>
                                                                 <div className='link'>Link: <a href={song.link}>{song.link}</a></div>
+                                                                {song.link &&
                                                                 <div className='video-section'>
                                                                     <div className='video-wrapper'>
                                                                         <iframe src={`https://www.youtube.com/embed/${getVideoId(song.link)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                                                     </div>
                                                                 </div>
+                                                                }
                                                                 <div className='notes'>
                                                                     <div>Notes: </div>
                                                                     <TextField
