@@ -44,12 +44,8 @@ class UserActions {
         }, function (err, users) {
             if (err) {
                 res.status(400).send(err);
-            } else if (users == '') {
-                res.status(200).send({
-                    statusCode: 404,
-                    errorMessage: "No users with role '" + req.params.role + "' was found"
-                });
-            } else {
+            }
+            else {
                 res.status(200).send(users);
             }
         })
