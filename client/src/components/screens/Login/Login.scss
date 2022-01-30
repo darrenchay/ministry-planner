@@ -1,42 +1,80 @@
 @import "./../../../globals.scss";
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
 .login-wrapper {
-    background: linear-gradient($primary-color 0%, #e6b9a2 100%);
+    background: linear-gradient(#D83B1E 0%, #FE9969 100%);
+    display: flex;
+    flex-direction: column;
+    /*
     align-items: center;
-    height: 500px;
-    width: 200px;
+    height: 100%;
+    width: 100%;
     min-width: 80%;
     min-height: max-content;
+    */
+
+    min-height: 100%;
+    min-width: 1024px;
+	
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+        
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
 
     .title {
-        flex-grow: 1;
+
         font-weight: bold;
         color: white;
-        padding-top: 50px;
-        border-radius: 10px;
+        padding-top: 1.3em;
     }
-
-    .description {
+    .description-container {
         flex-grow: 1;
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5em;
+        //text-align: center;    
+        //background-color: black;
+    }
+    .description {
+        
         color: white;
-        padding-top: 50px;
-        border-radius: 10px;
+      
     }
 
     .logo-background {
-        background-color: white;
+        //background-color: white;
         max-width: 20%;
         align-items: center;
     }
 
     .login-button {
-        box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.3);
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
         background-color: white;
         max-width: "100%";
         font-weight: bold;
         color: $primary-color;
-        padding: 12px;
-        border-radius: 15px;
-        margin-bottom: 25px;
+        padding: 0.6em 1.2em;
+        border-radius: 10px;
+        margin-top: 2.5em;
+    }
+    .login-button-hovered {
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+        text-decoration: underline;
+        background-color: white;
+        max-width: "100%";
+        font-weight: bold;
+        color: $primary-color;
+        padding: 0.6em 1.2em;
+        border-radius: 10px;
+        margin-top: 2.5em;
     }
 }
