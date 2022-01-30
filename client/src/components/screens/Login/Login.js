@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth0 } from '@auth0/auth0-react';
 import {
     Button,
@@ -9,26 +9,17 @@ import { useHistory } from "react-router-dom";
 import "./Login.scss"
 import logo from "../../../Assets/Images/stpaul-logo.png";
 
-const LoginButton = () => {
+export default function LoginPage() {
+ 
+    const { isAuthenticated } = useAuth0();
+    const history = useHistory();
+    const [loginHovered, setLoginHovered] = useState(false);
+
     const { loginWithRedirect } = useAuth0();
 
     const login = () => {
         loginWithRedirect();
     }
-
-    return (
-        <Button
-            className="login-button"
-            onClick={login}
-        >
-            Log In
-        </Button>
-    );
-};
-
-export default function LoginPage() {
-    const { isAuthenticated } = useAuth0();
-    const history = useHistory();
 
     useEffect(() => {
         if (isAuthenticated === true) {
@@ -37,18 +28,39 @@ export default function LoginPage() {
         // eslint-disable-next-line
     }, [isAuthenticated]);
 
+    const handleOnMouseOver = () => {
+        setLoginHovered(true);
+    };
+
+    const handleOnMouseLeave = () => {
+        setLoginHovered(false);
+    };
+    
+
     return (
         <Paper elevation={3} className="login-wrapper">
             <Typography className="title" variant="h2">
-                Welcome to Ministry Planner
+                WELCOME TO MINISTRY PLANNER
             </Typography>
+            {/* 
             <Paper elevation={0} className="logo-background">
                 <img src={logo} alt="logo" />
             </Paper>
-            <Typography className="description" variant="h4">
-                Please login or signup to see the events
-            </Typography>
-            <LoginButton />
+             */}
+            <div className="description-container">
+                <Typography className="description" variant="h4">
+                    Please log in or sign up to see events ☺
+                </Typography>
+                <Button
+                    className={loginHovered ? "login-button-hovered": "login-button"}
+                    onClick={login}  
+                    onMouseOver={handleOnMouseOver}  
+                    onMouseLeave={handleOnMouseLeave}
+                    variant="h5"
+                >
+                    Log In
+                </Button>
+            </div>
         </Paper>
     );
 }
