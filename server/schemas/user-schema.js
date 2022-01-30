@@ -3,15 +3,21 @@ import { Schema, model } from 'mongoose';
 const userSchema = new Schema({
     firstname: {
         type: String,
-        required: true
+        default: ''
     },
-    authId: {
-        type: String,
-        required: true
+    authenticated: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    registered: {
+        type: Boolean,
+        required: true,
+        default: false
     },
     lastname: {
         type: String,
-        required: true
+        default: ''
     },
     email: {
         type: String,
@@ -20,7 +26,8 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        // required: true,
+        // default: '',
         min: 8,
         max: 40
     },
@@ -31,12 +38,10 @@ const userSchema = new Schema({
     role: [
         {
             type: String,
-            required: true
         }
     ],
     ministry: {
         type: String,
-        required: true
     },
     assignedEvents: [
         {

@@ -4,12 +4,12 @@ const sendgrid = require('@sendgrid/mail')
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 class EmailActions {
-    sendEmail(req, res) {
+    notifyUsers(req, res) {
         var users = req.body.users;
         for (var i = 0; i < users.length; i++) {
             var data = users[i];
             const msg = {
-                template_id: process.env.SENDGRID_TEMPLATE_ID,
+                template_id: process.env.SENDGRID_CONFIRM_EVENT_TEMPLATE_ID,
                 from: "ministryplannerteam@gmail.com",
                 personalizations: [{
                     to: { email: data.recipient.email },
@@ -21,7 +21,7 @@ class EmailActions {
                     },
                 }],
             }
-
+            console.log(msg);
             sendgrid
                 .send(msg)
                 .catch((err) => {
@@ -32,6 +32,32 @@ class EmailActions {
         res.status(200).send("Emails sent successfully");
     };
 
+    authNewUser(req, res) {
+        var data = req.body.data;
+        console.log(data)
+        const msg = {
+            template_id: process.env.SENDGRID_AUTH_NEW_USER_TEMPLATE_ID,
+            from: "ministryplannerteam@gmail.com",
+            personalizations: [{
+                to: { email: data.recipient.email },
+                dynamic_template_data: {
+                    recipient_name: data.recipient.name,
+                    email: data.email,
+                    hostIP: process.env.NODE_ENV === 'production' ? "http://localhost:8080" : "https://ministry-planner-server.herokuapp.com/api/",
+                    // hostIP: "http://localhost:8080",
+                    userID: data.userId
+                },
+            }],
+
+        }
+            sendgrid
+            .send(msg)
+            .catch((err) => {
+                res.status(400).send(err.message);
+                return;
+            })
+        res.status(200).send("Email sent successfully");
+    } 
 }
 
 export default new EmailActions();

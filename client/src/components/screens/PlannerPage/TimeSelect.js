@@ -58,7 +58,8 @@ export default function TimeSelect({
     setIsTemplate,
     leaders
 }) {
-    const isAdmin = useSelector((state) => state.isAdmin);
+    // const isAdmin = useSelector((state) => state.isAdmin);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const [years, setYears] = useState([]);

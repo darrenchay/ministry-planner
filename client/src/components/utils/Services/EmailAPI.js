@@ -13,3 +13,15 @@ export const notifyAllUsers = (data) => {
             throw err;
         })
 }
+
+export const authNewUser = (data) => {
+    return axios({
+        method: "post",
+        url: baseURL + "email/authNewUser",
+        data: data
+    })
+        .then(resp => resp.data)
+        .catch(err => {
+            throw err;
+        })
+}
