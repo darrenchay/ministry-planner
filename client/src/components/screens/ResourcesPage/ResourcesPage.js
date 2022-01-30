@@ -75,7 +75,7 @@ export default function ResourcesPage() {
                 setOriginalSonglist(resource[0].sections);
                 setSelectedSonglist(resource[0].sections);
             });
-    }, [event]);
+    }, [originalSonglist]);
 
     const handleEdit = () => {
         setIsEditable(true);

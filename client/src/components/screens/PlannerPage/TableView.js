@@ -24,7 +24,7 @@ export default function TableView({
         RolesAPI.getAllRoles().then((roles) => {
             var tempRoles = [];
             roles.forEach((role, index) => {
-                if (role.name !== "Worship-Leader") {
+                if (role.name !== "Worship-Leader" && role.name !== "Admin-Worship") {
                     tempRoles.push(role.name);
                 }
                 if (index === roles.length - 1) {
