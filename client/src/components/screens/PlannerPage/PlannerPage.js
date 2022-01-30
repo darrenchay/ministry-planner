@@ -117,7 +117,7 @@ export default function PlannerPage() {
         if (registered === false) {
             history.push('/profile');
         }
-    }, [])
+    }, [history]);
 
     // Updates events list when something on the page updates
     useEffect(() => {

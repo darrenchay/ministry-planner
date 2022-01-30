@@ -1,6 +1,6 @@
 import "./TableView.scss";
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import * as RolesAPI from "../../utils/Services/RolesAPI";
 import TableViewRow from "./TableViewRow";
 import CreateEvent from "./CreateEvent";

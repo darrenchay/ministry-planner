@@ -1,6 +1,6 @@
 import "./EventCard.scss";
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import cloneDeep from "lodash/cloneDeep";
 import { useHistory } from "react-router-dom";
 import { CustomScrollbar } from "../../utils/CustomScrollbar/CustomScrollbar";

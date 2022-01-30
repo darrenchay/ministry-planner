@@ -69,7 +69,7 @@ export default function HomePage() {
                     history.push("/newUser");
                 }
             })
-    }, [user, dispatch])
+    }, [user, dispatch, history])
 
     let redirectToPlanner = (event) => {
         history.push("planner");
