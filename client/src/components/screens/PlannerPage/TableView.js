@@ -17,7 +17,7 @@ export default function TableView({
     setCreateTemplateFlag,
     leaders
 }) {
-    const isAdmin = useSelector((state) => state.isAdmin);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const [rolesHeaders, setRolesHeaders] = useState([]);
 
     useEffect(() => {

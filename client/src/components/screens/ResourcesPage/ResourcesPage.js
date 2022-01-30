@@ -57,7 +57,8 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function ResourcesPage() {
     const location = useLocation();
-    const event = location.event;
+    const event = JSON.parse(localStorage.getItem('eventData'));
+    // const event = location.event;
     const [resource, setResource] = useState();
     const [originalSonglist, setOriginalSonglist] = useState();
     const [selectedSonglist, setSelectedSonglist] = useState(originalSonglist);

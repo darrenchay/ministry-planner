@@ -94,7 +94,7 @@ const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
 }
 
 export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent, leaders }) {
-    const isAdmin = useSelector((state) => state.isAdmin);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreate);
     const [originalEvent, changeOriginalEvent] = useState(event);
@@ -106,6 +106,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
     const serviceTypes = ["-", "sevenAM", "nineAM", "youth", "other"];
 
     let redirectToResources = () => {
+        localStorage.setItem('eventData', JSON.stringify(originalEvent));
         history.push({
             pathname: "resources",
             event: event

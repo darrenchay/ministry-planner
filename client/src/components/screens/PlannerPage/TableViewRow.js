@@ -92,7 +92,7 @@ export default function TableViewRow({
     setEvent,
     leaders
 }) {
-    const isAdmin = useSelector((state) => state.isAdmin);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreateEvent);
     const [originalEvent, changeOriginalEvent] = useState(event);
