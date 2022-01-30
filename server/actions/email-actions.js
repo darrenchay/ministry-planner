@@ -34,7 +34,6 @@ class EmailActions {
 
     authNewUser(req, res) {
         var data = req.body.data;
-        console.log(data)
         const msg = {
             template_id: process.env.SENDGRID_AUTH_NEW_USER_TEMPLATE_ID,
             from: "ministryplannerteam@gmail.com",
@@ -50,14 +49,34 @@ class EmailActions {
             }],
 
         }
-            sendgrid
+        sendgrid
             .send(msg)
             .catch((err) => {
                 res.status(400).send(err.message);
                 return;
             })
         res.status(200).send("Email sent successfully");
-    } 
+    }
+
+    approveConfimation(req, res) {
+        var data = req.body.data;
+        console.log(data)
+        const msg = {
+            template_id: process.env.SENDGRID_APPROVAL_USER_TEMPLATE_ID,
+            from: "ministryplannerteam@gmail.com",
+            personalizations: [{
+                to: { email: data.recipient.email },
+            }],
+
+        }
+        sendgrid
+            .send(msg)
+            .catch((err) => {
+                res.status(400).send(err.message);
+                return;
+            })
+        res.status(200).send("Email sent successfully");
+    }
 }
 
 export default new EmailActions();

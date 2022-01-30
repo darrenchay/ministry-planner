@@ -1,4 +1,8 @@
 import userSchema from '../schemas/user-schema';
+const sendgrid = require('@sendgrid/mail')
+
+sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+const baseURL = (process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL);
 
 class UserActions {
     addOne(req, res) {
@@ -62,7 +66,8 @@ class UserActions {
                 res.status(400).send(err.errmsg);
             else
                 res.status(200).send({
-                    user: user}
+                    user: user
+                }
                 );
         });
     }
@@ -107,8 +112,28 @@ class UserActions {
             else if (data.n == 0)
                 res.status(404).send("User '" + req.params.id + "' not found");
             else if (data.nModified == 1 && body.authenticated == true) {
-                res.status(200).send("User Authenticated");
-                //send email to new user
+                // Finding the user after authenticating
+                userSchema.findOne({ _id: req.params.id })
+                    .exec((err, user) => {
+                        //send email to new user
+                        const msg = {
+                            template_id: process.env.SENDGRID_APPROVAL_USER_TEMPLATE_ID,
+                            from: "ministryplannerteam@gmail.com",
+                            personalizations: [{
+                                to: { email: user.email },
+                            }],
+                        }
+                        sendgrid
+                            .send(msg)
+                            .then(()=> {
+                                console.log("Approval email sent");
+                                res.status(200).send("User Authenticated");
+                            })
+                            .catch((err) => {
+                                res.status(400).send(err.message);
+                                return;
+                            })
+                    });
             } else {
                 res.status(200).send("Authenticated toggled");
             }
