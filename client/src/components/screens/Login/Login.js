@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import { useHistory } from "react-router-dom";
 import "./Login.scss"
-import logo from "../../../Assets/Images/stpaul-logo.png";
+// import logo from "../../../Assets/Images/stpaul-logo.png";
 
 export default function LoginPage() {
  
