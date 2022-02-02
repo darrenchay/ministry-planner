@@ -34,13 +34,38 @@ export const updateUser = (data, id) => {
             throw err;
         })
 }
-export const getUserByAuthId = (id) => {
+export const getUserByEmail = (email) => {
     return axios
-        .get(baseURL + "users/auth/" + id)
+        .get(baseURL + "users/email/" + email)
         .then(resp => resp.data)
         .catch((err) => {
             console.log(err);
             throw err;
         });
+}
+
+export const createUser = (user) => {
+    return axios({
+        method: "post",
+        url: baseURL + "users/add",
+        data: user
+    })
+        .then(resp => resp.data)
+        .catch(err => {
+            console.log(err);
+            throw err;
+        })
+}
+
+export const registerUser = (id) => {
+    return axios({
+        method: "post",
+        url: baseURL + "users/register/" + id + "/true"
+    })
+        .then(resp => resp.data)
+        .catch(err => {
+            console.log(err);
+            throw err;
+        })
 }
 

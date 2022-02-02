@@ -7,6 +7,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useDispatch } from 'react-redux';
 import isAdmin from '../../state/actions/adminAction.js';
 import * as UserAPI from "../../utils/Services/UsersAPI";
+import * as EmailAPI from "../../utils/Services/EmailAPI";
 
 export default function HomePage() {
     const { user } = useAuth0();
@@ -14,18 +15,61 @@ export default function HomePage() {
     const history = useHistory();
 
     useEffect(() => {
-        UserAPI.getUserByAuthId(user.sub.split('|')[1])
-        .then((userData) => {
-            if (userData === '') {
-                console.log("New user");
-            } else {
-                if(userData[0].role.includes("Worship-Leader")) {
-                    dispatch(isAdmin());
-                    console.log("Admin");
+        // console.log(user)
+        UserAPI.getUserByEmail(user.email)
+            .then((data) => {
+                // console.log(data)
+                // Checking if user exists
+                if (data.user.length > 0) {
+                    // Checks if user is authenticated
+                    if (data.user[0].authenticated === true) {
+                        localStorage.setItem('userData', JSON.stringify(data.user[0]))
+                        //Checks if user is registered
+                        if (data.user[0].registered === true) {
+                            // Verifies user is an admin
+                            if (data.user[0].role.includes("Worship-Leader")) {
+                                dispatch(isAdmin());
+                                // console.log("Admin");
+                                localStorage.setItem('isAdmin', JSON.stringify(true));
+                            } else {
+                                localStorage.setItem('isAdmin', JSON.stringify(false));
+                            }
+                        } else {
+                            //If user is not registered redirect to create profile
+                            history.push("/profile");
+                        }
+                    } else {
+                        //If user is not authed but created, redirect to waiting page
+                        history.push("/newUser");
+                    }
+                } else {
+                    // a new user just signed up; send approval email
+                    var newUser = {
+                        "email": user.email
+                    }
+                    UserAPI.createUser(newUser).then((user) => {
+                        console.log(user)
+                        var data = {
+                            data: {
+                                recipient: {
+                                    name: "Jason",
+                                    email: "darrenchay@gmail.com"
+                                },
+                                email: user.email,
+                                userId: user._id
+                            }
+                        }
+                        console.log(data)
+                        EmailAPI.authNewUser(data).then(resp => {
+                            console.log(resp)
+                        })
+                    }
+                    );
+                    //redirect user to waiting page
+                    history.push("/newUser");
                 }
-            }
-        })
-    }, [user, dispatch])
+            })
+    }, [user, dispatch, history])
 
     let redirectToPlanner = (event) => {
         history.push("planner");

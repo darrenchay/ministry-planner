@@ -88,12 +88,18 @@ export default function ProfilePage() {
     const [openErrorUpdateUserInfo, setOpenErrorUpdateUserInfo] = useState(false);
    
     useEffect(() => {
-        UsersAPI.getUser("61d67a800c5e2a4accf528ea")
-            .then((user) => {
-                console.log(user);
-                setOriginalUserInfo(user);
-                // setProfileImg('data:image/png;base64,' + (btoa(String.fromCharCode(...new Uint8Array(user.profileImage.data)))))
-            });
+        var user = JSON.parse(localStorage.getItem('userData'))
+        setOriginalUserInfo(user);
+        if(user.registered === false) {
+            toggleEdit(true);
+        }
+
+        // UsersAPI.getUser("61d67a800c5e2a4accf528ea")
+        //     .then((user) => {
+        //         console.log(user);
+        //         setOriginalUserInfo(user);
+        //         // setProfileImg('data:image/png;base64,' + (btoa(String.fromCharCode(...new Uint8Array(user.profileImage.data)))))
+        //     });
     }, [])
 
     useEffect(() => {
@@ -163,10 +169,28 @@ export default function ProfilePage() {
 
     const handleSave = () => {
         // saving the event
-        // console.log(selectedUserInfo)
-        UsersAPI.updateUser(selectedUserInfo, "61d67a800c5e2a4accf528ea")
+        console.log(selectedUserInfo)
+
+        if(selectedUserInfo.registered === false) {
+            var tempUser = cloneDeep(selectedUserInfo);
+            tempUser.registered = true;
+            setSelectedUserInfo(tempUser);
+            UsersAPI.updateUser(tempUser, tempUser._id)
+                .then(resp => {
+                    console.log("successfully updated " + resp.nModified + " user");
+                    handleCloseSnack();
+                    setOpenSuccessUpdateUserInfo(true);
+                    setOriginalUserInfo(selectedUserInfo);
+                })
+                .catch(err => {
+                    setOpenErrorUpdateUserInfo(true)
+                    console.log(err);
+                    // Add error handler and do not make editable false, instead show an alert which says an error occured
+                });
+        } else {
+            UsersAPI.updateUser(selectedUserInfo, selectedUserInfo._id)
             .then(resp => {
-                console.log("successfully updated " + resp.nModified + "user");
+                console.log("successfully updated " + resp.nModified + " user");
                 handleCloseSnack();
                 setOpenSuccessUpdateUserInfo(true);
                 setOriginalUserInfo(selectedUserInfo);
@@ -176,6 +200,7 @@ export default function ProfilePage() {
                 console.log(err);
                 // Add error handler and do not make editable false, instead show an alert which says an error occured
             });
+        }
      
         toggleEdit(false);
         setShowPassword(false);
@@ -209,7 +234,12 @@ export default function ProfilePage() {
                 <input type="file" name="image-upload" id="input" accept="image/*" onChange={imageHandler} />
             </div>
             {/* Use typography instead*/}
-            <h1 className="titleName">{originalUserInfo.firstname + ' ' + originalUserInfo.lastname}</h1>
+            {originalUserInfo?.firstname?.length > 0 && 
+                <h1 className="titleName">{originalUserInfo.firstname + ' ' + originalUserInfo.lastname}</h1>
+            }
+            {originalUserInfo?.firstname?.length === 0 && 
+                <h1 className="titleName">CREATE YOUR PROFILE</h1>
+            }
             <div className="userInfo">
                 
                 <div className="header">
@@ -239,7 +269,11 @@ export default function ProfilePage() {
                 </div>
                 
                 <div className="contactInfo">
-                    <div className="firstname">First Name</div>
+                    <div className="firstname">
+                        First Name 
+                        <div className="required">*</div>
+                    </div>
+                    
                     <TextField InputProps={{
                         classes: {
                             // notchedOutline: classes.noBorder,
@@ -254,9 +288,13 @@ export default function ProfilePage() {
                         variant={isEditable ? "outlined" : "standard"}
                         placeholder="Enter First Name"
                         value={selectedUserInfo.firstname}
-                        onChange={handleChangeFirstName} />
-                    <div class="row-border"></div>
-                    <div className="lastname">Last Name</div>
+                        onChange={handleChangeFirstName}
+                        required />
+                    <div className="row-border"></div>
+                    <div className="lastname">
+                        Last Name  
+                        <div className="required">*</div>
+                    </div>
                     <TextField InputProps={{
                         classes: {
                             // notchedOutline: classes.noBorder,
@@ -272,7 +310,7 @@ export default function ProfilePage() {
                         placeholder="Enter First Name"
                         value={selectedUserInfo.lastname}
                         onChange={handleChangeLastName} />
-                    <div class="row-border"></div>
+                    <div className="row-border"></div>
                     <div className="email">Email</div>
                     <TextField InputProps={{
                         classes: {
@@ -300,7 +338,7 @@ export default function ProfilePage() {
                         placeholder="Enter email"
                         value={selectedUserInfo.email}
                         onChange={handleChangeEmail} />
-                    <div class="row-border"></div>
+                    <div className="row-border"></div>
                     <div className="password">Password</div>
                         <TextField InputProps={{
                         classes: {
@@ -332,7 +370,7 @@ export default function ProfilePage() {
                         value={selectedUserInfo.password}
                         onChange={handleChangePassword} />
 
-                    <div class="row-border"></div>
+                    <div className="row-border"></div>
                     <div className="phone">Phone</div>
                     <TextField InputProps={{
                         classes: {
@@ -368,7 +406,7 @@ export default function ProfilePage() {
             {/*  
             <script type="text/javascript">
                 for (let i = 0; i < originalUserInfo.ministry.length; i++) {
-                $('<div class="results" />').text(ministry[i]).appendTo('ministry');       
+                $('<div className="results" />').text(ministry[i]).appendTo('ministry');       
             }
             </script>
             */}

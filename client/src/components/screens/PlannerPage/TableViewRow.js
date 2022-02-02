@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import {
     makeStyles,
@@ -92,7 +92,7 @@ export default function TableViewRow({
     setEvent,
     leaders
 }) {
-    const isAdmin = useSelector((state) => state.isAdmin);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreateEvent);
     const [originalEvent, changeOriginalEvent] = useState(event);

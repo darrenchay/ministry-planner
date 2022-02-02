@@ -1,6 +1,6 @@
 import "./TableView.scss";
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import * as RolesAPI from "../../utils/Services/RolesAPI";
 import TableViewRow from "./TableViewRow";
 import CreateEvent from "./CreateEvent";
@@ -17,14 +17,14 @@ export default function TableView({
     setCreateTemplateFlag,
     leaders
 }) {
-    const isAdmin = useSelector((state) => state.isAdmin);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const [rolesHeaders, setRolesHeaders] = useState([]);
 
     useEffect(() => {
         RolesAPI.getAllRoles().then((roles) => {
             var tempRoles = [];
             roles.forEach((role, index) => {
-                if (role.name !== "Worship-Leader") {
+                if (role.name !== "Worship-Leader" && role.name !== "Admin-Worship") {
                     tempRoles.push(role.name);
                 }
                 if (index === roles.length - 1) {

@@ -1,6 +1,6 @@
 import "./TimeSelect.scss";
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import {
     Slider,
     Typography,
@@ -58,7 +58,8 @@ export default function TimeSelect({
     setIsTemplate,
     leaders
 }) {
-    const isAdmin = useSelector((state) => state.isAdmin);
+    // const isAdmin = useSelector((state) => state.isAdmin);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth();
     const [years, setYears] = useState([]);

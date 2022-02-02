@@ -10,6 +10,7 @@ import ProfilePage from "./components/screens/ProfilePage/ProfilePage";
 import Navbar from "./components/utils/Navbar/Navbar";
 import Auth0ProviderWithHistory from "./components/utils/Auth/Auth";
 import ProtectedRoute from "./components/utils/Auth/ProtectedRoute";
+import NewUserPage from "./components/screens/NewUser/NewUser";
 
 export default function Router() {
 
@@ -26,6 +27,7 @@ export default function Router() {
                         <ProtectedRoute path="/team" component={TeamPage} />
                         <ProtectedRoute path="/aboutus" component={AboutUsPage} />
                         <ProtectedRoute path="/profile" component={ProfilePage} />
+                        <ProtectedRoute path="/newUser" component={NewUserPage} />
                     </Switch>
                 </Auth0ProviderWithHistory>
 

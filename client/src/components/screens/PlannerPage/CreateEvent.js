@@ -29,9 +29,11 @@ export default function CreateEvent({ setUpdateFlag, setOpen, setIsCreate, leade
           teamMember: [],
           teamMapping: [],
         };
-        if (obj.roleName !== "Worship-Leader" || obj.roleName !== "Admin-Worship") {
+        if (obj.roleName !== "Worship-Leader" && obj.roleName !== "Admin-Worship") {
+            console.log(obj.roleName)
           rolesArr.push(obj);
         }
+        console.log(rolesArr)
       });
       var eventObj = {
         event: {

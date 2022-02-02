@@ -1,5 +1,6 @@
 import "./PlannerPage.scss";
 import React, { useEffect, useState } from "react";
+import { useHistory } from 'react-router-dom';
 import * as EventsAPI from "./../../utils/Services/EventsAPI";
 import cloneDeep from "lodash/cloneDeep";
 import {
@@ -49,6 +50,7 @@ const MenuProps = {
 };
 
 export default function PlannerPage() {
+    const history = useHistory();
     const [events, setEvents] = useState(null);
     const [month, setMonth] = useState(
         steps.find(({ value }) => value === new Date().getMonth()).label
@@ -109,6 +111,13 @@ export default function PlannerPage() {
         setOpenSuccessDelete(false);
         setOpenErrorDelete(false);
     };
+
+    useEffect(() => {
+        var registered = JSON.parse(localStorage.getItem('userData')).registered;
+        if (registered === false) {
+            history.push('/profile');
+        }
+    }, [history]);
 
     // Updates events list when something on the page updates
     useEffect(() => {
