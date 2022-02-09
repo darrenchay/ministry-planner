@@ -6,26 +6,12 @@ import cloneDeep from "lodash/cloneDeep";
 import {
     Typography,
     IconButton,
-    Snackbar,
-    FormControl,
-    FormControlLabel,
-    InputLabel,
-    Select,
-    OutlinedInput,
-    MenuItem,
-    ListItemText,
-    Box,
-    Chip,
-    Checkbox
+    Snackbar
 } from "@material-ui/core";
 import * as UsersAPI from "./../../utils/Services/UsersAPI";
 import MuiAlert from "@material-ui/lab/Alert";
 import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRounded";
 import KeyboardArrowRightRoundedIcon from "@material-ui/icons/KeyboardArrowRightRounded";
-import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
-import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import EventCard from "./EventCard";
 import TableView from "./TableView";
@@ -36,18 +22,6 @@ import steps from "../../utils/Components/MonthSteps";
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
 
 export default function PlannerPage() {
     const history = useHistory();
@@ -257,7 +231,7 @@ export default function PlannerPage() {
             <div className="planner-page-wrapper">
                 <div className="top-section">
                     {/* <div class="view-btn-wrapper"> */}
-                    <ToggleButtonGroup
+                    {/* <ToggleButtonGroup
                         className="view-btn-wrapper"
                         value={isTableView}
                         exclusive
@@ -270,7 +244,7 @@ export default function PlannerPage() {
                         <ToggleButton value={false}>
                             <CalendarViewWeekIcon />
                         </ToggleButton>
-                    </ToggleButtonGroup>
+                    </ToggleButtonGroup> */}
                     {/* </div> */}
                     <TimeSelect
                         month={month}
@@ -285,8 +259,14 @@ export default function PlannerPage() {
                         setCreateEventFlag={setCreateEventFlag}
                         setCreateTemplateFlag={setCreateTemplateFlag}
                         setIsTemplate={setIsTemplate}
+                        leaders={leaders}
+                        changeView={changeView}
+                        filterTypes={filterTypes}
+                        handleChangeSelectedFilterType={handleChangeSelectedFilterType}
+                        handleSelectAll={handleSelectAll}
+                        numChecked={numChecked}
                     />
-                    <FormControl sx={{ m: 1, width: 300 }}>
+                    {/* <FormControl sx={{ m: 1, width: 300 }}>
                         <InputLabel id="filter-label">Filter</InputLabel>
                         <Select
                             labelId="filter-label"
@@ -325,7 +305,7 @@ export default function PlannerPage() {
                                 )
                             })}
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
                 </div>
                 {isTableView && (
                     <TableView
