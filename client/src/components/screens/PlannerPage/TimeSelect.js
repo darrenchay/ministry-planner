@@ -3,16 +3,23 @@ import React, { useEffect, useState } from "react";
 // import { useSelector } from 'react-redux';
 import {
     Slider,
-    Typography,
-    Select,
     Button,
     MenuItem,
-    FormControl,
-    makeStyles,
+    FormControlLabel,
+    ListItemText,
+    Box,
+    Chip,
+    Checkbox
 } from "@material-ui/core";
+import { Select, InputLabel, FormControl } from "@mui/material";
+import { makeStyles } from "@material-ui/core";
 import Modal from "@material-ui/core/Modal";
 import CreateTemplate from "./CreateTemplate";
 import CreateEvent from "./CreateEvent";
+import CalendarViewMonthIcon from "@mui/icons-material/CalendarViewMonth";
+import CalendarViewWeekIcon from "@mui/icons-material/CalendarViewWeek";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import FastForwardOutlinedIcon from "@material-ui/icons/FastForwardOutlined";
 
@@ -26,6 +33,17 @@ function getModalStyle() {
         transform: `translate(-${top}%, -${left}%)`,
     };
 }
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -56,7 +74,12 @@ export default function TimeSelect({
     setCreateEventFlag,
     setCreateTemplateFlag,
     setIsTemplate,
-    leaders
+    leaders,
+    changeView,
+    filterTypes,
+    handleChangeSelectedFilterType,
+    handleSelectAll,
+    numChecked
 }) {
     // const isAdmin = useSelector((state) => state.isAdmin);
     const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
@@ -124,14 +147,21 @@ export default function TimeSelect({
     };
     return (
         <div className="time-select-wrapper">
-            <div>
-                <Typography className="time-header">
-                    <b>
-                        {marks.find(({ label }) => label === month).full} {year}
-                    </b>
-                </Typography>
-            </div>
             <div className="slider-event-section">
+                <ToggleButtonGroup
+                    className="view-btn-group"
+                    value={isTableView}
+                    exclusive
+                    onChange={changeView}
+                    aria-label="text alignment"
+                >
+                    <ToggleButton value={true}>
+                        <CalendarViewMonthIcon />
+                    </ToggleButton>
+                    <ToggleButton value={false}>
+                        <CalendarViewWeekIcon />
+                    </ToggleButton>
+                </ToggleButtonGroup>
                 <Button
                     className="current-event"
                     variant="contained"
@@ -166,24 +196,73 @@ export default function TimeSelect({
                             })}
                     </Select>
                 </FormControl>
-                <Slider
-                    className="slider"
-                    defaultValue={0}
-                    step={1}
-                    valueLabelDisplay="off"
-                    marks={marks}
-                    value={valueSlider}
-                    min={0}
-                    max={11}
-                    onChangeCommitted={updateMonth}
-                    onMouseDown={() => {
-                        setShowLoading(true);
-                    }}
-                    onTouchMove={() => {
-                        setShowLoading(true);
-                    }}
-                />
+                <div className="slider-wrapper">
+                    <div className="time-header">
+                        <b>
+                            {marks.find(({ label }) => label === month).full} {year}
+                        </b>
+                    </div>
+                    <Slider
+                        className="slider"
+                        defaultValue={0}
+                        step={1}
+                        valueLabelDisplay="off"
+                        marks={marks}
+                        value={valueSlider}
+                        min={0}
+                        max={11}
+                        onChangeCommitted={updateMonth}
+                        onMouseDown={() => {
+                            setShowLoading(true);
+                        }}
+                        onTouchMove={() => {
+                            setShowLoading(true);
+                        }}
+                    />
+                </div>
+                <FormControl className="filter-box">
+                    <InputLabel id="filter-label">Filter</InputLabel>
+                    <Select
+                        labelId="filter-label"
+                        id="filter"
+                        multiple
+                        value={filterTypes}
+                        onChange={handleChangeSelectedFilterType}
+                        label="Filter"
+                        variant="outlined"
+                        renderValue={(selected) => (
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.filter((type => type.checked === true)).map((type) => {
+                                    return <Chip key={type.value} label={type.full} />
+                                })}
+                            </Box>
+                        )}
+                        MenuProps={MenuProps}
+                    >
+                        <FormControlLabel
+                            label="All"
+                            control={
+                                <Checkbox
+                                    checked={numChecked.length === 4}
+                                    indeterminate={(numChecked.length < 4) && (numChecked.length > 0)}
+                                    onChange={handleSelectAll}
+                                />
+                            }
+                        />
+                        {filterTypes.map((type) => {
+                            return (
+                                <MenuItem key={type.value} value={type.value}>
+                                    <FormControlLabel
+                                        control={<Checkbox checked={type.checked} />}
+                                    />
+                                    <ListItemText primary={type.full} />
+                                </MenuItem>
+                            )
+                        })}
+                    </Select>
+                </FormControl>
                 {isAdmin && <>
+                    <div class="event-btn-wrapper">
                     <Button
                         className="create-event-button"
                         variant="contained"
@@ -202,6 +281,7 @@ export default function TimeSelect({
                     >
                         Manage Teams
                     </Button>
+                    </div>
                     <Modal
                         open={openEvent}
                         onClose={handleClose}
