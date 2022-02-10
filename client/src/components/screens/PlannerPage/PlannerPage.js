@@ -230,22 +230,6 @@ export default function PlannerPage() {
         <>
             <div className="planner-page-wrapper">
                 <div className="top-section">
-                    {/* <div class="view-btn-wrapper"> */}
-                    {/* <ToggleButtonGroup
-                        className="view-btn-wrapper"
-                        value={isTableView}
-                        exclusive
-                        onChange={changeView}
-                        aria-label="text alignment"
-                    >
-                        <ToggleButton value={true}>
-                            <CalendarViewMonthIcon />
-                        </ToggleButton>
-                        <ToggleButton value={false}>
-                            <CalendarViewWeekIcon />
-                        </ToggleButton>
-                    </ToggleButtonGroup> */}
-                    {/* </div> */}
                     <TimeSelect
                         month={month}
                         setMonth={setMonth}
@@ -266,46 +250,6 @@ export default function PlannerPage() {
                         handleSelectAll={handleSelectAll}
                         numChecked={numChecked}
                     />
-                    {/* <FormControl sx={{ m: 1, width: 300 }}>
-                        <InputLabel id="filter-label">Filter</InputLabel>
-                        <Select
-                            labelId="filter-label"
-                            id="filter"
-                            multiple
-                            value={filterTypes}
-                            onChange={handleChangeSelectedFilterType}
-                            input={<OutlinedInput label="Filter" />}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {selected.filter((type => type.checked === true)).map((type) => {
-                                        return <Chip key={type.value} label={type.full} />
-                                    })}
-                                </Box>
-                            )}
-                            MenuProps={MenuProps}
-                        >
-                            <FormControlLabel
-                                label="All"
-                                control={
-                                    <Checkbox
-                                        checked={numChecked.length === 4}
-                                        indeterminate={(numChecked.length < 4) && (numChecked.length > 0)}
-                                        onChange={handleSelectAll}
-                                    />
-                                }
-                            />
-                            {filterTypes.map((type) => {
-                                return (
-                                    <MenuItem key={type.value} value={type.value}>
-                                        <FormControlLabel
-                                            control={<Checkbox checked={type.checked} />}
-                                        />
-                                        <ListItemText primary={type.full} />
-                                    </MenuItem>
-                                )
-                            })}
-                        </Select>
-                    </FormControl> */}
                 </div>
                 {isTableView && (
                     <TableView
