@@ -25,8 +25,10 @@ const resourceSchema = new Schema({
 	],
 	comments: [
 		{
-			commentId: String,
-			user: String,
+			user: {
+				type: Schema.Types.ObjectId,
+				ref: 'User',
+			},
 			comment: String,
 			timestamp : {
 				type : String,

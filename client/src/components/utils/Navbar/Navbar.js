@@ -34,7 +34,7 @@ export default function Navbar() {
     };
 
     let redirectToResources = (event) => {
-        history.push("/resources")
+        // history.push("/resources")
     };
 
     let redirectToTeam = (event) => {

@@ -12,7 +12,15 @@ class ResourceActions {
 	}
 
 	getAll(req, res) {
-		resourceSchema.find(function(err, resources) {
+		resourceSchema.find({})
+			.populate({
+				path: 'comments',
+				populate: {
+					path: 'user',
+					model: 'User'
+				}
+			})
+		.exec(function(err, resources) {
 			if (err)
 				res.status(400).send(err.message);
 			else
