@@ -107,7 +107,11 @@ class WorshipOnDutyActions {
                 } else if (worshipEventDetails.n == 0) {
                     res.status(404).send("Status " + req.body.roleId + " not successfully updated");
                 } else {
-                    res.status(200).send(worshipEventDetails);
+                    if(worshipEventDetails.nModified == 0) {
+                        res.status(200).send("Your status was already set to " + req.params.status + " before");
+                    } else {
+                        res.status(200).send("Your status has been successfully updated");
+                    }
                 }
             })
     }
