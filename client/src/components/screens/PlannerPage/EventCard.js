@@ -181,6 +181,8 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                     }
                 }
                 if (found === false) {
+                    // var userToAdd = user;
+                    // userToAdd.roleId = role._id;
                     userList.push(user);
                 }
             })
@@ -191,17 +193,20 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
 
         // Populating data to send emails
         userList.forEach(user => {
+            // console.log(user)
             data.users.push({
                 eventName: event.event.name,
                 eventDate: dateFormatter.getDay(event.event.timestamp),
                 recipient: {
                     name: user.firstname,
-                    email: user.email
+                    email: user.email,
+                    id: user._id
                 },
                 sender: {
                     name: "Jason - Worship Coordinator",
                     email: "teast"
-                }
+                },
+                eventId: event.eventDetails._id
             })
         })
         EmailAPI.notifyAllUsers(data).then(() => {

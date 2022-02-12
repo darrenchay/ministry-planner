@@ -20,12 +20,10 @@ class EmailActions {
                         sender_name: data.sender.name,
                         hostIP: process.env.NODE_ENV === 'production' ? "http://localhost:8080" : "https://ministry-planner-server.herokuapp.com/api/",
                         eventId: data.eventId,
-                        // roleId: data.roleId,
                         userId: data.recipient.id
                     },
                 }],
             }
-            console.log(msg);
             sendgrid
                 .send(msg)
                 .catch((err) => {
@@ -64,7 +62,6 @@ class EmailActions {
 
     approveConfimation(req, res) {
         var data = req.body.data;
-        console.log(data)
         const msg = {
             template_id: process.env.SENDGRID_APPROVAL_USER_TEMPLATE_ID,
             from: "ministryplannerteam@gmail.com",
