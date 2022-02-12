@@ -29,6 +29,11 @@ const resourceSchema = new Schema({
 				type: Schema.Types.ObjectId,
 				ref: 'User',
 			},
+			edited: {
+				type: Boolean,
+				required: true,
+				default: false
+			},
 			comment: String,
 			timestamp : {
 				type : String,

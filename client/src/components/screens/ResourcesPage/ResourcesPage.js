@@ -77,7 +77,7 @@ export default function ResourcesPage() {
                 setOriginalSonglist(resource[0].sections);
                 setSelectedSonglist(resource[0].sections);
             });
-    }, [originalSonglist, comments]);
+    }, [originalSonglist, comments, event.eventDetails.resourceId]);
 
     const handleEdit = () => {
         setIsEditable(true);
@@ -94,15 +94,19 @@ export default function ResourcesPage() {
     }
 
     const handleAddComment = () => {
-        // console.log("userdata:", userData)
-        // console.log("userdata id:", userData._id)
         if (text?.length > 0) {
-            var tempComments = cloneDeep(comments)
-            tempComments.unshift({
+            var newComment = {
                 user: userData._id,
                 comment: text,
-                timestamp: Math.round(new Date().getTime() / 1000)
-            })
+                timestamp: Math.round(new Date().getTime() / 1000),
+                edited: false
+            }
+            if (comments?.length > 0) {
+                var tempComments = cloneDeep(comments)
+                tempComments.unshift(newComment)
+            } else {
+                tempComments = [newComment]
+            }
             var tempResource = {
                 comments: tempComments
             }

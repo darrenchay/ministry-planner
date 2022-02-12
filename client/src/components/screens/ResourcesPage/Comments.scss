@@ -3,7 +3,7 @@
   
 .comment {
     display: flex;
-    margin-bottom: 28px;
+    margin-bottom: 25px;
 
     .comment-image-container {
         margin-right: 12px;
@@ -13,7 +13,7 @@
         width: 100%;
         text-align: left;
 
-        .comment-content {
+        .comment-header {
             display: flex;
 
             .comment-author-date {
@@ -32,6 +32,44 @@
             font-size: 14px;
             font-weight: bold;
         }
+    }
+
+    .comment-editable-right-part {
+        width: 100%;
+        text-align: left;
+
+        .comment-text-post {
+            display: flex;
+            width: 100%;
+
+            .comment-editable-text {
+                font-size: 14px;
+                font-weight: bold;
+                width: 80%;
+            }
+
+            .post-button {
+                width: 20%;
+                border: none;
+                background: none;
+                font-size: small;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .cancel-button {
+            border: none;
+            font-size: small;
+            background: none;
+
+            :hover {
+                cursor: pointer;
+            }
+        }
+
     }
 }
   
