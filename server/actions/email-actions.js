@@ -17,7 +17,11 @@ class EmailActions {
                         event_name: data.eventName,
                         event_date: data.eventDate,
                         recipient_name: data.recipient.name,
-                        sender_name: data.sender.name
+                        sender_name: data.sender.name,
+                        hostIP: process.env.NODE_ENV === 'production' ? "http://localhost:8080" : "https://ministry-planner-server.herokuapp.com/api/",
+                        eventId: data.eventId,
+                        // roleId: data.roleId,
+                        userId: data.recipient.id
                     },
                 }],
             }

@@ -87,18 +87,11 @@ class WorshipOnDutyActions {
             },
             {
                 "$set": {
-                    "teamList.$[role].teamMapping.$[user].status": req.params.status
+                    "teamList.$[].teamMapping.$[user].status": req.params.status
                 }
             },
             {
-                "multi": false,
-                "upsert": false,
                 arrayFilters: [
-                    {
-                        "role.roleId": {
-                            "$eq": req.params.roleId
-                        }
-                    },
                     {
                         "user.memberId": {
                             "$eq": req.params.id

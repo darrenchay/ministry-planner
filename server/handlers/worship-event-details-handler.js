@@ -9,7 +9,7 @@ router.get('/:id', function(req, res) { WorshipEventDetails.getOne(req, res) });
 router.post('/add', function(req, res) { WorshipEventDetails.addOne(req, res) });
 router.post('/update/:id', function(req, res) { WorshipEventDetails.updateOne(req, res) });
 router.post('/updateRole/:id', function(req, res) { WorshipEventDetails.updateRole(req, res) });
-router.post('/updateStatus/:eventDetailsId/:roleId/:id/:status', function(req, res) { WorshipEventDetails.updateUserStatus(req, res) });
+router.get('/updateStatus/:eventDetailsId/:id/:status', function(req, res) { WorshipEventDetails.updateUserStatus(req, res) });
 
 router.delete('/delete/:id', function(req, res) { WorshipEventDetails.deleteOne(req, res) });
 router.delete('/deleteAll', function(req, res) { WorshipEventDetails.deleteAll(req, res) });
