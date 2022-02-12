@@ -17,6 +17,7 @@ export default function Comment({ comment, resource }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     var isLoggedinInUser = (loggedinUserData._id === comment.user) ? true : false
     const [editedComment, setEditedComment] = useState(cloneDeep(comment.comment));
+    var originalComment = cloneDeep(comment.comment)
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
@@ -57,18 +58,18 @@ export default function Comment({ comment, resource }) {
     const handleConfirm = () => {
         var tempResource = cloneDeep(resource);
         var idx = resource.comments.indexOf(comment)
-        if (editedComment?.length > 0) {
-            if (idx !== -1) {
+        if (editedComment?.length > 0 ) {
+            if (idx !== -1 && editedComment !== originalComment) {
                 tempResource.comments[idx].comment = editedComment;
                 tempResource.comments[idx].edited = true;
+                ResourceAPI.updateResource(tempResource, resource._id)
+                    .then(resp => {
+                        console.log('Successfully edited comment', resp);
+                    })
+                    .catch(err => {
+                        console.log("Error while editing comment", err);
+                    });
             }
-            ResourceAPI.updateResource(tempResource, resource._id)
-                .then(resp => {
-                    console.log('Successfully edited comment', resp);
-                })
-                .catch(err => {
-                    console.log("Error while editing comment", err);
-                });
             setIsEditable(false)
             setAnchorEl(false)
         }
