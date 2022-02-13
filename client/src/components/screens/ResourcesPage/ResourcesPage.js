@@ -75,6 +75,7 @@ export default function ResourcesPage() {
                 setOriginalSonglist(resource[0].sections);
                 setSelectedSonglist(resource[0].sections);
             });
+    // eslint-disable-next-line
     }, [originalSonglist]);
 
     const handleEdit = () => {
