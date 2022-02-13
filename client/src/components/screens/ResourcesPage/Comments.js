@@ -2,7 +2,7 @@ import "./Comments.scss";
 import * as dateFormatter from '../../utils/ConvertDate';
 import React, { useEffect, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
-import { Button, Menu, MenuItem, IconButton } from '@material-ui/core';
+import { Menu, MenuItem, IconButton } from '@material-ui/core';
 import cloneDeep from "lodash/cloneDeep";
 import * as ResourceAPI from '../../utils/Services/ResourcesAPI';
 import * as UserAPI from "../../utils/Services/UsersAPI";
@@ -14,7 +14,6 @@ export default function Comment({ comment, resource }) {
     // const [userPicture, setUserPicture] = useState()
     const loggedinUserData = JSON.parse(localStorage.getItem('userData'));
     var isLoggedinInUser = (loggedinUserData._id === comment.user) ? true : false
-    const [show, setShow] = useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
     
     const handleClick = event => {
