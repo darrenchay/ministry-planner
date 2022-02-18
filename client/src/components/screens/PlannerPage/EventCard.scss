@@ -19,13 +19,12 @@
     }
 
     .card-header {
-        padding: 10px 10px 0 18px;
+        padding: 10px 10px 0 16px;
 
         .title-button-wrapper {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 5px;
 
             .title {
                 width: 70%;
@@ -43,6 +42,7 @@
 
             &-edit {
                 @extend .title-button-wrapper;
+                margin-bottom: 4px;
                 .title {
                     .MuiInputBase-multiline {
                         padding: 10px;
@@ -55,9 +55,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            .date-picker-wrapper {
-                margin-bottom: 9px;
+            margin-bottom: 2px;
+            &-margin {
+                @extend .event-info-wrapper;
+                margin-bottom: 6px;
+            }
 
+            .date-picker-wrapper {
                 .MuiFormControl-marginNormal {
                     margin: 0;
                     width: 100%;
@@ -70,7 +74,7 @@
 
                     .MuiOutlinedInput-adornedEnd {
                         padding: 0;
-                        width: 70%;
+                        width: 98%;
 
                         .MuiOutlinedInput-input {
                             padding: 10px;
@@ -89,21 +93,19 @@
                     }
                 }
             }
-            .service-type {
-                .MuiSelect-outlined.MuiSelect-outlined {
-                    min-width: 120px;
-                    color: black;
-                }
 
-                .MuiSelect-icon.Mui-disabled {
-                    display: none;
+            .rehearsals {
+                padding-bottom: 4px;
+                .MuiButton-text {
+                    padding: 4px 0;
+                    padding-left: 8px;
+                    font-size: 12px;
                 }
-
-                .MuiInputLabel-outlined.MuiInputLabel-shrink {
-                    color: black;
+                &-no-padding {
+                    @extend .rehearsals;
+                    padding-bottom: 0;
                 }
             }
-
         }
 
         .event-info-wrapper2 {
@@ -111,9 +113,8 @@
             justify-content: space-between;
             align-items: center;
 
-            .worship-leader {
+            .worship-leader, .service-type {
                 .MuiSelect-outlined.MuiSelect-outlined {
-                    min-width: 90px;
                     color: black;
                 }
 
@@ -126,11 +127,8 @@
                 }
             }
 
-            .rehearsals {
-                .MuiButton-text {
-                    padding: 6px 0 6px 8px;
-                    font-size: 12px;
-                }
+            .service-type {
+                padding-right: 6px;
             }
         }
     }

@@ -80,6 +80,42 @@ class WorshipOnDutyActions {
             })
     }
 
+    updateUserStatus(req, res) {
+        WorshipEventDetails.updateOne(
+            {
+                "_id": req.params.eventDetailsId,
+            },
+            {
+                "$set": {
+                    "teamList.$[].teamMapping.$[user].status": req.params.status
+                }
+            },
+            {
+                arrayFilters: [
+                    {
+                        "user.memberId": {
+                            "$eq": req.params.id
+                        },
+                    }
+
+                ]
+
+            },
+            function (err, worshipEventDetails) {
+                if (err) {
+                    res.status(400).send(err);
+                } else if (worshipEventDetails.n == 0) {
+                    res.status(404).send("Status " + req.body.roleId + " not successfully updated");
+                } else {
+                    if(worshipEventDetails.nModified == 0) {
+                        res.status(200).send("Your status was already set to " + req.params.status + " before");
+                    } else {
+                        res.status(200).send("Your status has been successfully updated");
+                    }
+                }
+            })
+    }
+
     deleteOne(req, res) {
         WorshipEventDetails.deleteOne({ _id: req.params.id }, function (err, worshipEventDetails) {
             if (err)

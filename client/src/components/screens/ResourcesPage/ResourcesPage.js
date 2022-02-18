@@ -58,6 +58,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 export default function ResourcesPage() {
     // const location = useLocation();
     const event = JSON.parse(localStorage.getItem('eventData'));
+    const userData = JSON.parse(localStorage.getItem('userData'));
     // const event = location.event;
     const [resource, setResource] = useState();
     const [originalSonglist, setOriginalSonglist] = useState();
@@ -65,6 +66,7 @@ export default function ResourcesPage() {
     const [isEditable, setIsEditable] = useState(false);
     const [comments, setComments] = useState();
     const [text, setText] = useState("");
+
     // const [isSonglistEmpty, setIsSonglistEmpty] = useState(true);
 
     useEffect(() => {
@@ -76,7 +78,7 @@ export default function ResourcesPage() {
                 setSelectedSonglist(resource[0].sections);
             });
     // eslint-disable-next-line
-    }, [originalSonglist]);
+    }, [originalSonglist, event]);
 
     const handleEdit = () => {
         setIsEditable(true);
@@ -92,25 +94,33 @@ export default function ResourcesPage() {
             })
     }
 
-    const addComment = () => {
-        var commentsObj = resource.comments
-        commentsObj.unshift({
-            commentId: "comment4",
-            user: "test user",
-            comment: text,
-            timestamp: Math.round(new Date().getTime() / 1000)
-        })
-        var addedResource = {
-            comments: commentsObj
+    const handleAddComment = () => {
+        if (text?.length > 0) {
+            var newComment = {
+                user: userData._id,
+                comment: text,
+                timestamp: Math.round(new Date().getTime() / 1000),
+                edited: false
+            }
+            if (comments?.length > 0) {
+                var tempComments = cloneDeep(comments)
+                tempComments.unshift(newComment)
+            } else {
+                tempComments = [newComment]
+            }
+            var tempResource = {
+                comments: tempComments
+            }
+            ResourceAPI.updateResource(tempResource, resource._id)
+                .then(resp => {
+                    console.log('Successfully posted comment', resp);
+                    setComments(comments)
+                })
+                .catch(err => {
+                    console.log("Error while posting comment", err);
+                });
+            setText("")
         }
-        ResourceAPI.updateResource(addedResource, resource._id)
-            .then(resp => {
-                console.log('Successfully retrieved', resp);
-            })
-            .catch(err => {
-                console.log("Error while retrieving", err);
-            });
-        setText("")
     }
 
     const handleCancel = () => {
@@ -284,11 +294,11 @@ export default function ResourcesPage() {
                                                                 </div>
                                                                 <div className='link'>Link: <a href={song.link}>{song.link}</a></div>
                                                                 {song.link &&
-                                                                <div className='video-section'>
-                                                                    <div className='video-wrapper'>
-                                                                        <iframe src={`https://www.youtube.com/embed/${getVideoId(song.link)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                                    <div className='video-section'>
+                                                                        <div className='video-wrapper'>
+                                                                            <iframe src={`https://www.youtube.com/embed/${getVideoId(song.link)}`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
                                                                 }
                                                                 <div className='notes'>
                                                                     <div>Notes: </div>
@@ -465,6 +475,7 @@ export default function ResourcesPage() {
                     <div className='form-container'>
                         <Avatar
                             className='image-container'
+                        // src={userData[0].profilePicture}
                         />
                         <TextField
                             className="comment-text"
@@ -479,7 +490,9 @@ export default function ResourcesPage() {
                             onChange={(e) => setText(e.target.value)}
                             value={text}
                         />
-                        <Button className="comment-form-button" onClick={addComment}>Post</Button>
+                        {text?.length > 0 &&
+                            <Button className="post-button" onClick={handleAddComment}>Post</Button>
+                        }
                     </div>
                     <div>
                         {comments?.length > 0 &&
@@ -487,7 +500,9 @@ export default function ResourcesPage() {
                                 .map((data) => {
                                     return (
                                         <Comment  //sort by latest
-                                            commentObj={data}
+                                            key={data._id}
+                                            comment={data}
+                                            resource={resource}
                                         />
                                     );
                                 })
