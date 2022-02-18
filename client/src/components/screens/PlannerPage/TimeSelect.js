@@ -7,8 +7,6 @@ import {
     MenuItem,
     FormControlLabel,
     ListItemText,
-    Box,
-    Chip,
     Checkbox
 } from "@material-ui/core";
 import { Select, InputLabel, FormControl } from "@mui/material";

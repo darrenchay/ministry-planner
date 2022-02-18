@@ -253,7 +253,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                     subheader={
                         <>
                             {!isTemplate &&
-                                <div className="event-info-wrapper">
+                                <div className={isEditable ? 'event-info-wrapper-margin' : 'event-info-wrapper'}>
                                     <div className={isEditable ? 'date-picker-wrapper' : 'date-picker-wrapper-no-margin'}>
                                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                             <KeyboardDateTimePicker
@@ -276,34 +276,78 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                             />
                                         </MuiPickersUtilsProvider>
                                     </div>
-                                    <div classname='service-type'>
-                                        <FormControl variant='outlined' size='small'>
-                                            <InputLabel id="serviceTypeSelect">Service</InputLabel>
-                                            <Select
-                                                className='service-type-select'
-                                                labelId="serviceTypeSelect"
-                                                label='Service'
-                                                value={selectedEvent.event.serviceType}
-                                                onChange={(e) => handleChangeEvent(e, "type")}
-                                                disabled={!isEditable}
+                                    {!isTemplate &&
+                                        <div className={isEditable ? 'rehearsals-no-padding' : 'rehearsals'}>
+                                            {/* <InputLabel id="rehearsal">Rehearsals</InputLabel> */}
+                                            <Button onClick={handleRehearsalClick}>
+                                                Rehearsals <KeyboardArrowDownIcon />
+                                            </Button>
+                                            <Menu
+                                                className='rehearsal-menu'
+                                                anchorEl={anchorEl}
+                                                keepMounted
+                                                open={Boolean(anchorEl)}
+                                                onClose={handleCloseRehearsals}
+                                                inputProps={{ 'aria-label': 'Without label' }}
+                                                PopoverClasses={{
+                                                    paper: classes.popover
+                                                }}
                                             >
-                                                <MenuItem value={serviceTypes[1]}> Main - 7:30 AM </MenuItem>
-                                                <MenuItem value={serviceTypes[2]}> Main - 9:30 AM </MenuItem>
-                                                <MenuItem value={serviceTypes[3]}> Youth </MenuItem>
-                                                <MenuItem value={serviceTypes[4]}> Other </MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </div>
+                                                <div className='rehearsal-inner-header'>Rehearsals</div>
+                                                {selectedEvent.eventDetails.rehearsals?.length > 0 && selectedEvent.eventDetails.rehearsals.map(rehearsal => (
+                                                    <RehearsalTime
+                                                        event={selectedEvent}
+                                                        setSelectedEvent={changeSelectedEvent}
+                                                        rehearsal={rehearsal}
+                                                        isEditable={isEditable}
+                                                    />
+                                                ))}
+                                                {selectedEvent.eventDetails.rehearsals?.length === 0 &&
+                                                    <div className='no-rehearsal-message'>No Rehearsal Times</div>
+                                                }
+                                                {isEditable &&
+                                                    <>
+                                                        <div className='rehearsal-date-picker-wrapper'>
+                                                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                                                <KeyboardDateTimePicker
+                                                                    variant="inline"
+                                                                    id="pickupDate"
+                                                                    inputVariant={isEditable ? "outlined" : "standard"}
+                                                                    format="d MMM yyyy - HH:mm"
+                                                                    ampm={false}
+                                                                    disabled={!isEditable}
+                                                                    value={addDateTime}
+                                                                    onChange={setAddDateTime}
+                                                                    InputProps={{
+                                                                        disableUnderline: !isEditable
+                                                                    }}
+                                                                    KeyboardButtonProps={{
+                                                                        "aria-label": "change date",
+                                                                        style: { display: isEditable ? 'inline-flex' : 'none' }
+                                                                    }}
+                                                                />
+                                                            </MuiPickersUtilsProvider>
+                                                        </div>
+                                                        <div className='rehearsal-add-button-wrapper'>
+                                                            <Button onClick={handleRehearsals} disabled={!isEditable} aria-label="settings" className='rehearsal-add-button'>
+                                                                <div className='add-text'>Add</div><AddCircleIcon />
+                                                            </Button>
+                                                        </div>
+                                                    </>
+                                                }
+                                            </Menu>
+                                        </div>
+                                    }
                                 </div>
                             }
                             <div className="event-info-wrapper2">
                                 <div className='worship-leader'>
                                     <FormControl variant='outlined' size='small'>
-                                        <InputLabel id="teamMemberSelect">Worship Leader</InputLabel>
+                                        <InputLabel id="teamMemberSelect">WS Leader</InputLabel>
                                         <Select
                                             className='worship-leader-select'
                                             labelId="teamMemberSelect"
-                                            label='Worship Leader'
+                                            label='WS Leader'
                                             value={selectedEvent.eventDetails.worshipLeader}
                                             onChange={handleChangeWorshipLeader}
                                             disabled={!isEditable}
@@ -321,69 +365,24 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                         </Select>
                                     </FormControl>
                                 </div>
-                                {!isTemplate &&
-                                    <div className="rehearsals">
-                                        {/* <InputLabel id="rehearsal">Rehearsals</InputLabel> */}
-                                        <Button onClick={handleRehearsalClick}>
-                                            Rehearsals <KeyboardArrowDownIcon />
-                                        </Button>
-                                        <Menu
-                                            className='rehearsal-menu'
-                                            anchorEl={anchorEl}
-                                            keepMounted
-                                            open={Boolean(anchorEl)}
-                                            onClose={handleCloseRehearsals}
-                                            inputProps={{ 'aria-label': 'Without label' }}
-                                            PopoverClasses={{
-                                                paper: classes.popover
-                                            }}
+                                <div className='service-type'>
+                                    <FormControl variant='outlined' size='small'>
+                                        <InputLabel id="serviceTypeSelect">Service</InputLabel>
+                                        <Select
+                                            className='service-type-select'
+                                            labelId="serviceTypeSelect"
+                                            label='Service'
+                                            value={selectedEvent.event.serviceType}
+                                            onChange={(e) => handleChangeEvent(e, "type")}
+                                            disabled={!isEditable}
                                         >
-                                            <div className='rehearsal-inner-header'>Rehearsals</div>
-                                            {selectedEvent.eventDetails.rehearsals?.length > 0 && selectedEvent.eventDetails.rehearsals.map(rehearsal => (
-                                                <RehearsalTime
-                                                    event={selectedEvent}
-                                                    setSelectedEvent={changeSelectedEvent}
-                                                    rehearsal={rehearsal}
-                                                    isEditable={isEditable}
-                                                />
-                                            ))}
-                                            {selectedEvent.eventDetails.rehearsals?.length === 0 &&
-                                                <div className='no-rehearsal-message'>No Rehearsal Times</div>
-                                            }
-                                            {isEditable &&
-                                                <>
-                                                    <div className='rehearsal-date-picker-wrapper'>
-                                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                                            <KeyboardDateTimePicker
-                                                                variant="inline"
-                                                                id="pickupDate"
-                                                                inputVariant={isEditable ? "outlined" : "standard"}
-                                                                format="d MMM yyyy - HH:mm"
-                                                                ampm={false}
-                                                                disabled={!isEditable}
-                                                                value={addDateTime}
-                                                                onChange={setAddDateTime}
-                                                                InputProps={{
-                                                                    disableUnderline: !isEditable
-                                                                }}
-                                                                KeyboardButtonProps={{
-                                                                    "aria-label": "change date",
-                                                                    style: { display: isEditable ? 'inline-flex' : 'none' }
-                                                                }}
-                                                            />
-                                                        </MuiPickersUtilsProvider>
-                                                    </div>
-                                                    <div className='rehearsal-add-button-wrapper'>
-                                                        <Button onClick={handleRehearsals} disabled={!isEditable} aria-label="settings" className='rehearsal-add-button'>
-                                                            <div className='add-text'>Add</div><AddCircleIcon />
-                                                        </Button>
-                                                    </div>
-                                                </>
-                                            }
-                                        </Menu>
-                                    </div>
-
-                                }
+                                            <MenuItem value={serviceTypes[1]}> Main - 7:30 AM </MenuItem>
+                                            <MenuItem value={serviceTypes[2]}> Main - 9:30 AM </MenuItem>
+                                            <MenuItem value={serviceTypes[3]}> Youth </MenuItem>
+                                            <MenuItem value={serviceTypes[4]}> Other </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
                             </div>
                         </>
                     }
