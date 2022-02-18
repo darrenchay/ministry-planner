@@ -7,8 +7,6 @@ import {
     MenuItem,
     FormControlLabel,
     ListItemText,
-    Box,
-    Chip,
     Checkbox
 } from "@material-ui/core";
 import { Select, InputLabel, FormControl } from "@mui/material";
@@ -33,17 +31,6 @@ function getModalStyle() {
         transform: `translate(-${top}%, -${left}%)`,
     };
 }
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -148,6 +135,7 @@ export default function TimeSelect({
     return (
         <div className="time-select-wrapper">
             <div className="slider-event-section">
+                <div className="view-btn-group-wrapper">
                 <ToggleButtonGroup
                     className="view-btn-group"
                     value={isTableView}
@@ -162,6 +150,7 @@ export default function TimeSelect({
                         <CalendarViewWeekIcon />
                     </ToggleButton>
                 </ToggleButtonGroup>
+                </div>
                 <Button
                     className="current-event"
                     variant="contained"
@@ -173,13 +162,6 @@ export default function TimeSelect({
                 </Button>
                 <FormControl variant="outlined" className="select-year" size="small">
                     <Select
-                        MenuProps={{
-                            anchorOrigin: {
-                                vertical: "bottom",
-                                horizontal: "left",
-                            },
-                            getContentAnchorEl: null,
-                        }}
                         labelId="select-year"
                         id="select-year"
                         placeholder="Year"
@@ -220,24 +202,14 @@ export default function TimeSelect({
                         }}
                     />
                 </div>
-                <FormControl className="filter-box">
-                    <InputLabel id="filter-label">Filter</InputLabel>
+                <FormControl className="filter-box" size="small">
+                    <InputLabel shrink={false}>Service</InputLabel>
                     <Select
-                        labelId="filter-label"
                         id="filter"
                         multiple
                         value={filterTypes}
                         onChange={handleChangeSelectedFilterType}
-                        label="Filter"
                         variant="outlined"
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.filter((type => type.checked === true)).map((type) => {
-                                    return <Chip key={type.value} label={type.full} />
-                                })}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
                     >
                         <FormControlLabel
                             label="All"
@@ -262,7 +234,6 @@ export default function TimeSelect({
                     </Select>
                 </FormControl>
                 {isAdmin && <>
-                    <div class="event-btn-wrapper">
                     <Button
                         className="create-event-button"
                         variant="contained"
@@ -281,7 +252,6 @@ export default function TimeSelect({
                     >
                         Manage Teams
                     </Button>
-                    </div>
                     <Modal
                         open={openEvent}
                         onClose={handleClose}
