@@ -16,6 +16,7 @@ import {
 import CancelIcon from '@material-ui/icons/Cancel';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import * as UsersAPI from './../../utils/Services/UsersAPI';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 // TODO: To find a way to use scss instead of makestyles here
 const useStyles = makeStyles(() => ({
@@ -26,6 +27,7 @@ const useStyles = makeStyles(() => ({
 
 const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable }) => {
     const [tag, setTag] = useState({})
+    const [status, setStatus] = useState({})
 
     // Creates a copy of the role object and deletes the member (and mapping) from the copy and updates the selected role with the copy
     const handleDeleteMember = () => {
@@ -42,12 +44,23 @@ const TeamMember = ({ teamMember, teamMapping, role, roleHandler, isEditable }) 
             var mapping = teamMapping.find(mapping => teamMember._id === mapping.memberId);
             if (mapping !== undefined) {
                 setTag(mapping.tag);
+                setStatus(mapping.status);
             }
         }
+        // console.log(team)
     }, [role, teamMember, teamMapping]);
 
     return (
         <div key={teamMember._id} className={isEditable ? 'team-member-wrapper-edit' : 'team-member-wrapper'}>
+            {status === "pending" && 
+                <FiberManualRecordIcon className='pending'/>
+            }
+            {status === "approved" && 
+                <FiberManualRecordIcon className='accepted'/>
+            }
+            {status === "rejected" && 
+                <FiberManualRecordIcon className='rejected'/>
+            }
             <Typography className="team-member">
                 {teamMember.firstname}
                 {tag?.length > 0 && <Typography className="tag" color="textSecondary">

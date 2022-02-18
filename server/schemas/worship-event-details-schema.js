@@ -22,7 +22,11 @@ const worshipEventDetails = new Schema({
             teamMapping: [
                 {
                     memberId: String,
-                    tag: String
+                    tag: String,
+                    status: { // accepted, reject, pending statuses
+                        type: String,
+                        default: 'pending'
+                    }
                 }
             ]
         }

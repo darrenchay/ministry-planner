@@ -39,14 +39,14 @@
 
         .team-member-wrapper {
             display: flex;
-            justify-content: space-between;
             margin-bottom: 8px;
-
+            
             &:last-child {
                 margin-bottom: 2px;
             }
-
+            
             .team-member {
+                // justify-content: space-between;
                 display: flex;
                 margin-right: 5px;
                 color: black;
@@ -55,6 +55,24 @@
                     color: lightslategrey;
                     margin-left: 6px;
                 }
+            }
+            .pending {
+                font-size: small;
+                margin-top: 1.6%;
+                margin-right: 2%;
+                color: #ecb13b;
+            }
+            .rejected {
+                font-size: small;
+                margin-top: 1.6%;
+                margin-right: 2%;
+                color: #d4102a;
+            }
+            .accepted {
+                font-size: small;
+                margin-top: 1.6%;
+                margin-right: 2%;
+                color: #2cc506;
             }
 
             &-edit {
