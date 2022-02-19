@@ -425,10 +425,13 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                         Resources
                     </Button>
 
-                    <Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon" />}
-                        color='primary' size="small" onClick={notifyEmail}>
-                        Notify
-                    </Button>
+					
+					{isAdmin &&
+						<Button className='notify-button' variant="contained" startIcon={<SendIcon className="send-icon" />}
+							color='primary' size="small" onClick={notifyEmail}>
+							Notify
+						</Button>
+					}
                 </CardActions>
             }
         </Card>
