@@ -1,5 +1,5 @@
 import './TeamPage.scss';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import cloneDeep from "lodash/cloneDeep";
 import {
     makeStyles,
