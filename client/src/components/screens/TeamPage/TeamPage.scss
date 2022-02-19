@@ -35,18 +35,6 @@
                 padding: 8px;
                 min-width: 150px;
 
-                // &.role-col-edit {
-                //     min-width: 200px;
-                // }
-
-                &.larger-col {
-                    min-width: 220px;
-                }
-
-                &.worshipLeader-col {
-                    min-width: 120px;
-                }
-
                 &.edit-col {
                     min-width: 80px;
                 }
@@ -63,7 +51,7 @@
                     }
                 }
 
-                .worship-leader {
+                .ministry {
                     .MuiSelect-outlined.MuiSelect-outlined {
                         min-width: 90px;
                         color: black;

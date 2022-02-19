@@ -183,7 +183,7 @@ export default function TeamMember({teamMember, setReload, reload, roles, minist
                 <td>
                     <FormControl variant="outlined" size="small">
                         <Select
-                            className="title"
+                            className="ministry"
                             value={selectedUser.ministry}
                             onChange={handleChangeMinistry}
                             disabled={!isEditable}
