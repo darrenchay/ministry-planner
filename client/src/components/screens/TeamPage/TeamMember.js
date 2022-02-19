@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function TeamMember({teamMember, setReload, reload, roles}) {
+export default function TeamMember({teamMember, setReload, reload, roles, ministries}) {
     const classes = useStyles();
     const [originalUser, setOriginalUser] = useState(teamMember);
     const [selectedUser, setSelectedUser] = useState(originalUser);
@@ -110,6 +110,12 @@ export default function TeamMember({teamMember, setReload, reload, roles}) {
         tempUserInfo.role = typeof value === 'string' ? value.split(',') : value;
         setSelectedUser(tempUserInfo);
       };
+
+    const handleChangeMinistry = (e) => {
+        var tempUserInfo = cloneDeep(selectedUser);
+        tempUserInfo.ministry = e.target.value;
+        setSelectedUser(tempUserInfo);
+    }
   return (
     <>
       <tr>                    
@@ -173,7 +179,27 @@ export default function TeamMember({teamMember, setReload, reload, roles}) {
                         onChange={handleChangeLastName} />
             </td>
 
-            <td>{selectedUser.ministry}</td>
+            {isEditable && 
+                <td>
+                    <FormControl variant="outlined" size="small">
+                        <Select
+                            className="title"
+                            value={selectedUser.ministry}
+                            onChange={handleChangeMinistry}
+                            disabled={!isEditable}
+                        >
+                            {ministries?.length > 0 &&
+                                ministries.map((ministry, index) => {
+                                    return <MenuItem value={ministry}>{ministry}</MenuItem>;
+                                })}
+                        </Select>
+                    </FormControl>
+                </td>
+            }
+            {!isEditable && 
+                <td>{selectedUser.ministry}</td>
+            }
+            
             {!isEditable &&            
             <td>{selectedUser.role?.length > 0 &&
                     selectedUser.role

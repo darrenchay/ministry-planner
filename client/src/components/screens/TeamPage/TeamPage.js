@@ -6,6 +6,8 @@ import * as RolesAPI from './../../utils/Services/RolesAPI'
 
 export default function TeamPage() {
     const [users, setUsers] = useState({})
+    // eslint-disable-next-line
+    const [ministries, setMinistries] = useState(['worship', 'sono']);
     const [roles, setRoles] = useState([]);
     const [reload, setReload] = useState(true);
     const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
@@ -47,7 +49,7 @@ export default function TeamPage() {
                   {users?.length > 0 && roles?.length > 0 && 
                       users.map((user) => {
                           return (
-                              <TeamMember key={user._id} teamMember={user} setReload={setReload} reload={reload} roles={roles}/>
+                              <TeamMember key={user._id} teamMember={user} setReload={setReload} reload={reload} roles={roles} ministries={ministries}/>
 
                           );
                       })}
