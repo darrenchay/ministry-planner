@@ -1,12 +1,13 @@
 import './TeamPage.scss';
 import React, { useState, useEffect } from "react";
 import * as UsersAPI from './../../utils/Services/UsersAPI'
+import TeamMember from './TeamMember';
 // import ButtonGroup from "../PlannerPage/EditButtonGroup";
 
 export default function TeamPage() {
   const [users, setUsers] = useState({})
-  // const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
-  // const [isEditable, toggleEdit] = useState(false);
+  const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+//   const [isEditable, toggleEdit] = useState(false);
 
   useEffect(() => {
     UsersAPI.getUsers()
@@ -25,8 +26,9 @@ export default function TeamPage() {
       <div className="table-wrapper">
               <table>
                   <tr className="headers-row">
-                      {/* <th className="edit-col"></th>  */}
-                      <th>Name</th> 
+                      {isAdmin &&  <th className="edit-col"></th>}
+                      <th>First Name</th> 
+                      <th>Last Name</th> 
                       <th>Ministry</th> 
                       <th>Roles</th>
                       <th>Email</th>
@@ -35,36 +37,8 @@ export default function TeamPage() {
                   {users?.length > 0 &&
                       users.map((user) => {
                           return (
-                              <tr>
-                                {/* 
-                                {isAdmin &&
-                                  <td className="edit-col">
-                                      {!isCreateEvent && (
-                                          <ButtonGroup
-                                              isEditable={isEditable}
-                                              toggleEdit={toggleEdit}
-                                              event={selectedEvent}
-                                              updateSelectedEvent={changeSelectedEvent}
-                                              originalData={originalEvent}
-                                              updateOriginalData={changeOriginalEvent}
-                                              setUpdateFlag={setUpdateFlag}
-                                          />
-                                      )}
-                                  </td>
-                                }
-                                 */}
-                                <td>{user.firstname + ' ' + user.lastname}</td>
-                                <td>{user.ministry}</td>
-                                <td>{ user.role?.length > 0 &&
-                                      user.role
-                                      .map((role) => {
-                                      return (<div>{role}</div>)
-                                      })
-                                    }
-                                </td>
-                                <td>{user.email}</td>
-                                <td>{user.phoneNumber}</td>
-                              </tr>
+                              <TeamMember teamMember={user} />
+
                           );
                       })}
               </table>
