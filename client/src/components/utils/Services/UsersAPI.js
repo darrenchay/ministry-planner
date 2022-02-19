@@ -79,3 +79,14 @@ export const registerUser = (id) => {
         })
 }
 
+export const deleteUser = (id) => {
+    return axios({
+        method: "delete",
+        url: baseURL + "users/delete/" + id 
+    })
+        .then(resp => resp.data)
+        .catch(err => {
+            console.log(err);
+            throw err;
+        })
+}

@@ -2,12 +2,21 @@ import './TeamPage.scss';
 import React, { useState, useEffect } from "react";
 import * as UsersAPI from './../../utils/Services/UsersAPI'
 import TeamMember from './TeamMember';
-// import ButtonGroup from "../PlannerPage/EditButtonGroup";
+import * as RolesAPI from './../../utils/Services/RolesAPI'
 
 export default function TeamPage() {
-  const [users, setUsers] = useState({})
-  const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+    const [users, setUsers] = useState({})
+    const [roles, setRoles] = useState([]);
+    const [reload, setReload] = useState(true);
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
 //   const [isEditable, toggleEdit] = useState(false);
+
+    useEffect(() => {
+        RolesAPI.getAllRoles().then((rolesResp)=> {
+            console.log(rolesResp)
+            setRoles(rolesResp);
+        })
+    }, []);
 
   useEffect(() => {
     UsersAPI.getUsers()
@@ -15,7 +24,8 @@ export default function TeamPage() {
           console.log(users);
           setUsers(users);
       });
-  }, [])
+    
+  }, [reload])
 
   return (
     <div className="view-wrapper">
@@ -34,10 +44,10 @@ export default function TeamPage() {
                       <th>Email</th>
                       <th>Phone</th>
                   </tr>
-                  {users?.length > 0 &&
+                  {users?.length > 0 && roles?.length > 0 && 
                       users.map((user) => {
                           return (
-                              <TeamMember teamMember={user} />
+                              <TeamMember key={user._id} teamMember={user} setReload={setReload} reload={reload} roles={roles}/>
 
                           );
                       })}

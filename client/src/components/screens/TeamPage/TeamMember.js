@@ -5,12 +5,18 @@ import {
     makeStyles,
     IconButton,
     TextField,
+    MenuItem,
+    Checkbox,
+    ListItemText,
+    FormControl,
+    Select,
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ConfirmDelete from '../../utils/Components/ConfirmDelete'
+import * as UsersAPI from './../../utils/Services/UsersAPI'
 
 const useStyles = makeStyles({
     noBorder: {
@@ -26,7 +32,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function TeamMember({teamMember, users, setUsers}) {
+export default function TeamMember({teamMember, setReload, reload, roles}) {
     const classes = useStyles();
     const [originalUser, setOriginalUser] = useState(teamMember);
     const [selectedUser, setSelectedUser] = useState(originalUser);
@@ -34,16 +40,17 @@ export default function TeamMember({teamMember, users, setUsers}) {
     const [isEditable, toggleEdit] = useState(false);
     const [open, setOpen] = useState(false);
 
-    useEffect(() => {
-
-    }, [])
-
     const handleEdit = () => {
         toggleEdit(!isEditable);
     };
 
     const handleSave = () => {
-        setOriginalUser(selectedUser);
+        UsersAPI.updateUser(selectedUser, selectedUser._id).then(() => {
+            console.log("updated user");
+            setOriginalUser(selectedUser);
+        }).catch((err) => {
+            console.log(err);
+        })
         toggleEdit(false);
     }
 
@@ -54,7 +61,13 @@ export default function TeamMember({teamMember, users, setUsers}) {
     }
 
     const handleDelete = () => {
-        setOpen(false);
+        UsersAPI.deleteUser(selectedUser._id).then(() => {
+            setReload(!reload);
+            setOpen(false);
+            console.log("reloading");
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     const handleClose = () => {
@@ -88,6 +101,15 @@ export default function TeamMember({teamMember, users, setUsers}) {
         tempUserInfo.phoneNumber = e.target.value;
         setSelectedUser(tempUserInfo);
     }
+
+    const handleChangeRoles = (event) => {
+        var tempUserInfo = cloneDeep(selectedUser);
+        const {
+          target: { value },
+        } = event;
+        tempUserInfo.role = typeof value === 'string' ? value.split(',') : value;
+        setSelectedUser(tempUserInfo);
+      };
   return (
     <>
       <tr>                    
@@ -152,6 +174,7 @@ export default function TeamMember({teamMember, users, setUsers}) {
             </td>
 
             <td>{selectedUser.ministry}</td>
+            {!isEditable &&            
             <td>{selectedUser.role?.length > 0 &&
                     selectedUser.role
                     .map((role) => {
@@ -159,6 +182,25 @@ export default function TeamMember({teamMember, users, setUsers}) {
                     })
                 }
             </td>
+            }
+            {isEditable && 
+            
+            <FormControl sx={{ m: 1, width: 300 }}>
+                <Select
+                multiple
+                value={selectedUser.role}
+                onChange={handleChangeRoles}
+                renderValue={(selected) => selected.join(', ')}
+                >
+                {roles?.map((roleVal) => (
+                    <MenuItem key={roleVal.name} value={roleVal.name}>
+                        <Checkbox checked={selectedUser.role.indexOf(roleVal.name) > -1} />
+                        <ListItemText primary={roleVal.name} />
+                    </MenuItem>
+                ))}
+                </Select>
+            </FormControl>
+            }
             <td>
             <TextField InputProps={{
                         classes: {
@@ -196,7 +238,7 @@ export default function TeamMember({teamMember, users, setUsers}) {
 
 
       </tr>
-                  <ConfirmDelete
+            <ConfirmDelete
                 keepMounted
                 open={open}
                 onClose={handleClose}
