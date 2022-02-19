@@ -8,16 +8,17 @@ import * as ResourceAPI from '../../utils/Services/ResourcesAPI';
 import * as UserAPI from "../../utils/Services/UsersAPI";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 
-export default function Comment({ comment, resource }) {
+export default function Comment({ comment, resource, setComments, setReload, reload }) {
 
     const [userName, setUserName] = useState()
     // const [userPicture, setUserPicture] = useState()
     const [isEditable, setIsEditable] = useState(false);
     const loggedinUserData = JSON.parse(localStorage.getItem('userData'));
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const [tempResource, setTempResource] = useState(cloneDeep(resource));
     var isLoggedinInUser = (loggedinUserData._id === comment.user) ? true : false
     const [editedComment, setEditedComment] = useState(cloneDeep(comment.comment));
-    var originalComment = cloneDeep(comment.comment)
+    const [originalComment, setOriginalComment] = useState(cloneDeep(comment.comment));
 
     const handleClick = event => {
         setAnchorEl(event.currentTarget);
@@ -33,10 +34,11 @@ export default function Comment({ comment, resource }) {
                 setUserName(userData.firstname + " " + userData.lastname)
                 // setUserPicture(userData.profileImage)
             })
-    }, )
+            // eslint-disable-next-line
+    }, [])
 
     const handleDeleteComment = () => {
-        var tempResource = cloneDeep(resource);
+        // var tempResource = cloneDeep(resource);
         var idx = resource.comments.indexOf(comment)
         if (idx !== -1) {
             tempResource.comments.splice(idx, 1);
@@ -45,6 +47,9 @@ export default function Comment({ comment, resource }) {
         ResourceAPI.updateResource(tempResource, resource._id)
             .then(resp => {
                 console.log('Successfully deleted comment', resp);
+                setComments(tempResource.comments)
+                setTempResource(tempResource)
+                setReload(!reload)
             })
             .catch(err => {
                 console.log("Error while deleting comment", err);
@@ -56,7 +61,6 @@ export default function Comment({ comment, resource }) {
     }
 
     const handleConfirm = () => {
-        var tempResource = cloneDeep(resource);
         var idx = resource.comments.indexOf(comment)
         if (editedComment?.length > 0 ) {
             if (idx !== -1 && editedComment !== originalComment) {
@@ -65,6 +69,10 @@ export default function Comment({ comment, resource }) {
                 ResourceAPI.updateResource(tempResource, resource._id)
                     .then(resp => {
                         console.log('Successfully edited comment', resp);
+                        setComments(tempResource.comments)
+                        setTempResource(tempResource)
+                        setOriginalComment(editedComment)
+                        setReload(!reload)
                     })
                     .catch(err => {
                         console.log("Error while editing comment", err);

@@ -64,6 +64,7 @@ export default function ResourcesPage() {
     const [originalSonglist, setOriginalSonglist] = useState();
     const [selectedSonglist, setSelectedSonglist] = useState(originalSonglist);
     const [isEditable, setIsEditable] = useState(false);
+    const [reload, setReload] = useState(false)
     const [comments, setComments] = useState();
     const [text, setText] = useState("");
 
@@ -77,7 +78,7 @@ export default function ResourcesPage() {
                 setOriginalSonglist(resource[0].sections);
                 setSelectedSonglist(resource[0].sections);
             });
-    }, [originalSonglist, event]);
+    }, [event.eventDetails.resourceId]);
 
     const handleEdit = () => {
         setIsEditable(true);
@@ -113,7 +114,7 @@ export default function ResourcesPage() {
             ResourceAPI.updateResource(tempResource, resource._id)
                 .then(resp => {
                     console.log('Successfully posted comment', resp);
-                    setComments(comments)
+                    setComments(tempComments)
                 })
                 .catch(err => {
                     console.log("Error while posting comment", err);
@@ -502,6 +503,9 @@ export default function ResourcesPage() {
                                             key={data._id}
                                             comment={data}
                                             resource={resource}
+                                            setComments={setComments}
+                                            // setReload={setReload}
+                                            // reload={reload}
                                         />
                                     );
                                 })
