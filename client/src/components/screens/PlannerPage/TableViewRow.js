@@ -180,7 +180,7 @@ export default function TableViewRow({
                     onChange={(e) => handleChangeEvent(e, "name")}
                 />
             </td>
-            <td className={isEditable ? "larger-col" : ""}>
+            <td className={isEditable ? "larger-col" : "date-time-col"}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDateTimePicker
                         variant="inline"
