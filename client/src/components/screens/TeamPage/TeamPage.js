@@ -30,7 +30,7 @@ export default function TeamPage() {
   }, [reload])
 
   return (
-    <div className="view-wrapper">
+    <div className="team-page-wrapper">
       <div className="page-title">
         Team Members
       </div>
