@@ -315,18 +315,20 @@ export default function TableViewRow({
                         >
                             Resources
                         </Button>
-                        <Button
-                            className="notify-button"
-                            variant="contained"
-                            startIcon={<SendIcon className="send-icon" />}
-                            color="primary"
-                            size="small"
-                            onClick={() => {
-                                console.log("Notified");
-                            }}
-                        >
-                            Notify
-                        </Button>
+                        {isAdmin &&
+                            <Button
+                                className="notify-button"
+                                variant="contained"
+                                startIcon={<SendIcon className="send-icon" />}
+                                color="primary"
+                                size="small"
+                                onClick={() => {
+                                    console.log("Notified");
+                                }}
+                            >
+                                Notify
+                            </Button>
+                         }
                     </CardActions>
                 )}
             </td>

@@ -45,7 +45,6 @@ class EmailActions {
                     recipient_name: data.recipient.name,
                     email: data.email,
                     hostIP: "https://ministry-planner-server.herokuapp.com/api/",
-                    // hostIP: "http://localhost:8080",
                     userID: data.userId
                 },
             }],

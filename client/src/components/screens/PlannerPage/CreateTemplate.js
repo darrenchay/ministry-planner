@@ -61,7 +61,7 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate, l
                         teamMember: [],
                         teamMapping: []
                     }
-                    if (obj.roleName !== "Worship-Leader" && obj.roleName !== "Admin-Worship") {
+                    if (obj.roleName !== "Worship-Leader" && obj.roleName !== "Admin") {
                         rolesArr.push(obj);
                     }
                 });
