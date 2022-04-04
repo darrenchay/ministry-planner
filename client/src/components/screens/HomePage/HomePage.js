@@ -53,7 +53,7 @@ export default function HomePage() {
                             data: {
                                 recipient: {
                                     name: "Jason",
-                                    email: "darrenchay@gmail.com"
+                                    email: process.env.NODE_ENV === 'production' ? "jason-cheng@live.com" : "darrenchay@gmail.com"
                                 },
                                 email: user.email,
                                 userId: user._id
