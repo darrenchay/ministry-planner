@@ -18,7 +18,7 @@ class EmailActions {
                         event_date: data.eventDate,
                         recipient_name: data.recipient.name,
                         sender_name: data.sender.name,
-                        hostIP: process.env.NODE_ENV === 'production' ? "http://localhost:8080" : "https://ministry-planner-server.herokuapp.com/api/",
+                        hostIP: "https://ministry-planner-server.herokuapp.com/api/",
                         eventId: data.eventId,
                         userId: data.recipient.id
                     },
@@ -44,7 +44,7 @@ class EmailActions {
                 dynamic_template_data: {
                     recipient_name: data.recipient.name,
                     email: data.email,
-                    hostIP: process.env.NODE_ENV === 'production' ? "http://localhost:8080" : "https://ministry-planner-server.herokuapp.com/api/",
+                    hostIP: "https://ministry-planner-server.herokuapp.com/api/",
                     // hostIP: "http://localhost:8080",
                     userID: data.userId
                 },
