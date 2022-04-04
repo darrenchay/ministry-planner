@@ -10,7 +10,8 @@ import emailHandler from './handlers/email-handler';
 require('dotenv').config();
 
 export function init(server) {
-	const uri = process.env.MONGODB_URI;
+	const uri = process.env.NODE_ENV === 'production' ? process.env.MONGODB_URI_PROD : process.env.MONGODB_URI_DEV;
+    console.log(uri)
     mongoose.connect(uri, {
                         useNewUrlParser : true,
                         useUnifiedTopology : true,
