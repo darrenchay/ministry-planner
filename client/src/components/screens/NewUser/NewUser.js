@@ -13,7 +13,8 @@ export default function NewUserPage() {
                 Welcome to Ministry Planner!
             </Typography>
             <Typography className="description" variant="h4">
-                You have successfully created an account! An email has been sent to the leader for approval. Please sit tight while your account gets approved!
+                {`You have successfully created an account! 
+                An email has been sent to the leader for approval. Please sit tight while your account gets approved!`}
             </Typography>
         </Paper>
     );

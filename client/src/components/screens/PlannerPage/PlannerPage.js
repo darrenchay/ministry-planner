@@ -276,7 +276,7 @@ export default function PlannerPage() {
                             </IconButton>
                         </div>
                         {(filteredEvents?.length === 0 || events?.length === 0) && (
-                            <div>
+                            <div className="message-wrapper">
                                 <Typography variant="h4">There are no events</Typography>
                             </div>
                         )}
