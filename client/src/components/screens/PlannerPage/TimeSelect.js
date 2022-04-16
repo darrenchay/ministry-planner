@@ -7,7 +7,8 @@ import {
     MenuItem,
     FormControlLabel,
     ListItemText,
-    Checkbox
+    Checkbox,
+	Box
 } from "@material-ui/core";
 import { Select, InputLabel, FormControl } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
@@ -211,26 +212,34 @@ export default function TimeSelect({
                         onChange={handleChangeSelectedFilterType}
                         variant="outlined"
                     >
-                        <FormControlLabel
-                            label="All"
-                            control={
-                                <Checkbox
-                                    checked={numChecked.length === 4}
-                                    indeterminate={(numChecked.length < 4) && (numChecked.length > 0)}
-                                    onChange={handleSelectAll}
-                                />
-                            }
-                        />
-                        {filterTypes.map((type) => {
-                            return (
-                                <MenuItem key={type.value} value={type.value}>
-                                    <FormControlLabel
-                                        control={<Checkbox checked={type.checked} />}
-                                    />
-                                    <ListItemText primary={type.full} />
-                                </MenuItem>
-                            )
-                        })}
+						<Box sx={{ display: 'flex', flexDirection: 'column', ml: 1 }}>
+							<FormControlLabel
+								label="All"
+								control={
+									<Checkbox
+										checked={numChecked.length === 4}
+										indeterminate={(numChecked.length < 4) && (numChecked.length > 0)}
+										onChange={handleSelectAll}
+									/>
+								}
+							/>
+						</Box>
+						{filterTypes.map((type) => {
+							return (
+								<MenuItem key={type.value} value={type.value}>
+									{/* <Box sx={{ display: 'flex', flexDirection: 'column',  ml: 1 }}> */}
+										<FormControlLabel
+											// For some reason using this causes clicks on the label text to not register but anywhere else does
+											// [ie label text loses clickability]
+											/* label = {type.full} */
+											control={<Checkbox checked={type.checked} />}
+										/>
+										{/*CSS FIXME - Adds too much left margin for some reason*/}
+										<ListItemText primary={type.full}/> 
+									{/* </Box> */}
+								</MenuItem>
+							)
+						})}
                     </Select>
                 </FormControl>
                 {isAdmin && <>
