@@ -61,7 +61,7 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate, l
                         teamMember: [],
                         teamMapping: []
                     }
-                    if (obj.roleName !== "Worship-Leader" && obj.roleName !== "Admin-Worship") {
+                    if (obj.roleName !== "Worship-Leader" && obj.roleName !== "Admin") {
                         rolesArr.push(obj);
                     }
                 });
@@ -143,6 +143,13 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate, l
     const handleOpen = () => {
         setOpenDelete(true);
     }
+
+    const handleCancel = () => {
+        setOpen(false);
+        setUpdateFlag(false);
+        setUpdateFlag(true);
+    };
+
     return (
         <>
             {event &&
@@ -177,7 +184,8 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate, l
                             <div>
                                 <Button className='create-button' variant="contained" color='primary' size="small"
                                     onClick={handleSave}>Create Team</Button>
-                                    
+                                <Button className="cancel-button" variant="contained" color="primary" size="small"
+                                    onClick={handleCancel}>Cancel</Button>
                             </div>
                         }
                     </div>

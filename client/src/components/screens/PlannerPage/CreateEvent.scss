@@ -20,9 +20,15 @@
         border-radius: 10px;
         margin-bottom: 10px;
 
-        .worship-leader {
-            .MuiSelect-outlined.MuiSelect-outlined {
-                min-width: 118px !important;
+        .card-header {
+            .worship-leader, .service-type {
+                .MuiSelect-outlined.MuiSelect-outlined {
+                    min-width: 100px;
+                }
+            }
+
+            .rehearsals {
+                padding-bottom: 0;
             }
         }
     }

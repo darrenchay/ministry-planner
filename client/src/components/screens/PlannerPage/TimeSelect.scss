@@ -18,17 +18,21 @@
             height: 30px;
         }
 
+        .view-btn-group-wrapper {
+            width: 9%;
+            height: 30px;
+        }
+
         .current-event {
-            width: 7%;
+            width: 7.5%;
             margin-left: 1%;
             box-shadow: none;
         }
         
         .select-year {
-            width: 10%;
             height: 30px;
-            width: 8%;
-            margin-left: 1%;
+            width: 7.8%;
+            margin-left: .8%;
 
             .MuiOutlinedInput-root {
                 height: 30px;
@@ -40,8 +44,8 @@
         }
 
         .slider-wrapper {
-            min-width: 50%;
-            margin: 0 1.5%;
+            width: 43.2%;
+            margin: 0 1.9%;
             .slider {
                 width: 100%;
                 color: $primary-color;
@@ -49,20 +53,21 @@
         }
 
         .filter-box {
-            min-width: 9%;
+            width: 8.3%;
         }
 
-        .event-btn-wrapper {
-            display: flex;
-            flex-direction: column;
-            width: 11%;
-            margin-left: 1%;
-            .create-event-button, .manage-teams-button {
-                background-color: $primary-color;
-            }
-            .manage-teams-button {
-                margin-top: 4px;
-            }
+        .create-event-button, .manage-teams-button {
+            width: 8%;
+            margin-left: .8%;
+            background-color: $primary-color;
+            padding: 0;
+        }
+        .manage-teams-button {
+            width: 9%;
         }
     }
+}
+
+.MuiMenu-list {
+    max-height: 180px;
 }

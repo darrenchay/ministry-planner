@@ -7,9 +7,8 @@ import {
     MenuItem,
     FormControlLabel,
     ListItemText,
-    Box,
-    Chip,
-    Checkbox
+    Checkbox,
+	Box
 } from "@material-ui/core";
 import { Select, InputLabel, FormControl } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
@@ -33,17 +32,6 @@ function getModalStyle() {
         transform: `translate(-${top}%, -${left}%)`,
     };
 }
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-            width: 250,
-        },
-    },
-};
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -148,6 +136,7 @@ export default function TimeSelect({
     return (
         <div className="time-select-wrapper">
             <div className="slider-event-section">
+                <div className="view-btn-group-wrapper">
                 <ToggleButtonGroup
                     className="view-btn-group"
                     value={isTableView}
@@ -162,6 +151,7 @@ export default function TimeSelect({
                         <CalendarViewWeekIcon />
                     </ToggleButton>
                 </ToggleButtonGroup>
+                </div>
                 <Button
                     className="current-event"
                     variant="contained"
@@ -173,13 +163,6 @@ export default function TimeSelect({
                 </Button>
                 <FormControl variant="outlined" className="select-year" size="small">
                     <Select
-                        MenuProps={{
-                            anchorOrigin: {
-                                vertical: "bottom",
-                                horizontal: "left",
-                            },
-                            getContentAnchorEl: null,
-                        }}
                         labelId="select-year"
                         id="select-year"
                         placeholder="Year"
@@ -220,49 +203,46 @@ export default function TimeSelect({
                         }}
                     />
                 </div>
-                <FormControl className="filter-box">
-                    <InputLabel id="filter-label">Filter</InputLabel>
+                <FormControl className="filter-box" size="small">
+                    <InputLabel shrink={false}>Service</InputLabel>
                     <Select
-                        labelId="filter-label"
                         id="filter"
                         multiple
                         value={filterTypes}
                         onChange={handleChangeSelectedFilterType}
-                        label="Filter"
                         variant="outlined"
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.filter((type => type.checked === true)).map((type) => {
-                                    return <Chip key={type.value} label={type.full} />
-                                })}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
                     >
-                        <FormControlLabel
-                            label="All"
-                            control={
-                                <Checkbox
-                                    checked={numChecked.length === 4}
-                                    indeterminate={(numChecked.length < 4) && (numChecked.length > 0)}
-                                    onChange={handleSelectAll}
-                                />
-                            }
-                        />
-                        {filterTypes.map((type) => {
-                            return (
-                                <MenuItem key={type.value} value={type.value}>
-                                    <FormControlLabel
-                                        control={<Checkbox checked={type.checked} />}
-                                    />
-                                    <ListItemText primary={type.full} />
-                                </MenuItem>
-                            )
-                        })}
+						<Box sx={{ display: 'flex', flexDirection: 'column', ml: 1 }}>
+							<FormControlLabel
+								label="All"
+								control={
+									<Checkbox
+										checked={numChecked.length === 4}
+										indeterminate={(numChecked.length < 4) && (numChecked.length > 0)}
+										onChange={handleSelectAll}
+									/>
+								}
+							/>
+						</Box>
+						{filterTypes.map((type) => {
+							return (
+								<MenuItem key={type.value} value={type.value}>
+									{/* <Box sx={{ display: 'flex', flexDirection: 'column',  ml: 1 }}> */}
+										<FormControlLabel
+											// For some reason using this causes clicks on the label text to not register but anywhere else does
+											// [ie label text loses clickability]
+											/* label = {type.full} */
+											control={<Checkbox checked={type.checked} />}
+										/>
+										{/*CSS FIXME - Adds too much left margin for some reason*/}
+										<ListItemText primary={type.full}/> 
+									{/* </Box> */}
+								</MenuItem>
+							)
+						})}
                     </Select>
                 </FormControl>
                 {isAdmin && <>
-                    <div class="event-btn-wrapper">
                     <Button
                         className="create-event-button"
                         variant="contained"
@@ -281,7 +261,6 @@ export default function TimeSelect({
                     >
                         Manage Teams
                     </Button>
-                    </div>
                     <Modal
                         open={openEvent}
                         onClose={handleClose}

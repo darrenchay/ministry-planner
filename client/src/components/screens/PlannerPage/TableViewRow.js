@@ -180,7 +180,7 @@ export default function TableViewRow({
                     onChange={(e) => handleChangeEvent(e, "name")}
                 />
             </td>
-            <td className={isEditable ? "larger-col" : ""}>
+            <td className={isEditable ? "larger-col" : "date-time-col"}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDateTimePicker
                         variant="inline"
@@ -315,18 +315,20 @@ export default function TableViewRow({
                         >
                             Resources
                         </Button>
-                        <Button
-                            className="notify-button"
-                            variant="contained"
-                            startIcon={<SendIcon className="send-icon" />}
-                            color="primary"
-                            size="small"
-                            onClick={() => {
-                                console.log("Notified");
-                            }}
-                        >
-                            Notify
-                        </Button>
+                        {isAdmin &&
+                            <Button
+                                className="notify-button"
+                                variant="contained"
+                                startIcon={<SendIcon className="send-icon" />}
+                                color="primary"
+                                size="small"
+                                onClick={() => {
+                                    console.log("Notified");
+                                }}
+                            >
+                                Notify
+                            </Button>
+                         }
                     </CardActions>
                 )}
             </td>

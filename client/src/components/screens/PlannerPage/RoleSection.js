@@ -155,6 +155,7 @@ export default function RoleSection({ data, index, type, isEditable, selectedEve
         } else if (type === 'tag') {
             tempData.tag = e.target.value;
         }
+        tempData.status = 'pending';
         changeNewRoleTag(tempData);
     }
 

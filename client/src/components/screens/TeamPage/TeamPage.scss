@@ -1,0 +1,83 @@
+@import "./../../../globals.scss";
+.team-page-wrapper {
+    margin: 0 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    .page-title {
+        font-size: $fontsize-header1 + 2;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+    .table-wrapper {
+        max-height: 700px;
+        overflow: auto;
+        border: 0.5px solid #dddddd;
+        border-radius: 8px;
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+
+            .headers-row {
+                position: sticky;
+                top: 0;
+                z-index: 1; // any positive value, layer order is global
+                background: #f0f0f0; // any bg-color to overlap
+            }
+
+            td, th {
+                border: 1px solid #dddddd;
+                padding: 8px;
+                min-width: 150px;
+
+                &.edit-col {
+                    min-width: 80px;
+                }
+
+                .MuiFormControl-root {
+                    width: 100%;
+                }
+
+                .MuiFormControl-marginNormal {
+                    margin: 0;
+
+                    .MuiInputBase-input.Mui-disabled {
+                        color: black;
+                    }
+                }
+
+                .ministry {
+                    .MuiSelect-outlined.MuiSelect-outlined {
+                        min-width: 90px;
+                        color: black;
+                    }
+
+                    .MuiSelect-icon.Mui-disabled {
+                        display: none;
+                    }
+
+                    .MuiInputLabel-outlined.MuiInputLabel-shrink {
+                        color: black;
+                    }
+                }
+
+                .title {
+                    .MuiInputBase-multiline {
+                        padding: 8px;
+
+                        textarea {
+                            color: black;
+                            font-size: $fontsize-header2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

@@ -1,6 +1,8 @@
 @import "./../../../globals.scss";
 
 .edit-button-section {
+    display: flex;
+    
     .MuiIconButton-root {
         padding: 6px;
         margin-left: 5px;
