@@ -133,6 +133,18 @@ export default function PlannerPage() {
     const [prevTimestamp, setPrevTimestamp] = useState(null);
     const [nextDisabled, setNextDisabled] = useState(true);
     const [prevDisabled, setPrevDisabled] = useState(true);
+    const [emptyCardPlaceholders, setEmptyCardPlaceholders] = useState([]);
+
+    useEffect(() => {
+        if (filteredEvents && filteredEvents.length > 0 && filteredEvents.length < 3) {
+            let temp = [];
+            for (let i = 0; i < 3 - filteredEvents.length; i++) {
+                temp.push(i);
+            }
+            console.log(temp)
+            setEmptyCardPlaceholders(temp);
+        }
+    }, [filteredEvents])
 
     useEffect(() => {
         if (events?.length > 0) {
@@ -155,7 +167,7 @@ export default function PlannerPage() {
                 if (events[i].event.timestamp >= currTimestamp) {
                     if (i + 1 < events.length) {
                         setNextTimestamp(events[i + 1].event.timestamp);
-                        if (events.length - i > 4) {
+                        if (events.length - i > 3) {
                             setNextDisabled(false);
                         } else {
                             setNextDisabled(true);
@@ -213,7 +225,7 @@ export default function PlannerPage() {
         } = event;
         const tempFilterTypes = cloneDeep(filterTypes);
         var tempFilterTypesIndex = (tempFilterTypes.map(values => values.value).findIndex((values) => { return values === value[4] }));
-        if (typeof value[4] !== 'undefined') {
+        if (typeof value[3] !== 'undefined') {
             tempFilterTypes[tempFilterTypesIndex].checked = !tempFilterTypes[tempFilterTypesIndex].checked;
             setFilterTypes(tempFilterTypes);
         }
@@ -294,7 +306,12 @@ export default function PlannerPage() {
                                         />
                                     );
                                 })
-                                .slice(0, 4)}
+                                .slice(0, 3)}
+                        {filteredEvents?.length < 3 && emptyCardPlaceholders?.length > 0 && !isTableView && emptyCardPlaceholders.map((index, e) => {
+                            return (
+                                <div className='emptyCardPlaceholder'></div>
+                            )
+                        })}
                         <div className="next-button-wrapper">
                             <IconButton
                                 disabled={nextDisabled}
