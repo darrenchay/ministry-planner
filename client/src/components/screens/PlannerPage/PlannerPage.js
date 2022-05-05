@@ -141,7 +141,6 @@ export default function PlannerPage() {
             for (let i = 0; i < 3 - filteredEvents.length; i++) {
                 temp.push(i);
             }
-            console.log(temp)
             setEmptyCardPlaceholders(temp);
         }
     }, [filteredEvents])
