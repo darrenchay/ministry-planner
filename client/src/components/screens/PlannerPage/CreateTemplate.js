@@ -114,11 +114,11 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate, l
                     setOpen(false);
                     setUpdateFlag(false);
                     setUpdateFlag(true);
-                    setIsTemplate(1);
+                    setIsTemplate(3);
                 })
                 .catch(err => {
                     console.log("Update template err", err);
-                    setIsTemplate(2);
+                    setIsTemplate(4);
                 });
         }
     }
@@ -128,10 +128,10 @@ export default function TemplateModal({ setUpdateFlag, setOpen, setIsTemplate, l
         .then(() => {
             handleClose();
             setOpen(false);
-            setIsTemplate(3);
+            setIsTemplate(5);
         })
         .catch(err => {
-            setIsTemplate(4);
+            setIsTemplate(6);
             console.log(err);
         })
     }
