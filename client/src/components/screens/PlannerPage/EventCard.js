@@ -96,6 +96,7 @@ const RehearsalTime = ({ event, setSelectedEvent, rehearsal, isEditable }) => {
 export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, setEvent, leaders }) {
     const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const isWorshipLeader = JSON.parse(localStorage.getItem('isWorshipLeader'));
+    const user = JSON.parse(localStorage.getItem('userData'));
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreate);
     const [originalEvent, changeOriginalEvent] = useState(event);
@@ -242,7 +243,7 @@ export default function EventCard({ event, setUpdateFlag, isCreate, isTemplate, 
                                 value={selectedEvent.event.name}
                                 onChange={(e) => handleChangeEvent(e, "name")}
                             />
-                            {(isAdmin || isWorshipLeader)  && !isCreate &&
+                            {(isAdmin || (isWorshipLeader && originalEvent.worshipLeader === user.firstname))  && !isCreate &&
                                 <ButtonGroup
                                     isEditable={isEditable}
                                     toggleEdit={toggleEdit}
