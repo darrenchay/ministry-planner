@@ -57,6 +57,7 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 export default function ResourcesPage() {
     const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+    const isWorshipLeader = JSON.parse(localStorage.getItem('isWorshipLeader'));
     const event = JSON.parse(localStorage.getItem('eventData'));
     const userData = JSON.parse(localStorage.getItem('userData'));
     const [resource, setResource] = useState();
@@ -255,7 +256,7 @@ export default function ResourcesPage() {
                                 <div className='left'></div>
                                 <div className='right'>
                                     <div className='text'><b>Songlist</b></div>
-                                    {isAdmin && 
+                                    {(isAdmin || isWorshipLeader) && 
                                         <button className='edit-btn' onClick={handleEdit}>Edit</button>
                                     }
                                 </div>
