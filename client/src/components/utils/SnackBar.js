@@ -41,12 +41,16 @@ export default function SnackBar({data}) {
     }, [data])
 
     return (
-        <Snackbar open={openStatus} autoHideDuration={4000} onClose={handleCloseSnack}>
-            <Alert onClose={handleCloseSnack} severity="success">
-                {message !== '' && 
-                    <>{message}</>
-                }
-            </Alert>
-        </Snackbar>
+        <>
+        {data && data.status &&
+            <Snackbar open={openStatus} autoHideDuration={4000} onClose={handleCloseSnack}>
+                <Alert onClose={handleCloseSnack} severity={data.status}>
+                    {message !== '' && 
+                        <>{message}</>
+                    }
+                </Alert>
+            </Snackbar>
+        }
+        </>
     )
 }
