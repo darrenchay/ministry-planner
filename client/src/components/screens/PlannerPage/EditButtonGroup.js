@@ -24,6 +24,7 @@ function Alert(props) {
 
 export default function ButtonGroup({ isEditable, toggleEdit, event,
                                     updateSelectedEvent, originalData, updateOriginalData, setUpdateFlag }) {
+    const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
     const [openSuccessUpdateEvent, setOpenSuccessUpdateEvent] = React.useState(false);
     const [openErrorUpdateEvent, setOpenErrorUpdateEvent] = React.useState(false);
     const [openSuccessDeleteEvent, setOpenSuccessDeleteEvent] = React.useState(false);
@@ -119,9 +120,11 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                     <IconButton onClick={handleEdit} aria-label="settings" >
                         <EditIcon />
                     </IconButton>
-                    <IconButton onClick={handleOpen} aria-label="settings" >
-                        <DeleteIcon className="delete-icon" />
-                    </IconButton>
+                    {isAdmin &&                    
+                        <IconButton onClick={handleOpen} aria-label="settings" >
+                            <DeleteIcon className="delete-icon" />
+                        </IconButton>
+                    }
                 </>
             }
             {isEditable && 

@@ -93,6 +93,8 @@ export default function TableViewRow({
     leaders
 }) {
     const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+    const isWorshipLeader = JSON.parse(localStorage.getItem('isWorshipLeader'));
+    const user = JSON.parse(localStorage.getItem('userData'));
     const classes = useStyles();
     const [isEditable, toggleEdit] = useState(isCreateEvent);
     const [originalEvent, changeOriginalEvent] = useState(event);
@@ -109,7 +111,6 @@ export default function TableViewRow({
     };
     
     useEffect(() => {
-        console.log("admin: ", isAdmin);
         if (isAdmin === true) {
             toggleEdit(false);
         }
@@ -146,9 +147,10 @@ export default function TableViewRow({
 
     return (
         <tr>
-            {isAdmin &&
+            {(isAdmin || isWorshipLeader) &&
                 <td className="edit-col">
-                    {!isCreateEvent && (
+                    {/* Only allow worship leader to edit their own event */}
+                    {(!isCreateEvent && originalEvent.eventDetails.worshipLeader === user._id) && (
                         <ButtonGroup
                             isEditable={isEditable}
                             toggleEdit={toggleEdit}

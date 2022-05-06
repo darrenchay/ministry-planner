@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import isAdmin from '../../state/actions/adminAction.js';
 import * as UserAPI from "../../utils/Services/UsersAPI";
 import * as EmailAPI from "../../utils/Services/EmailAPI";
+import isWorshipLeader from '../../state/actions/worshipLeaderAction';
 
 export default function HomePage() {
     const { user } = useAuth0();
@@ -27,12 +28,19 @@ export default function HomePage() {
                         //Checks if user is registered
                         if (data.user[0].registered === true) {
                             // Verifies user is an admin
-                            if (data.user[0].role.includes("Worship-Leader")) {
+                            if (data.user[0].role.includes("Admin")) {
                                 dispatch(isAdmin());
-                                // console.log("Admin");
                                 localStorage.setItem('isAdmin', JSON.stringify(true));
+                                localStorage.setItem('isWorshipLeader', JSON.stringify(true));
+                            }
+                            // Checks if a worship leader
+                            else if (data.user[0].role.includes("Worship-Leader")) {
+                                dispatch(isWorshipLeader());
+                                localStorage.setItem('isWorshipLeader', JSON.stringify(true));
+                                localStorage.setItem('isAdmin', JSON.stringify(false));
                             } else {
                                 localStorage.setItem('isAdmin', JSON.stringify(false));
+                                localStorage.setItem('isWorshipLeader', JSON.stringify(false));
                             }
                         } else {
                             //If user is not registered redirect to create profile

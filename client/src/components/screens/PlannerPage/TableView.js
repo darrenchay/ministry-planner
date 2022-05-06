@@ -18,6 +18,7 @@ export default function TableView({
     leaders
 }) {
     const isAdmin = JSON.parse(localStorage.getItem('isAdmin'));
+    const isWorshipLeader = JSON.parse(localStorage.getItem('isWorshipLeader'));
     const [rolesHeaders, setRolesHeaders] = useState([]);
 
     useEffect(() => {
@@ -40,7 +41,7 @@ export default function TableView({
                 {rolesHeaders?.length > 0 &&
                     <table>
                         <tr className="headers-row">
-                            {isAdmin && <th className="edit-col"></th>}
+                            {(isAdmin || isWorshipLeader) && <th className="edit-col"></th>}
                             <th>Title</th>
                             <th>Date / Time</th>
                             <th className="worshipLeader-col">Worship Leader</th>
