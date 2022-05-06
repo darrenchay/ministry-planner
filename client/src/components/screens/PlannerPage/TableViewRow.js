@@ -150,7 +150,7 @@ export default function TableViewRow({
             {(isAdmin || isWorshipLeader) &&
                 <td className="edit-col">
                     {/* Only allow worship leader to edit their own event */}
-                    {(!isCreateEvent && originalEvent.worshipLeader === user.firstname) && (
+                    {(!isCreateEvent && originalEvent.eventDetails.worshipLeader === user._id) && (
                         <ButtonGroup
                             isEditable={isEditable}
                             toggleEdit={toggleEdit}
