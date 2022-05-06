@@ -46,7 +46,6 @@ export default function TeamMember({teamMember, setReload, reload, roles, minist
 
     const handleSave = () => {
         UsersAPI.updateUser(selectedUser, selectedUser._id).then(() => {
-            console.log("updated user");
             setOriginalUser(selectedUser);
         }).catch((err) => {
             console.log(err);

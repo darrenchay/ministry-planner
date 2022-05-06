@@ -4,6 +4,17 @@ import * as UsersAPI from './../../utils/Services/UsersAPI'
 import TeamMember from './TeamMember';
 import * as RolesAPI from './../../utils/Services/RolesAPI'
 
+function adminFilter(user) {
+    if (user.role.length > 1) {
+        return true
+    } else {
+        if (!user.role.includes("Admin")) {
+        return true
+        }
+    }
+    return false
+}
+
 export default function TeamPage() {
     const [users, setUsers] = useState({})
     // eslint-disable-next-line
@@ -23,11 +34,18 @@ export default function TeamPage() {
   useEffect(() => {
     UsersAPI.getUsers()
       .then((users) => {
-          console.log(users);
-          setUsers(users);
+          var filteredUsers
+          // Filters out all admin users (excluding admin users that also have other roles)
+          if (!isAdmin) {
+            filteredUsers = users.filter(adminFilter)
+              setUsers(filteredUsers);
+            } else {
+                console.log(users);
+              setUsers(users);
+          }
       });
     
-  }, [reload])
+  }, [reload, isAdmin])
 
   return (
     <div className="team-page-wrapper">
