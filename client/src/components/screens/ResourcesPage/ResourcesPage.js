@@ -14,7 +14,7 @@ import * as dateFormatter from '../../utils/ConvertDate';
 import * as ResourceAPI from '../../utils/Services/ResourcesAPI';
 import Comment from './Comments.js'
 import cloneDeep from "lodash/cloneDeep";
-
+import SnackBar from '../../utils/SnackBar';
 
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -66,6 +66,8 @@ export default function ResourcesPage() {
     const [reload, setReload] = useState(false)
     const [comments, setComments] = useState();
     const [text, setText] = useState("");
+    const [snackBarData, setSnackBarData] = useState({});
+    const [isComment, setIsComment] = useState(0);
 
     // const [isSonglistEmpty, setIsSonglistEmpty] = useState(true);
 
@@ -80,6 +82,22 @@ export default function ResourcesPage() {
     // eslint-disable-next-line
     }, [event.eventDetails.resourceId]);
 
+    useEffect(() => {
+        if (isComment === 1) {
+            setSnackBarData({object:'comment',action:'delete',status:'success'});
+        }
+        else if (isComment === 2) {
+            setSnackBarData({object:'comment',action:'delete',status:'error'});
+        }
+        else if (isComment === 3) {
+            setSnackBarData({object:'comment',action:'update',status:'success'});
+        }
+        else if (isComment === 4) {
+            setSnackBarData({object:'comment',action:'update',status:'error'});
+        }
+        setIsComment(0);
+    }, [isComment])
+
     const handleEdit = () => {
         setIsEditable(true);
     }
@@ -91,6 +109,11 @@ export default function ResourcesPage() {
             .then((resp) => {
                 console.log("successfully updated " + resp.nModified + " resource(s)");
                 setIsEditable(false);
+                setSnackBarData({object:'songlist',action:'update',status:'success'});
+            })
+            .catch(err => {
+                console.log("Error while updating songlist", err);
+                setSnackBarData({object:'songlist',action:'update',status:'error'});
             })
     }
 
@@ -114,10 +137,13 @@ export default function ResourcesPage() {
             ResourceAPI.updateResource(tempResource, resource._id)
                 .then(resp => {
                     console.log('Successfully posted comment', resp);
-                    setComments(tempComments)
+                    // setComments(tempComments)
+                    setComments(comments);
+                    setSnackBarData({object:'comment',action:'create',status:'success'});
                 })
                 .catch(err => {
                     console.log("Error while posting comment", err);
+                    setSnackBarData({object:'comment',action:'create',status:'error'});
                 });
             setText("")
         }
@@ -506,8 +532,9 @@ export default function ResourcesPage() {
                                             comment={data}
                                             resource={resource}
                                             setComments={setComments}
-                                            setReload={setReload}
-                                            reload={reload}
+                                            // setReload={setReload}
+                                            // reload={reload}
+                                            setIsComment={setIsComment}
                                         />
                                     );
                                 })
@@ -515,6 +542,7 @@ export default function ResourcesPage() {
                     </div>
                 </div>
             </div>
+            <SnackBar data={snackBarData}></SnackBar>
         </div>
     );
 }

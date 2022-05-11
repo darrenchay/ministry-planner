@@ -1,7 +1,6 @@
 import './EditButtonGroup.scss';
 import React, { useState } from "react";
 import {
-    Snackbar,
     IconButton,
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
@@ -9,13 +8,10 @@ import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
 import DeleteIcon from '@material-ui/icons/Delete';
 import * as EventsAPI from './../../utils/Services/EventsAPI'
-import MuiAlert from '@material-ui/lab/Alert';
 
-import ConfirmDelete from '../../utils/Components/ConfirmDelete'
+import ConfirmDelete from '../../utils/Components/ConfirmDelete';
+import SnackBar from '../../utils/SnackBar';
 
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 // Handles the toggling of the edit/save/cancel buttons
 // On click edit, save a local version of the event
@@ -24,24 +20,11 @@ function Alert(props) {
 
 export default function ButtonGroup({ isEditable, toggleEdit, event,
                                     updateSelectedEvent, originalData, updateOriginalData, setUpdateFlag }) {
-    const [openSuccessUpdateEvent, setOpenSuccessUpdateEvent] = React.useState(false);
-    const [openErrorUpdateEvent, setOpenErrorUpdateEvent] = React.useState(false);
-    const [openSuccessDeleteEvent, setOpenSuccessDeleteEvent] = React.useState(false);
-    const [openErrorDeleteEvent, setOpenErrorDeleteEvent] = React.useState(false);
-    const [openSuccessUpdateRole, setOpenSuccessUpdateRole] = React.useState(false);
-    const [openErrorUpdateRole, setOpenErrorUpdateRole] = React.useState(false);
     const [open, setOpen] = useState(false);
+    const [snackBarData, setSnackBarData] = useState({});
+
     const handleEdit = () => {
         toggleEdit(!isEditable);
-    };
-
-    const handleCloseSnack = () => {
-        setOpenSuccessUpdateEvent(false);
-        setOpenErrorUpdateEvent(false);
-        setOpenSuccessDeleteEvent(false);
-        setOpenErrorDeleteEvent(false);
-        setOpenSuccessUpdateRole(false);
-        setOpenErrorUpdateRole(false);
     };
 
     const handleSave = () => {
@@ -49,12 +32,10 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
         EventsAPI.updateEvent(event.event, event.event._id)
             .then(resp => {
                 console.log("successfully updated " + resp.nModified + " event(s)");
-                handleCloseSnack();
-                setOpenSuccessUpdateEvent(true);
+                setSnackBarData({object:'event',action:'update',status:'success'});
             })
             .catch(err => {
-                setOpenErrorUpdateEvent(true)
-                console.log(err);
+                setSnackBarData({object:'event',action:'update',status:'error'});
                 // Add error handler and do not make editable false, instead show an alert which says an error occured
             });
 
@@ -64,8 +45,8 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                 console.log("successfully updated " + resp.nModified + " role(s)");
             })
             .catch(err => {
-                setOpenErrorUpdateRole(true)
                 console.log(err);
+                setSnackBarData({object:'role',action:'update',status:'error'});
             })
 
         // saving the event's roles
@@ -94,12 +75,11 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
                 setOpen(false);
                 setUpdateFlag(false);
                 setUpdateFlag(true);
-                handleCloseSnack();
-                setOpenSuccessDeleteEvent(true);
+                setSnackBarData({object:'event',action:'delete',status:'success'});
                 // Trigger a better watcher of useEffect to update list of events
             })
             .catch(err => {
-                setOpenErrorDeleteEvent(true);
+                setSnackBarData({object:'event',action:'delete',status:'error'});
                 console.log(err);
             })
     }
@@ -136,36 +116,7 @@ export default function ButtonGroup({ isEditable, toggleEdit, event,
             }
 
             {/* Status update toast notifications */}
-            <Snackbar open={openSuccessUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Event successfully updated!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openErrorUpdateEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="error">
-                    An error occured when updating the event.
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openSuccessUpdateRole} autoHideDuration={5000} onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Role successfully updated!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openErrorUpdateRole} autoHideDuration={5000} onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="error">
-                    An error occured when updating the role.
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openSuccessDeleteEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Event successfully deleted!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openErrorDeleteEvent} autoHideDuration={5000} onClose={handleCloseSnack}>
-                <Alert onClose={handleCloseSnack} severity="error">
-                    An error occured when deleting the event.
-                </Alert>
-            </Snackbar> 
+            <SnackBar data={snackBarData}></SnackBar>
             <ConfirmDelete
                 keepMounted
                 open={open}

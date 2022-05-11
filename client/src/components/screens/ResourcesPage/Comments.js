@@ -8,7 +8,7 @@ import * as ResourceAPI from '../../utils/Services/ResourcesAPI';
 import * as UserAPI from "../../utils/Services/UsersAPI";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 
-export default function Comment({ comment, resource, setComments, setReload, reload }) {
+export default function Comment({ comment, resource, setIsComment, setComments }) {
 
     const [userName, setUserName] = useState()
     // const [userPicture, setUserPicture] = useState()
@@ -47,12 +47,14 @@ export default function Comment({ comment, resource, setComments, setReload, rel
         ResourceAPI.updateResource(tempResource, resource._id)
             .then(resp => {
                 console.log('Successfully deleted comment', resp);
+                setIsComment(1);
                 setComments(tempResource.comments)
                 setTempResource(tempResource)
-                setReload(!reload)
+                // setReload(!reload)
             })
             .catch(err => {
                 console.log("Error while deleting comment", err);
+                setIsComment(2);
             });
     }
 
@@ -72,10 +74,13 @@ export default function Comment({ comment, resource, setComments, setReload, rel
                         setComments(tempResource.comments)
                         setTempResource(tempResource)
                         setOriginalComment(editedComment)
-                        setReload(!reload)
+                        // setReload(!reload)
+                        setIsComment(3);
+
                     })
                     .catch(err => {
                         console.log("Error while editing comment", err);
+                        setIsComment(4);
                     });
             }
             setIsEditable(false)

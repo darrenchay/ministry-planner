@@ -6,10 +6,8 @@ import cloneDeep from "lodash/cloneDeep";
 import {
     Typography,
     IconButton,
-    Snackbar
 } from "@material-ui/core";
 import * as UsersAPI from "./../../utils/Services/UsersAPI";
-import MuiAlert from "@material-ui/lab/Alert";
 import KeyboardArrowLeftRoundedIcon from "@material-ui/icons/KeyboardArrowLeftRounded";
 import KeyboardArrowRightRoundedIcon from "@material-ui/icons/KeyboardArrowRightRounded";
 
@@ -19,9 +17,8 @@ import TimeSelect from "./TimeSelect";
 import * as dateFormatter from "./../../utils/ConvertDate";
 
 import steps from "../../utils/Components/MonthSteps";
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import SnackBar from "../../utils/SnackBar";
+
 
 export default function PlannerPage() {
     const history = useHistory();
@@ -69,22 +66,13 @@ export default function PlannerPage() {
     // eslint-disable-next-line
     const [isCreate, setIsCreate] = useState(0);
 
-    const [openSuccessCreate, setOpenSuccessCreate] = useState(false);
-    const [openErrorCreate, setOpenErrorCreate] = useState(false);
-    const [openSuccessDelete, setOpenSuccessDelete] = React.useState(false);
-    const [openErrorDelete, setOpenErrorDelete] = React.useState(false);
-
     const [updateFlag, setUpdateFlag] = useState(true);
     const [isTableView, setIsTableView] = useState(false);
     const [createEventFlag, setCreateEventFlag] = useState(false);
     const [createTemplateFlag, setCreateTemplateFlag] = useState(false);
 
-    const handleCloseSnack = () => {
-        setOpenSuccessCreate(false);
-        setOpenErrorCreate(false);
-        setOpenSuccessDelete(false);
-        setOpenErrorDelete(false);
-    };
+    const [snackBarData, setSnackBarData] = useState({})
+
 
     useEffect(() => {
         var registered = JSON.parse(localStorage.getItem('userData')).registered;
@@ -115,24 +103,51 @@ export default function PlannerPage() {
 
     useEffect(() => {
         if (isTemplate === 1) {
-            setOpenSuccessCreate(true);
+            setSnackBarData({object:'team',action:'create',status:'success'});
         }
-        if (isTemplate === 2) {
-            setOpenErrorCreate(true);
+        else if (isTemplate === 2) {
+            setSnackBarData({object:'team',action:'create',status:'error'});
         }
-        if (isTemplate === 3) {
-            setOpenSuccessDelete(true);
+        else if (isTemplate === 3) {
+            setSnackBarData({object:'team',action:'update',status:'success'});
         }
-        if (isTemplate === 4) {
-            setOpenErrorDelete(true);
+        else if (isTemplate === 4) {
+            setSnackBarData({object:'team',action:'update',status:'error'});
+        }
+        else if (isTemplate === 5) {
+            setSnackBarData({object:'team',action:'delete',status:'success'});
+        }
+        else if (isTemplate === 6) {
+            setSnackBarData({object:'team',action:'delete',status:'error'});
         }
         setIsTemplate(0);
     }, [isTemplate]);
+
+    useEffect(() => {
+        if (isCreate === 1) {
+            setSnackBarData({object:'event',action:'create',status:'success'});
+        }
+        else if (isCreate === 2) {
+            setSnackBarData({object:'event',action:'create',status:'error'});
+        }
+        setIsCreate(0);
+    }, [isCreate]);
 
     const [nextTimestamp, setNextTimestamp] = useState(null);
     const [prevTimestamp, setPrevTimestamp] = useState(null);
     const [nextDisabled, setNextDisabled] = useState(true);
     const [prevDisabled, setPrevDisabled] = useState(true);
+    const [emptyCardPlaceholders, setEmptyCardPlaceholders] = useState([]);
+
+    useEffect(() => {
+        if (filteredEvents && filteredEvents.length > 0 && filteredEvents.length < 3) {
+            let temp = [];
+            for (let i = 0; i < 3 - filteredEvents.length; i++) {
+                temp.push(i);
+            }
+            setEmptyCardPlaceholders(temp);
+        }
+    }, [filteredEvents])
 
     useEffect(() => {
         if (events?.length > 0) {
@@ -155,7 +170,7 @@ export default function PlannerPage() {
                 if (events[i].event.timestamp >= currTimestamp) {
                     if (i + 1 < events.length) {
                         setNextTimestamp(events[i + 1].event.timestamp);
-                        if (events.length - i > 4) {
+                        if (events.length - i > 3) {
                             setNextDisabled(false);
                         } else {
                             setNextDisabled(true);
@@ -213,7 +228,7 @@ export default function PlannerPage() {
         } = event;
         const tempFilterTypes = cloneDeep(filterTypes);
         var tempFilterTypesIndex = (tempFilterTypes.map(values => values.value).findIndex((values) => { return values === value[4] }));
-        if (typeof value[4] !== 'undefined') {
+        if (typeof value[3] !== 'undefined') {
             tempFilterTypes[tempFilterTypesIndex].checked = !tempFilterTypes[tempFilterTypesIndex].checked;
             setFilterTypes(tempFilterTypes);
         }
@@ -294,7 +309,12 @@ export default function PlannerPage() {
                                         />
                                     );
                                 })
-                                .slice(0, 4)}
+                                .slice(0, 3)}
+                        {filteredEvents?.length < 3 && emptyCardPlaceholders?.length > 0 && !isTableView && emptyCardPlaceholders.map((index, e) => {
+                            return (
+                                <div className='emptyCardPlaceholder'></div>
+                            )
+                        })}
                         <div className="next-button-wrapper">
                             <IconButton
                                 disabled={nextDisabled}
@@ -307,43 +327,9 @@ export default function PlannerPage() {
                     </div>
                 )}
             </div>
+            
             {/* Status update toast notifications */}
-            <Snackbar
-                open={openSuccessCreate}
-                autoHideDuration={5000}
-                onClose={handleCloseSnack}
-            >
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Successfully created!
-                </Alert>
-            </Snackbar>
-            <Snackbar
-                open={openErrorCreate}
-                autoHideDuration={5000}
-                onClose={handleCloseSnack}
-            >
-                <Alert onClose={handleCloseSnack} severity="error">
-                    An error occured when creating.
-                </Alert>
-            </Snackbar>
-            <Snackbar
-                open={openSuccessDelete}
-                autoHideDuration={5000}
-                onClose={handleCloseSnack}
-            >
-                <Alert onClose={handleCloseSnack} severity="success">
-                    Successfully deleted!
-                </Alert>
-            </Snackbar>
-            <Snackbar
-                open={openErrorDelete}
-                autoHideDuration={5000}
-                onClose={handleCloseSnack}
-            >
-                <Alert onClose={handleCloseSnack} severity="error">
-                    An error occured when deleting.
-                </Alert>
-            </Snackbar>
+            <SnackBar data={snackBarData}></SnackBar>
         </>
     );
 }
