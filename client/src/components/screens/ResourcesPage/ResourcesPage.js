@@ -78,7 +78,7 @@ export default function ResourcesPage() {
                 setSelectedSonglist(resource[0].sections);
             });
     // eslint-disable-next-line
-    }, [originalSonglist, event]);
+    }, [event.eventDetails.resourceId]);
 
     const handleEdit = () => {
         setIsEditable(true);
@@ -506,8 +506,8 @@ export default function ResourcesPage() {
                                             comment={data}
                                             resource={resource}
                                             setComments={setComments}
-                                            // setReload={setReload}
-                                            // reload={reload}
+                                            setReload={setReload}
+                                            reload={reload}
                                         />
                                     );
                                 })
