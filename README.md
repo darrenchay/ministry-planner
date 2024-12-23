@@ -1,5 +1,7 @@
 # ministry-planner
 This is a web app created for churches to streamline the scheduling of volunteers in the various ministries for events. Built mainly in react with MongoDB
+
+Note: This web app's version linked on this project is currently not maintained anymore
 # Notes to developers
 - DO NOT PUSH TO MAIN DIRECTLY 
 - When assigned a pull request, review the code to see if everything is ok then approve or add comments 
